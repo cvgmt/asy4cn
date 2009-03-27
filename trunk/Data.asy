@@ -1,0 +1,1 @@
+import graph;size(250, IgnoreAspect);file filename=line(input("data.txt"));write(filename);real[][] A=dimension(filename,0,0);write(A);A=transpose(A);real[] x=A[0];real[] y=A[1];guide g = graph(x,y);draw(g,linewidth(1.5));//xlimits(95.65, 96.30);xaxis(BottomTop, LeftTicks);//ylimits(2.93,3.01);yaxis(LeftRight, RightTicks);

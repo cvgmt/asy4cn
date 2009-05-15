@@ -61,7 +61,7 @@ draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
 \index{编译}
 不过赵博士写书讲求胸有成竹方才下笔，因此他更愿意使用更一种方式：打开一个文本
 编辑器，把上面的绘图命令都录入完毕，保存为一个名为 \verb=line.asy= 的文件，最
-后把这个文件手动到 \Asy{} 的图标上面，就完成了整个作图。
+后把这个文件拖动到 \Asy{} 的图标上面，就完成了整个作图。
 
 赵博士的小侄子不屑于这种快捷图标的编译方式，他直接进入命令行，输入
 \verb=asy=，就进入了 \Asy{} 的交互环境；要是输入 \verb=asy line=，就画出了刚
@@ -183,7 +183,7 @@ filldraw( (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
 \caption{弦图的初步框架}\label{fig:xiantuskeleton}
 \end{figure}
 
-还应该弦图的中间是“黄实”，应该用黄色填充。这部分是一个正方形，可以使用现成
+还应该画出弦图的中间的“黄实”，用黄色填充。这部分是一个正方形，可以使用现成
 的 \lstinline[mathescape]|box($\text{角点}$, $\text{角点}$)|
 \index{box@\lstinline=box=} 命令来产生矩形的路径，因而填充正中间的正方形就可
 以用：
@@ -328,7 +328,8 @@ scale(`倍数`)           // `\color{comment}按倍数放缩`
 xscale(`倍数`)          // `\color{comment}$x$ 轴方向按倍数放缩`
 yscale(`倍数`)          // `\color{comment}$y$ 轴方向按倍数放缩`
 scale(x, y)           // `\color{comment}在 $x$ 轴、$y$ 轴方向分别按倍数` x, y `\color{comment}放缩`
-rotate(`角度`, z=(0,0)) // `\color{comment}按角度绕中心` z`\color{comment}（默认为原点，顺时针）旋转`
+rotate(`角度`, z=(0,0)) // `\color{comment}按角度绕中心` z`\color{comment}（
+默认为原点，逆时针）旋转`
 slant(`因子`)           // `\color{comment}按一定因子向右倾斜`
 reflect(a, b)         // `\color{comment}相对直线` a--b `\color{comment}反射`
 \end{lstlisting}
@@ -673,7 +674,7 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 
 \begin{enumerate}
   \item 查阅参考手册 \cite{asyman}，看看都有哪些颜色可用。看看你的系统中安装
-    了哪些中文字体。然后修改 \autoref{fig:xiantulabel}，使用另一种你喜欢的字
+    了哪些中文字体。然后修改\autoref{fig:xiantulabel}，使用另一种你喜欢的字体
     进行标注；并且将“朱实”、“黄实”和“弦实”分别用红、黄、橙色标注。
 
   \item 查阅参考手册 \cite{asyman}，看看 |draw|、|fill|、|label| 等命令都可以

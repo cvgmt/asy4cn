@@ -8,8 +8,6 @@
 %\input{winfonts.tex}   % Windows 预装字体
 %\input{adobefonts.tex}  % Adobe 字体混合 Windows 字体
 
-\usepackage{mflogo}
-
 % 数学相关设置
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -22,6 +20,9 @@
 \newcommand\dif{\mathrm{d}}
 \newcommand\diff{\,\dif}
 \newcommand\mi{\mathrm{i}}
+
+\usepackage{mflogo}
+\usepackage{xltxtra}
 
 \usepackage{longtable}
 
@@ -63,7 +64,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.70}
+\newcommand\asyversion{1.72}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -100,9 +101,9 @@
 
 版权所有 \copyright{} 2004--9 Andy Hammerlindl, John Bowman, and Tom Prince.
 
-{\leftskip=4em 在 GNU General Public License（GNU 通用公共许可证）的条款下
-（见源文件目录顶层的 \prgname{LICENSE} 文件）授予复制、发布和/或修改此文档的
-许可。\par}
+{\leftskip=4em 在 GNU Lesser General Public License（GNU 较宽松公共许可证）的
+条款下（见源文件目录顶层的 \prgname{LICENSE} 文件）授予复制、发布和/或修改此
+文档的许可。\par}
 
 翻译：milksea\qquad\today
 \end{titlepage}
@@ -253,9 +254,9 @@ path unitcircle=E..N..W..S..cycle;
 
 在带有后控制点 $c_0$ 的结点 $z_0$，与带有前控制点 $c_1$ 的结点 $z_1$ 之间的
 一段三次样条曲线，按 Bézier 曲线
-\[
+\begin{equation*}
   (1-t)^3 z_0 + 3t(1-t)^2 c_0 + 3t^2 (1-t) c_1 + t^3 z_1, \qquad 0\leq t\leq 1
-\]
+\end{equation*}
 计算。
 
 如下图所示，由两个终点 $z_0$ 和 $z_1$ 以及两个控制点 $c_0$ 与 $c_1$ 构造的
@@ -605,6 +606,20 @@ void draw(picture pic=currentpicture, path[] g, pen[] p);
 \setbox0\vbox{\lstinputlisting{Coons.asy}}%
 \includegraphics[height=\ht0]{Coons.pdf}\box0}。
 
+\index{函数式渐变}
+\index{functionshade@\inlinecode=functionshade=}
+用 pdf\LaTeX, \XeTeX{} 和 pdf\TeX{} 的 \TeX{} 引擎可得到更一般的渐变的可能：
+过程
+\begin{lstlisting}
+void functionshade(picture pic=currentpicture, path[] g, bool stroke=false,
+                   pen fillrule=currentpen, string shader);
+\end{lstlisting}
+使用由字符串 |shader| 设定的 \prgname{PostScript} 计算过程，按填充规则
+|fillrule|，在图 |pic| 上路径 |g| 内部的部分做渐变填充；该
+（\prgname{PostScript}）过程取 2 个参数，各自在 $[0,1]$ 取值，并返回
+|colors(fillrule).length| 个颜色成分。函数式渐变在例子
+\prgname{functionshading.asy} 中示例。
+
 下面的过程使用 |evenodd| 剪裁连同 |^^| 运算符来反填充一个区域：
 \begin{lstlisting}
 void unfill(picture pic=currentpicture, path g);
@@ -759,6 +774,7 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
 \pageref{sec:pathsandguides} 页 \ref{sec:pathsandguides} 节），如 |box|、
 |roundbox| 或 |ellipse|。
 
+\index{texpath@\inlinecode=texpath=}
 函数 |path[] texpath(Label L)| 返回 \TeX{} 将要为绘制标签 |L| 而填充的路径。
 
 函数 |string minipage(string s, width=100pt)| 可用于将字符串 |s| 格式化为一个
@@ -1194,6 +1210,7 @@ path circle(pair c, real r)
 太大了——原来四个结点的曲线仅和精确的圆相差不足 $0.06\%$，太多的结点在输出
 设备上体现不出来，却要大大增加绘制、填充等路径操作的计算量。因此译者建议实用
 中先重定义 \inlinecode{nCircle} 为较小的数值。}：
+\index{Circle@\inlinecode=Circle=}
 \begin{lstlisting}
 import graph;
 path Circle(pair c, real r, int n=nCircle);
@@ -1201,6 +1218,7 @@ path Circle(pair c, real r, int n=nCircle);
 
 与 |circle| 一致，圆心为 |c| 半径为 |r|，从 |angle1| 到 |angle2| 度，在
 |angle2|${}\geq{}$|angle1| 时逆时针绘制的圆弧，可以这样构造：
+\index{arc@\inlinecode=arc=}
 \begin{lstlisting}
 path arc(pair c, real r, real angle1, real angle2);
 \end{lstlisting}
@@ -1223,6 +1241,7 @@ path arc(pair c, explicit pair z1, explicit pair z2,
 
 如果需要高精度，可以用模块 \prgname{graph.asy} 中定义的过程来产生 |n| 个结点
 的 Bézier 曲线真圆弧：
+\index{Arc@\inlinecode=Arc=}
 \begin{lstlisting}
 import graph;
 path Arc(pair c, real r, real angle1, real angle2, bool direction,
@@ -1233,6 +1252,7 @@ path Arc(pair c, explicit pair z1, explicit pair z2,
 \end{lstlisting}
 
 椭圆可以用此过程绘制：
+\index{ellipse@\inlinecode=ellipse=}
 \begin{lstlisting}
 path ellipse(pair c, real a, real b)
 {
@@ -1752,6 +1772,8 @@ pen font(string encoding, string family, string series="m", string shape="n")
   \prgname{unicode} 包提供（见原手册 7.19 节 \prgname{unicode} 部分%
   \transnote{此译本未包括此部分。}）。
 
+  \index{TeX 字体@\TeX{} 字体}
+  \index{font@\inlinecode=font=}
   另外，可以使用函数 |pen font(string name)| 选择固定大小的 \TeX{} 字体（此时
   |fontsize| 不起作用），如 |"cmr12"|（$12$\,pt Computer Modern Roman）或
   |pcrr|（Courier）。还可以给定可选的大小参数来将字体放缩到要求的大小：
@@ -2036,7 +2058,9 @@ transform fixedscaling(picture pic=currentpicture, pair min,
 将使图 |pic| 使用一个固定的放缩把 |box(min,max)| 中的用户坐标映射为（已经限定
 的）图尺寸，其中考虑画笔 |p| 的宽度。如果最终的图超出限定的尺寸将发出警告。
 
-调用函数 |shipout|，可以将图装入帧并将其转换为 \prgname{PostScript} 图像：
+调用函数 |shipout|，可以将图 |pic| 装入帧，并使用图像格式 |format| 输出到文件
+\verb=prefix.fotmat=：
+\index{shipout@\inlinecode=shipout=}
 \begin{lstlisting}
 void shipout(string prefix=defaultfilename, picture pic,
              orientation orientation=orientation,
@@ -2045,8 +2069,21 @@ void shipout(string prefix=defaultfilename,
              orientation orientation=orientation,
              string format="", bool wait=false, bool view=true);
 \end{lstlisting}
-如果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加上一条 |shipout()|
-命令。
+默认的输出格式为 \prgname{PostScript}，可用命令行选项 \verb=-f= 或
+\verb=-tex= 改变。如果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加
+上一条 |shipout()| 命令。
+
+\index{orientation@\inlinecode=orientation=}
+\index{Portrait@\inlinecode=Portrait=}
+\index{Landscape@\inlinecode=Landscape=}
+\index{UpsideDown@\inlinecode=UpsideDown=}
+默认的页面方向为 |Portrait|（纵向）；这可以通过改变变量 |orientation| 修改。
+要以横向模式输出，仅仅需要设置 |orientation=Landscape| 或发出指令
+\begin{lstlisting}
+shipout(Landscape);
+\end{lstlisting}
+要旋转页面 $-90^\circ$，使用方向 |Seascape|。要旋转页面 $180^\circ$，使用方向
+|UpsideDown|（上下颠倒）。
 
 可以调用函数明确将图 |pic| 装入一帧：
 \begin{lstlisting}
@@ -2064,14 +2101,6 @@ frame pic.scale(real xsize=this.xsize, real ysize=this.ysize,
 \end{lstlisting}
 （它将放缩结果帧，包括标注和固定尺寸的对象）将强制完全遵从给定的尺寸设定，但
 通常应该并不需要。
-
-默认的页面方向为 |Portrait|（纵向）；这可以通过改变变量 |orientation| 修改。
-要以横向模式输出，仅仅需要设置 |orientation=Landscape| 或发出指令
-\begin{lstlisting}
-shipout(Landscape);
-\end{lstlisting}
-要旋转页面 $-90^\circ$，使用方向 |Seascape|。要旋转页面 $180^\circ$，使用方向
-|UpsideDown|（上下颠倒）。
 
 要在图外一定边距画出边框，使用函数
 \begin{lstlisting}
@@ -3096,11 +3125,43 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 
 \subsection{数学函数}
 % 5.11.4 Mathematical functions
+\index{libm 过程@\prgname{libm} 过程}
 
+\index{sin@\inlinecode=sin=}
+\index{cos@\inlinecode=cos=}
+\index{tan@\inlinecode=tan=}
+\index{asin@\inlinecode=asin=}
+\index{acos@\inlinecode=acos=}
+\index{atan@\inlinecode=atan=}
+\index{exp@\inlinecode=exp=}
+\index{log@\inlinecode=log=}
+\index{pow10@\inlinecode=pow10=}
+\index{log10@\inlinecode=log10=}
+\index{sinh@\inlinecode=sinh=}
+\index{cosh@\inlinecode=cosh=}
+\index{tanh@\inlinecode=tanh=}
+\index{asinh@\inlinecode=asinh=}
+\index{acosh@\inlinecode=acosh=}
+\index{atanh@\inlinecode=atanh=}
+\index{sqrt@\inlinecode=sqrt=}
+\index{cbrt@\inlinecode=cbrt=}
+\index{fabs@\inlinecode=fabs=}
+\index{expm1@\inlinecode=expm1=}
+\index{log1p@\inlinecode=log1p=}
+\index{identity@\inlinecode=identity=}
+\index{J@\inlinecode=J=}
+\index{Y@\inlinecode=Y=}
+\index{gamma@\inlinecode=gamma=}
+\index{erf@\inlinecode=erf=}
+\index{erfc@\inlinecode=erfc=}
+\index{atan2@\inlinecode=atan2=}
+\index{hypot@\inlinecode=hypot=}
+\index{fmod@\inlinecode=fmod=}
+\index{remainder@\inlinecode=remainder=}
 \prgname{Asymptote} 有标准 \prgname{libm} 数学 |real(real)| 型函数的内部
 版本：|sin|, |cos|, |tan|, |asin|, |acos|, |atan|,
 |exp|, |log|, |pow10|, |log10|, |sinh|, |cosh|, |tanh|, |asinh|, |acosh|,
-|atanh|, |sqrt|, |cbrt|, |fabs|, |expm1| 以及恒等函数 |identity|\transnote{
+|atanh|, |sqrt|, |cbrt|, |fabs|, |expm1|, |log1p| 以及恒等函数 |identity|\transnote{
 三角函数 \inlinecode{sin} 正弦，\inlinecode{cos} 余弦，\inlinecode{tan} 正切
 以弧度为单位；反三角函数\inlinecode{asin} 反正弦，\inlinecode{acos}
 反余弦，\inlinecode{atan} 反正切返回弧度值；指数 \inlinecode{exp}，对数
@@ -3111,6 +3172,7 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \inlinecode{atanh} 双曲反正切；\inlinecode{sqrt} 平方根；\inlinecode{cbrt}
 立方根；\inlinecode{fabs} 实数绝对值；
 \inlinecode{expm1} 为 $x \mapsto \exp x - 1$（对接近零的参数也精确）；
+\inlinecode{log1p} 为 $x \mapsto \log(1+x)$（对接近零的参数也精确）；
 恒等函数 \inlinecode{identity} 与产生单位方阵的函数同名。}。
 \prgname{Asymptote} 同样定义了 |n| 阶 Bessel 函数：
 第一类 |J(int n, real)| 以及第二类 |Y(int n, real)|，还有 $\Gamma$ 函数
@@ -3443,7 +3505,7 @@ write(f/n);
 \item |real[] tridiagonal(real[] a, real[] b, real[] c, real[] f)| \go
   求解周期三对角问题 $L\bm x = \bm f$ 并返回解 $\bm x$，其中 $\bm f$ 为 $n$
   维向量，而 $L$ 为 $n\times n$ 矩阵
-  \[
+  \begin{equation*}
   \begin{pmatrix}
     b_0 & c_0 & & & a_0 \\
     a_1 & b_1 & c_1 \\
@@ -3451,7 +3513,7 @@ write(f/n);
      & & \ddots & \ddots & \ddots \\
     c_{n-1} & & & a_{n-1} & b_{n-1} \\
   \end{pmatrix}
-  \]
+  \end{equation*}
   对 Dirichlet 边界条件（在此记为 $u_{-1}$ 和 $u_{n}$），用
   $f_0 - a_0 u_{-1}$ 和 $f_{n-1} - c_{n-1} u_n$ 替换 $f_0$，然后设
   $a_0 = c_{n-1} = 0$。\transnote{公式中的 $a$, $b$, $c$, $f$ 分别对应数组
@@ -3955,3 +4017,4 @@ int y=A.x;
 
 \end{document}
 
+% vim:tw=77:

@@ -8,6 +8,9 @@
 %\input{winfonts.tex}   % Windows 预装字体
 %\input{adobefonts.tex}  % Adobe 字体混合 Windows 字体
 
+\usepackage{makeidx}
+\makeindex
+
 % 数学相关设置
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -64,7 +67,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.72}
+\newcommand\asyversion{1.73}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -156,6 +159,10 @@ draw((0,0)--(100,100));
   \includegraphics{diagonal.pdf}
 \end{center}
 
+\index{大点}\index{bp}
+\index{点}\index{pt}
+\index{英寸}\index{inch}
+\index{复数}\index{序对}\index{pair@\inlinecode=pair=}
 这里的单位是 \prgname{PostScript}“大点”（big point\transnote{这里大点（big
 point）的概念来自 \TeX{}。在 \TeX{} 之外的印刷领域，$1/72$\,inch 就叫点
 （point, pt），而在 \TeX{} 中的点要小一些：$1\,\text{pt} = 1/72.27\,\text{inch}$。},
@@ -163,12 +170,16 @@ $1\,\text{bp} = 1/72\,\text{inch}$）；|--| 意谓用直线段连结。在
 \prgname{Asymptote} 坐标中像 |(0,0)| 和 |(1000,100)| 这样的叫做\emph{复数}%
 （序对，|pair|）。
 
+\index{quit@\inlinecode=quit=}
+\index{自动补全}
+\index{交互模式}
 这里你可以敲入更进一步的绘图命令，它们将被加到上面展示出的图中，也可敲 |quit|
 退出交互模式。你可以在交互模式中使用方向键来编辑以前的行（假定你已经打开了
 GNU \prgname{readline} 库的支持）。Tab 键将自动补全无歧义的词；否则，再次按下
 tab 将显示可能的选择。对交互模式的进一步的特殊命令在原手册第 9 章 Interactive
 Mode\transnote{本译本未包括此章。} 描述。
 
+\index{批处理模式}
 在批处理模式下，\prgname{Asymptote} 从一个文件中直接读入命令。要试试这个，把
 \lstinputlisting{diagonal.asy}
 敲进一个文件，比方说 \prgname{test.asy}。然后用 \prgname{MSDOS} 或
@@ -176,11 +187,14 @@ Mode\transnote{本译本未包括此章。} 描述。
 \begin{lstlisting}[language=]
 asy -V test
 \end{lstlisting}
+\index{拖放}
 \prgname{Windows} 用户\transnote{原手册误作 \prgname{MSDOS}，或欲指
-\prgname{Windows} 控制台，但不准确。此更正。}可以将文件拖放到桌面的
-\prgname{asy} 图标或是把 \prgname{Asymptote} 作为扩展名为 {asy} 的文件的默认
-应用程序。
+\prgname{Windows} 命令行，但不准确。此更正。}可以将文件拖放到桌面的
+\prgname{asy} 图标或是把 \prgname{Asymptote} 作为扩展名为 \prgname{asy} 的文
+件的默认应用程序。
 
+\index{-V@\verb=-V=}
+\index{-o@\verb=-o=}
 \verb=-V= 选项打开一个 \prgname{PostScript} 查看窗口，从而你可以立即查看嵌入
 式 \prgname{PostScript} 输出。默认将输出到文件 \prgname{test.eps}；输出文件的
 前缀可以通过 \verb=-o= 命令行参数改变。
@@ -191,16 +205,24 @@ asy -V test
   \includegraphics{square}
 \end{center}
 
+\index{size@\inlinecode=size=}
 通常直接以 \prgname{PostScript} 坐标工作是不方便的。下面的例子绘制一个放缩到
-宽 $101$\,dp 和高 $101$\,dp 的单位正方形。其输出与前面的例子相同。
+宽 $101$\,bp 和高 $101$\,bp 的单位正方形。其输出与前面的例子相同。
 \begin{lstlisting}
 size(101,101);
 draw((0,0)--(1,0)--(1,1)--(0,1)--cycle);
 \end{lstlisting}
 
+\index{unitsquare@\inlinecode=unitsquare=}
 为方便计，路径 |(0,0)--(1,0)--(1,1)--(0,1)--cycle| 可以用预定义的变量
 |unitsquare| 代换，或等价地，|box((0,0),(1,1))|。
 
+\index{pt@\inlinecode=pt=}
+\index{cm@\inlinecode=cm=}
+\index{mm@\inlinecode=mm=}
+\index{inch@\inlinecode=inch=}
+\index{inches@\inlinecode=inches=}
+\index{size@\inlinecode=size=}
 可以按 |pt|（$1$\,|pt|${}=1/72.27$\,|inch|）、|cm|、|mm| 或是 |inches|%
 \transnote{这里 \inlinecode{inch} 和 \inlinecode{inches} 意义相同，都是
 英尺。}来设定尺寸。如果给定尺寸（|size|）参数为 0，则该方向没有约束；总的放缩
@@ -211,6 +233,7 @@ draw((0,0)--(1,0)--(1,1)--(0,1)--cycle);
   \includegraphics{bigsquare.pdf}
 \end{center}
 
+\index{unitsize@\inlinecode=unitsize=}
 要使用户坐标表示正好 |1cm| 的倍数：
 \begin{lstlisting}
 unitsize(1cm);
@@ -223,6 +246,8 @@ unitsize(1cm,2cm);
 draw(unitsquare);
 \end{lstlisting}
 
+\index{标签}
+\index{label@\inlinecode=label=}
 在 \prgname{Asymptote} 中很容易增加标签；用双引号引起的 \LaTeX{} 字符串、坐标
 和可选的对齐方向来设定标签：
 \lstinputlisting{labelsquare.asy}
@@ -230,6 +255,15 @@ draw(unitsquare);
   \includegraphics{labelsquare.pdf}
 \end{center}
 
+\index{罗盘方向}
+\index{E@\inlinecode=E=}
+\index{N@\inlinecode=N=}
+\index{NE@\inlinecode=NE=}
+\index{ENE@\inlinecode=ENE=}
+\index{up@\inlinecode=up=}
+\index{down@\inlinecode=down=}
+\index{right@\inlinecode=right=}
+\index{left@\inlinecode=left=}
 \prgname{Asymptote} 使用标准的罗盘方向 |E=(1,0)|、|N=(0,1)|、|NE=unit(N+E)|
 以及 |ENE=unit(E+NE)| 等等，并在 \prgname{Asymptote} 基本模块 \prgname{plain}
 中定义有复数（|pair|) |up|、|down|、|right| 和 |left|。具有名为 |E| 的局部
@@ -241,6 +275,11 @@ draw(unitsquare);
   \includegraphics{quartercircle.pdf}
 \end{center}
 
+\index{--@\inlinecode=--=}
+\index{..@\inlinecode=..=}
+\index{cycle@\inlinecode=cycle=}
+\index{unitcircle@\inlinecode=unitcircle=}
+\index{环形路径}
 一般地，一条路径由一列复数（或其他路径）确定，它们以 |--| 相连来表示直线段或
 |..| 表示三次样条。设定终止结点 |cycle| 建立一条平滑连回初始结点的环形路径，
 如在这里对单位圆的近似（精确到 $0.06\%$ 以内）：
@@ -248,17 +287,27 @@ draw(unitsquare);
 path unitcircle=E..N..W..S..cycle;
 \end{lstlisting}
 
+\index{三次样条曲线}
+\index{结点}
+\index{入向切线}
+\index{出向切线}
 三次样条曲线的每个内结点可以指定一个前缀或后缀的方向 |{dir}|：复数 |dir| 的
 方向分别设定该曲线在此结点处，入向或出向切线的方向。外结点仅能在向内一边指定
 方向限定。
 
+\index{控制点}
+\index{Bézier 曲线}
 在带有后控制点 $c_0$ 的结点 $z_0$，与带有前控制点 $c_1$ 的结点 $z_1$ 之间的
 一段三次样条曲线，按 Bézier 曲线
 \begin{equation*}
   (1-t)^3 z_0 + 3t(1-t)^2 c_0 + 3t^2 (1-t) c_1 + t^3 z_1, \qquad 0\leq t\leq 1
 \end{equation*}
-计算。
+计算\transnote{本节关于三次 Bézier 样条曲线的讲解是比较难懂的，并且下图中关
+于曲线离散生成的知识事实上与绘图无关。关于曲线控制的更清晰详细的介绍可以参考
+\MP{} 的手册 \textit{\MP{}: A User's Manual} 第 4 章 Curves，以及关于 \MP{} 
+与 Con\TeX{}t 的文档 \textit{METAFUN} 的第 1 章。}。
 
+\index{Bézier 曲线!离散生成}
 如下图所示，由两个终点 $z_0$ 和 $z_1$ 以及两个控制点 $c_0$ 与 $c_1$ 构造的
 三阶中点（$m_5$），正是在由四元组 $(z_0, c_0, c_1, z_1)$ 建立的 Bézier 曲线
 上对应于 $t = 1/2$ 的点。这就允许人们通过将重新提取的三阶中点用作终点，并
@@ -273,6 +322,7 @@ path unitcircle=E..N..W..S..cycle;
 事实上，类似的性质对于每小段中在 $[0,1]$ 上的任意分数 $t$ 位置的点都成立，而
 不仅仅是中点（$t=1/2$）。
 
+\index{Bézier 曲线!的几何性质}
 用这种方式构造的 Bézier 曲线具有如下性质：
 \begin{itemize}
   \item 它完全包含在给定四个点的凸包内。
@@ -280,6 +330,7 @@ path unitcircle=E..N..W..S..cycle;
     第二个端点。
 \end{itemize}
 
+\index{controls@\inlinecode=controls=}
 用户可以像这样设定两个结点间的显式控制点：
 \begin{lstlisting}
 draw((0,0)..controls (0,100) and (100,100)..(100,0));
@@ -289,20 +340,26 @@ draw((0,0)..controls (0,100) and (100,100)..(100,0));
 Donald Knuth 的专著 \textit{The \MF{}book} 的第 14 章中描述的算法来选择自己的
 控制点。用户还可以通过设定方向、张力和卷曲值来定制路向（或路径）。
 
+\index{张力}
 张力越强，曲线越直，它也就越接近直线。可以将样条曲线的张力从其默认值 $1$ 变为
 任意大于等于 $0.75$ 的实数值（参考 John D.~Hobby, \textit{Discrete and
 Computational Geometry 1}, 1986）：
+\index{tension@\inlinecode=tension=}
+\index{tension atleast@\inlinecode=tension atleast=}
 \begin{lstlisting}
 draw((100,0)..tension 2 ..(100,100)..(0,100));
 draw((100,0)..tension 2 and 1 ..(100,100)..(0,100));
 draw((100,0)..tension atleast 1 ..(100,100)..(0,100));
 \end{lstlisting}
 
+\index{卷曲参数}
 卷曲参数设定在路径端点处的弯曲程度（$0$ 表示直的；默认值 $1$ 表示近似为圆）：
+\index{curl@\inlinecode=curl=}
 \begin{lstlisting}
 draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
 \end{lstlisting}
 
+\index{::@\inlinecode=::=}
 \MP{} 的 |...| 路径连接符，在可能时它要求一个限定在由端点和方向定义的三角形内
 的无拐点的曲线，它在 \prgname{Asymptote} 中实现为 |.. tension atleast 1 ..|
 的方便缩写 |::|（省略号 |...| 在 \prgname{Asymptote} 中用于标示可变长参数；见
@@ -318,21 +375,26 @@ draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
   \includegraphics{colons.pdf}
 \end{center}
 
+\index{---@\inlinecode=---=}
+\index{&@\inlinecode=&=}
 |---| 连接符是 |..tension atleast infinity..| 的缩写\transnote{它的效果和通常
 的折线连接基本相同，只是在弯折处比完全的折线更为圆滑。}，而 |&| 连接符连结两条
 路径，并去除第一条路径的第最后一个结点（它一般应该与第二条路径的第一个结点
 重合）。
 
+\index{^^@\inlinecode=^^=}
 一条相连的 \prgname{Asymptote} 路径，与一条 \prgname{PostScript} 的
 \verb=subpath=（子路径）等价。|^^| 二元运算符，它要求画笔从左边路径的终点移动
 （而不绘制出来或影响终点的曲率）到右边路径的起点，可以用来将若干
 \prgname{Asymptote} 路径聚集到一个 |path[]| 数组中（等价于一条
-\prgname{PostScript} 子路径）：
+\prgname{PostScript} 路径）：
 \lstinputlisting{superpath.asy}
 \begin{center}
   \includegraphics{superpath.pdf}
 \end{center}
 
+\index{evenodd@\inlinecode=evenodd=}
+\index{zerowinding@\inlinecode=zerowinding=}
 这里 \prgname{PostScript} 奇偶（|evenodd|）填充规制设定仅在两个圆\transnote{%
 原文误作单位圆。事实上这里其中一个圆已经放缩过。}之间界定的区域会被填充。在
 这个例子中，如果小心地变换路径的方向，可以使用默认的零卷绕数（|zerowinding|）
@@ -340,6 +402,7 @@ draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
 \begin{lstlisting}
 filldraw(unitcircle^^reverse(g),yellow,black);
 \end{lstlisting}
+\index{^^@\inlinecode=^^=}
 |^^| 运算符被 \prgname{three.asy} 中的 |box(triple, triple)| 函数用于无回溯
 步骤地构造立方体 |unitbox| 的边：
 \lstinputlisting{cube.asy}
@@ -366,6 +429,8 @@ Ivaldi 在 \url{http://piprim.tuxfamily.org/asymptote/} 发布。
 |shipout| 函数输出（见 \pageref{sec:framepicture} 页
 \ref{sec:framepicture} 节 |shipout| 的说明）。
 
+\index{layer@\inlinecode=layer=}
+\index{层}
 如果需要在标签（或逐字的 \TeX 命令，见 \pageref{sec:framepicture} 页
 \ref{sec:framepicture} 节 |tex| 的说明）上面绘制 \prgname{PostScript}
 对象，可以使用 |layer| 命令开始一个新的 \prgname{PostScript}/\LaTeX{} 层：
@@ -383,6 +448,8 @@ void layer(picture pic=currentpicture);
 \section{描绘（draw）}
 % 4.1 draw
 
+\index{描绘}
+\index{draw@\inlinecode=draw=}
 \begin{lstlisting}
 void draw(picture pic=currentpicture, Label L="", path g,
           align align=NoAlign, pen p=currentpen,
@@ -397,14 +464,44 @@ void draw(picture pic=currentpicture, Label L="", path g,
 \inlinecode{draw(g, EndArrow, BeginBar)}，得到的图形效果是一样的。}。参数
 |legend| 是构造可选图例项时使用的标签。
 
+\index{None@\inlinecode=None=}
+\index{BeginBar@\inlinecode=BeginBar=}
+\index{EndBar@\inlinecode=EndBar=}
+\index{Bars@\inlinecode=Bars=}
+\index{barsize@\inlinecode=barsize=}
+\index{短杠}
 短杠在标明尺寸时很有用。|bar| 可取值 |None|、|BeginBar|、|EndBar|（或等价地
 |Bar|）以及 |Bars|（在路径两端绘制短杠）。每个短杠设定（除了 |None|）将接受
 一个可选的实数参数以 \prgname{PostScript} 坐标标明短杠的长度。设置的短杠长度
 为 |barsize(pen)|。
 
+\index{None@\inlinecode=None=}
+\index{Blank@\inlinecode=Blank=}
+\index{BeginArrow@\inlinecode=BeginArrow=}
+\index{MidArrow@\inlinecode=MidArrow=}
+\index{EndArrow@\inlinecode=EndArrow=}
+\index{Arrow@\inlinecode=Arrow=}
+\index{Arrows@\inlinecode=Arrows=}
+\index{arrowhead@\inlinecode=arrowhead=}
+\index{Default@\inlinecode=Default=}
+\index{SimpleHead@\inlinecode=SimpleHead=}
+\index{HookHead@\inlinecode=HookHead=}
+\index{TeXHead@\inlinecode=TeXHead=}
+\index{FillDraw@\inlinecode=FillDraw=}
+\index{Fill@\inlinecode=Fill=}
+\index{NoFill@\inlinecode=NoFill=}
+\index{UnFill@\inlinecode=UnFill=}
+\index{Draw@\inlinecode=Draw=}
+\index{arrowsize@\inlinecode=arrowsize=}
+\index{BeginArcArrow@\inlinecode=BeginArcArrow=}
+\index{EndArcArrow@\inlinecode=EndArcArrow=}
+\index{ArcArrow@\inlinecode=ArcArrow=}
+\index{MidArcArrow@\inlinecode=MidArcArrow=}
+\index{ArcArrows@\inlinecode=ArcArrows=}
+\index{箭头}
 |arrow| 可取值 |None|、|Blank|（不画出箭头与路径\transnote{利用它可以只画一组
 短杠。}）、|BeginArrow|、|MidArrow|、|EndArrow|（或等价地 |Arrow|）以及
-|Arrays|（在路径的两端都绘制箭头）。除 |None| 和 |Blank| 外的所有箭头设定可以
+|Arrows|（在路径的两端都绘制箭头）。除 |None| 和 |Blank| 外的所有箭头设定可以
 给以可选的箭尖参数 |arrowhead|（预定义的箭头风格 |Default|、|SimpleHead|、
 |HookHead|、|TeXHead| 之一），实数 |size|（\prgname{PostScript} 坐标的箭尖
 尺寸），实数 |angle|（箭尖角度，以度计），填充类型 |filltype|（|FillDraw|、
@@ -415,6 +512,23 @@ void draw(picture pic=currentpicture, Label L="", path g,
 大，而效果不佳。}：|BeginArcArrow|、|EndArcArrow|（或等价地 |ArcArrow|）、
 |MidArcArrow| 以及 |ArcArrows|。
 
+\index{NoMargin@\inlinecode=NoMargin=}
+\index{BeginMargin@\inlinecode=BeginMargin=}
+\index{EndMargin@\inlinecode=EndMargin=}
+\index{Margins@\inlinecode=Margins=}
+\index{Margin@\inlinecode=Margin=}
+\index{labelmargin@\inlinecode=labelmargin=}
+\index{BeginPenMargin@\inlinecode=BeginPenMargin=}
+\index{EndPenMargin@\inlinecode=EndPenMargin=}
+\index{PenMargin@\inlinecode=PenMargin=}
+\index{PenMargins@\inlinecode=PenMargins=}
+\index{DotMargin@\inlinecode=DotMargin=}
+\index{dotfactor@\inlinecode=dotfactor=}
+\index{BeginDotMargin@\inlinecode=BeginDotMargin=}
+\index{EndDotMargin@\inlinecode=EndDotMargin=}
+\index{DotMargins@\inlinecode=DotMargins=}
+\index{TrueMargin@\inlinecode=TrueMargin=}
+\index{边距}
 边距可以用于收缩 |labelmargin(p)| 长的路径可见部分以避免与其他画出的对象
 重叠。|margin| 的典型值为 |NoMargin|、|BeginMargin|、|EndMargin|（或等价地
 |Margin|）以及 |Margins|（它在路径的两端都留下边距）。可以使用
@@ -435,7 +549,9 @@ void draw(picture pic=currentpicture, Label L="", path g,
   \includegraphics[height=5\baselineskip]{Pythagoras}
 \end{center}}。
 
+\index{图例}
 一幅图 |pic| 的图例可以用下列过程对齐装入一帧：
+\index{legend@\inlinecode=legend=}
 \begin{lstlisting}
 frame legend(picture pic=currentpicture, int perline=1,
              real xmargin=legendmargin, real ymargin=xmargin,
@@ -452,10 +568,13 @@ frame legend(picture pic=currentpicture, int perline=1,
 的帧于是可以使用 |add| 和 |attach| 添加进来并相对图 |dest| 上一点对齐（参看
 \pageref{sec:framepicture} 页 \ref{sec:framepicture} 节 |add| 函数）。
 
+\index{画点}
+\index{dotfactor@\inlinecode=dotfactor=}
 要绘制一点，只要画出只包含一个单独点的路径。在 |plain| 模块中定义的命令 |dot|
 画出一个点，它有等于显式画笔线宽或默认线宽放大 |dotfactor|（默认为 6）倍的
 直径，并使用设定的填充类型（见 \pageref{sec:framepicture} 页
 \ref{sec:framepicture} 节填充类型的说明）：
+\index{dot@\inlinecode=dot=}
 \begin{lstlisting}
 void dot(picture pic=currentpicture, pair z, pen p=currentpen,
          filltype filltype=Fill);
@@ -467,11 +586,14 @@ void dot(picture pic=currentpicture, Label[] L=new Label[], pair[] z,
 void dot(picture pic=currentpicture, Label L, pen p=currentpen,
          filltype filltype=Fill);
 \end{lstlisting}
+\index{defaultformat@\inlinecode=defaultformat=}
 如果给定变量 |Label| 为第二个过程的 |Label| 参数，|format| 参数将用于在格式化
 打点位置的字符串（这里默认值 |defaultformat| 为 |"$%.4g$"|）。
 \iffalse$\fi  % 欺骗编辑器语法高亮
+\index{画路径上的点}
 第三个过程在复数数组 |z| 的每个点处画一个点。还可以在一条路径的每个结点处打
 一个点：
+\index{dot@\inlinecode=dot=}
 \begin{lstlisting}
 void dot(picture pic=currentpicture, Label[] L=new Label[],
          path g, align align=RightSide, string format=defaultformat,
@@ -482,6 +604,7 @@ void dot(picture pic=currentpicture, Label[] L=new Label[],
 
 要关于用户坐标 |origin| 绘制固定尺寸的对象（以 \prgname{PostScript}
 坐标），使用过程
+\index{draw@\inlinecode=draw=}
 \begin{lstlisting}
 void draw(pair origin, picture pic=currentpicture, Label L="", path g,
           align align=NoAlign, pen p=currentpen, arrowbar arrow=None,
@@ -495,11 +618,14 @@ void draw(pair origin, picture pic=currentpicture, Label L="", path g,
 % 4.2 fill
 \label{sec:fill}
 
+\index{填充}
+\index{fill@\inlinecode=fill=}
 \begin{lstlisting}
 void fill(picture pic=currentpicture, path g, pen p=currentpen);
 \end{lstlisting}
 使用画笔 |p|，在图 |pic| 上填充由环形路径 |g| 限定的区域内部。
 
+\index{filldraw@\inlinecode=filldraw=}
 还有一个方便的 |filldraw| 命令，它填充路径并绘制边界线。可以为每个操作分别
 设定画笔：
 \begin{lstlisting}
@@ -507,6 +633,7 @@ void filldraw(picture pic=currentpicture, path g, pen fillpen=currentpen,
               pen drawpen=currentpen);
 \end{lstlisting}
 
+\index{fill@\inlinecode=fill=}
 这个固定尺寸的 |fill| 版本允许人们填充一个关于用户坐标 |origin|，以
 \prgname{PostScript} 坐标描述的对象：
 \begin{lstlisting}
@@ -520,12 +647,15 @@ add(pic,opic,origin);
 \end{lstlisting}
 
 过程
+\index{filloutside@\inlinecode=filloutside=}
 \begin{lstlisting}
 void filloutside(picture pic=currentpicture, path g, pen p=currentpen);
 \end{lstlisting}
 填充路径 |g| 的区域外部，向外直达图 |pic| 的当前边界。
 
+\index{渐变!格状梯度光滑渐变}
 在二维画笔数组 |p| 之上使用填充规则 |fillrule| 的格状梯度光滑渐变，可以由
+\index{latticeshade@\inlinecode=latticeshade=}
 \begin{lstlisting}
 void latticeshade(picture pic=currentpicture, path g, bool stroke=false,
                   pen fillrule=currentpen, pen[][] p);
@@ -541,18 +671,22 @@ void latticeshade(picture pic=currentpicture, path g, bool stroke=false,
 \setbox0\vbox{\lstinputlisting{latticeshading.asy}}%
 \includegraphics[height=\ht0]{latticeshading.pdf}\box0}。
 
+\index{渐变!轴向梯度光滑渐变}
 按线段 |a--b| 方向，从画笔 |pena| 到 |penb| 的轴向梯度光滑渐变可以由下面函数
 得到\transnote{这里给一个例子：\\
 \setbox0\vbox{\lstinputlisting{axialshade.asy}}%
 \includegraphics[height=\ht0]{axialshade.pdf}\box0}：
+\index{axialshade@\inlinecode=axialshade=}
 \begin{lstlisting}
 void axialshade(picture pic=currentpicture, path g, bool stroke=false,
                 pen pena, pair a,
                 pen penb, pair b);
 \end{lstlisting}
 
+\index{渐变!放射梯度光滑渐变}
 从以 |a| 圆心 |ra| 为半径的圆上的画笔 |pena|，到以 |b| 为圆心 |rb| 为半径的
 圆上的画笔 |penb| 的放射梯度光滑渐变，也是类似的：
+\index{radialshade@\inlinecode=radialshade=}
 \begin{lstlisting}
 void radialshade(picture pic=currentpicture, path g, bool stroke=false,
                  pen pena, pair a, real ra,
@@ -564,8 +698,10 @@ void radialshade(picture pic=currentpicture, path g, bool stroke=false,
 \setbox0\vbox{\lstinputlisting{shadestroke.asy}}%
 \includegraphics[height=\ht0]{shadestroke.pdf}\box0}。
 
+\index{渐变!Gouraud 渐变}
 在由顶点集 |z| 和边标志 |edges| 定义的三角格点上，使用填充规则 |fillrule| 及
 画笔数组 |p| 中的顶点颜色的 Gouraud 渐变，由下面函数实现：
+\index{gouraudshade@\inlinecode=gouraudshade=}
 \begin{lstlisting}
 void gouraudshade(picture pic=currentpicture, path g, bool stroke=false,
                   pen fillrule=currentpen, pen[] p, pair[] z,
@@ -581,22 +717,28 @@ void gouraudshade(picture pic=currentpicture, path g, bool stroke=false,
 边标志的文档见
 \url{http://partners.adobe.com/public/developer/en/ps/sdk/TN5600.SmoothShading.pdf}。
 
+\index{渐变!张量积渐变}
 在由路径数组 |b| 中的长度为 4 的 $n$ 环形路径界定的补片上，使用由 $n\times4$
 的画笔数组 |p| 和 $n\times4$ 数组内的中间控制点确定的顶点颜色，使用填充规则
 |fillrule| 的张量积渐变，由下面函数实现：
+\index{tensorshade@\inlinecode=tensorshade=}
 \begin{lstlisting}
 void tensorshade(picture pic=currentpicture, path g, bool stroke=false,
                  pen fillrule=currentpen, pen[][] p, path[] b=g,
                  pair[][] z=new pair[][]);
 \end{lstlisting}
+\index{渐变!Coons 渐变}
 如果数组 |z| 为空，将使用 Coons 渐变，其中颜色控制点会自动计算。|p| 中画笔
 必须属于同一颜色空间。对只有单个补片（$n=1$）的情形的更简单的界面也是可用的：
+\index{tensorshade@\inlinecode=tensorshade=}
 \begin{lstlisting}
 void tensorshade(picture pic=currentpicture, path g, bool stroke=false,
                  pen fillrule=currentpen, pen[] p, path b=g,
                  pair[] z=new pair[]);
 \end{lstlisting}
+\index{渐变!填充连续一列路径之间的区域}
 还可以使用给定的画笔数组，光滑渐变填充连续一列路径之间的区域：
+\index{draw@\inlinecode=draw=}
 \begin{lstlisting}
 void draw(picture pic=currentpicture, path[] g, pen[] p);
 \end{lstlisting}
@@ -606,10 +748,10 @@ void draw(picture pic=currentpicture, path[] g, pen[] p);
 \setbox0\vbox{\lstinputlisting{Coons.asy}}%
 \includegraphics[height=\ht0]{Coons.pdf}\box0}。
 
-\index{函数式渐变}
-\index{functionshade@\inlinecode=functionshade=}
+\index{渐变!函数式渐变}
 用 pdf\LaTeX, \XeTeX{} 和 pdf\TeX{} 的 \TeX{} 引擎可得到更一般的渐变的可能：
 过程
+\index{functionshade@\inlinecode=functionshade=}
 \begin{lstlisting}
 void functionshade(picture pic=currentpicture, path[] g, bool stroke=false,
                    pen fillrule=currentpen, string shader);
@@ -620,7 +762,9 @@ void functionshade(picture pic=currentpicture, path[] g, bool stroke=false,
 |colors(fillrule).length| 个颜色成分。函数式渐变在例子
 \prgname{functionshading.asy} 中示例。
 
+\index{反填充}
 下面的过程使用 |evenodd| 剪裁连同 |^^| 运算符来反填充一个区域：
+\index{unfill@\inlinecode=unfill=}
 \begin{lstlisting}
 void unfill(picture pic=currentpicture, path g);
 \end{lstlisting}
@@ -629,6 +773,8 @@ void unfill(picture pic=currentpicture, path g);
 \section{剪裁（clip）}
 % 4.3 clip
 
+\index{剪裁}
+\index{clip@\inlinecode=clip=}
 \begin{lstlisting}
 void clip(picture pic=currentpicture, path g, stroke=false,
           pen fillrule=currentpen);
@@ -646,16 +792,25 @@ void clip(picture pic=currentpicture, path g, stroke=false,
 % 4.4 label
 \label{sec:label}
 
+\index{标注}
+\index{label@\inlinecode=label=}
 \begin{lstlisting}
 void label(picture pic=currentpicture, Label L, pair position,
            align align=NoAlign, pen p=nullpen, filltype filltype=NoFill)
 \end{lstlisting}
+\index{align@\inlinecode=ailgn=}
+\index{NoAlign@\inlinecode=NoAlign=}
+\index{labelmargin@\inlinecode=labelmargin=}
+\index{Align@\inlinecode=Align=}
+\index{标签}
+\index{对齐}
 使用画笔 |p| 在图 |pic| 上绘制标签 |L|。如果 |align| 为 |NoAlign|，标签将在
 用户坐标 |position| 居中；否则将以 |align| 方向从 |position| 以
 \prgname{PostScript} 坐标偏移 |align*labelmargin(p)| 的距离对齐。常数 |Align|
 可以用来按标签的左下角在 |position| 位置对齐。如果 |p| 为 |nullpen|，在标签中
 设定的画笔（默认为 |currentpen|）将被使用。标签 |L| 既可以是一个字符串也可以
 是通过调用如下函数之一得到的结构体：
+\index{Label@\inlinecode=Label=}
 \begin{lstlisting}
 Label Label(string s="", pair position, align align=NoAlign,
             pen p=nullpen, embed embed=Rotate, filltype filltype=NoFill);
@@ -672,23 +827,33 @@ Label Label(Label L, align align=NoAlign,
 $45^\circ$。标签的最终位置还可以通过 \prgname{PostScript} 坐标转换平移：%
 |shift(10,0)*L|。|embed| 参数决定标签如何随着嵌入（此标签的）图变换：
 \begin{funclist}
+\index{Shift@\inlinecode=Shift=}
 \item |Shift| \go
   仅随嵌入它的图平移；
+\index{Rotate@\inlinecode=Rotate=}
 \item |Rotate| \go
   仅随嵌入它的图平移和旋转（默认值）；
+\index{Rotate@\inlinecode=Rotate=}
 \item |Rotate(pair z)| \go
   按（随图变换过的）向量 |z| 旋转；
+\index{Slant@\inlinecode=Slant=}
 \item |Slant| \go
   仅随嵌入它的图平移、旋转、倾斜、反射；
+\index{Scale@\inlinecode=Scale=}
 \item |Scale| \go
   随嵌入它的图的平移、旋转、倾斜、反射和放缩；
 \end{funclist}
 
+\index{标注路径}
 要给一条路径加标签，用
+\index{label@\inlinecode=label=}
 \begin{lstlisting}
 void label(picture pic=currentpicture, Label L, path g, align align=NoAlign,
            pen p=nullpen, filltype filltype=NoFill);
 \end{lstlisting}
+\index{标签位置}
+\index{position@\inlinecode=position=}
+\index{Relative@\inlinecode=Relative=}
 标签默认将位于路径的中点。另一种标签位置（一个在 0 与 |length(g)| 之间的
 |arctime| 值，参看 \pageref{sec:pathsandguides} 页 \ref{sec:pathsandguides}
 节 |arctime| 函数）可以在构造标签时用一个实数值 |position| 设定。位置
@@ -704,16 +869,25 @@ Label Label(Label L, explicit position position, align align=NoAlign,^^J
 \end{lstlisting}
 其 \inlinecode{position} 参数即可以是一个实数，也可以是一个
 \inlinecode{Relative(value)} 值。}。如下的方便缩写形式已经预定义好了：
+\index{BeginPoint@\inlinecode=BeginPoint=}
+\index{MidPoint@\inlinecode=MidPoint=}
+\index{EndPoint@\inlinecode=EndPoint=}
 \begin{lstlisting}
 position BeginPoint=Relative(0);
 position MidPoint=Relative(0.5);
 position EndPoint=Relative(1);
 \end{lstlisting}
+\index{align@\inlinecode=align=}
+\index{对齐}
+\index{Relative@\inlinecode=Relative=}
 路径标签以方向 |align| 对齐，它可由一个绝对罗盘方向（复数 |pair|）或相对于
 路径本地方向北极轴测量的方向 |Relative(pair)| 设定\transnote{%
 \inlinecode{Relative(N)} 就是路径在此位置的切向。有关这种 \inlinecode{Label}
 的 \inlinecode{position} 和 \inlinecode{align} 参数的意义，如图所示：
 \begin{center}\includegraphics{labelalign.pdf}\end{center}}。
+\index{LeftSide@\inlinecode=LeftSide=}
+\index{Center@\inlinecode=Center=}
+\index{RightSide@\inlinecode=RightSide=}
 为方便计，|LeftSide|、|Center| 和 |RightSide| 分别定义为 |Relative(W)|、%
 |Relative((0,0))| 以及 |Relative(E)|。给 |LeftSide|、|Center| 和 |RightSide|
 左乘一个实数放缩因子会把标签移得更靠近或更远离路径\transnote{除了上文和脚注
@@ -725,8 +899,10 @@ Label Label(pair position, align align=NoAlign, pen p=nullpen,^^J
 \ \ \ \ \ \ \ \ \ \ \ \ embed embed=Rotate, filltype filltype=NoFill);^^J
 \end{lstlisting}}。
 
+\index{arrowlength@\inlinecode=arrowlength=}
 带有从方向 |dir| 来指向 |b| 的长为 |arrowlength| 的固定尺寸箭头的标签，可以由
 如下过程产生：
+\index{arrow@\inlinecode=arrow=}
 \begin{lstlisting}
 void arrow(picture pic=currentpicture, Label L="", pair b, pair dir,
            real length=arrowlength, align align=NoAlign,
@@ -735,6 +911,7 @@ void arrow(picture pic=currentpicture, Label L="", pair b, pair dir,
 如果没有设定对齐方向（不论是在标签中还是明确以参数给出），可选的标签将使用
 边距 |align|，以 |dir| 的方向对齐。
 
+\index{graphic@\inlinecode=graphic=}
 函数 |string graphic(string name, string options="")| 返回一个可以用于插入
 嵌入式 \prgname{PostScript}（Encapsulated \prgname{PostScript}，EPS）文件的
 字符串。这里，|name| 是要插入的文件名而 |options| 是一个逗号分隔的参数列表
@@ -747,21 +924,27 @@ label(graphic("file.eps","width=1cm"),(0,0),NE);
 layer();
 \end{lstlisting}
 
+\index{baseline@\inlinecode=baseline=}
+\index{基线}
 |string baseline(string s, string template="\strut")| 函数可用于
 扩大标签的边框以匹配给定的模板，从而这些标签的基线将排在同一水平线上。
 参见 \prgname{Pythagoras.asy} 的例子\transnote{\prgname{Pythagoras.asy}
 的例子见脚注 \ref{foot:pythagoras}。}。
 
+\index{overwrite@\inlinecode=overwrite=}
 用 |overwrite| 画笔属性（参看 \pageref{sec:pens} 页 \ref{sec:pens} 节），可以
 避免标签互相覆写。
 
+\index{object@\inlinecode=object=}
 在 \prgname{plain\_Label.asy} 中定义的结构体 |object|（对象）允许以一致的行为
 方式看待标签和帧。用如下过程可以将一组对象打包进一帧内：
+\index{pack@\inlinecode=pack=}
 \begin{lstlisting}
 frame pack(pair align=2S ... object inset[]);
 \end{lstlisting}
 要绘制或填充围绕一个标签的方盒（或是椭圆或其他路径）并返回界定的对象，使用
 如下过程之一：
+\index{draw@\inlinecode=draw=}
 \begin{lstlisting}
 object draw(picture pic=currentpicture, Label L, envelope e,
             real xmargin=0, real ymargin=xmargin, pen p=currentpen,
@@ -770,6 +953,10 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
             real xmargin=0, real ymargin=xmargin, pen p=currentpen,
             filltype filltype=NoFill, bool above=true);
 \end{lstlisting}
+\index{envelope@\inlinecode=envelope=}
+\index{box@\inlinecode=box=}
+\index{roundbox@\inlinecode=roundbox=}
+\index{ellipse@\inlinecode=ellipse=}
 这里 |envelope| 是在 \prgname{plain\_boxes.asy} 中定义的边界绘制过程（参看
 \pageref{sec:pathsandguides} 页 \ref{sec:pathsandguides} 节），如 |box|、
 |roundbox| 或 |ellipse|。
@@ -777,11 +964,10 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
 \index{texpath@\inlinecode=texpath=}
 函数 |path[] texpath(Label L)| 返回 \TeX{} 将要为绘制标签 |L| 而填充的路径。
 
+\index{minipage@\inlinecode=minipage=}
 函数 |string minipage(string s, width=100pt)| 可用于将字符串 |s| 格式化为一个
-宽度为 |width| 的段落\transnote{由于 \prgname{Asymptote} 的标签使用的内部
-\TeX{} 宏定义的缺陷，\inlinecode{minipage} 中的文字不能分段，换行只能直接用
-\inlinecode{\\\\} 生成。}。
-这个例子利用 |minipage|、|clip| 和 |graphic| 来生成一个 CD 标签：
+宽度为 |width| 的段落。这个例子利用 |minipage|、|clip| 和 |graphic| 来生成一
+个 CD 标签：
 \begin{center}
   \includegraphics{CDlabel.pdf}
 \end{center}
@@ -792,12 +978,23 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
 % 5 Programming
 \label{chap:programming}
 
+\index{控制结构}
+\index{控制流}
 这里是对程序设计语言 \prgname{Asymptote} 的一个介绍性的例子，强调其中与
 C, C++ 和 Java 相似的控制结构\transnote{这个文档无疑是面向具有 C, C++ 或 Java
 等语言编程经验的人的，因而这里关于控制流的说明简略得甚至有些过分，比如没有
 给出 \inlinecode{do} 结构的例子。有需要的读者请参考相关语言和程序设计的其他
 书籍。}。
 
+\index{注释}
+\index{//@\inlinecode=//=}
+\index{/* */@\inlinecode=/* */=}
+\index{声明变量}
+\index{条件测试}
+\index{if@\inlinecode=if=}
+\index{else@\inlinecode=else=}
+\index{循环}
+\index{for@\inlinecode=for=}
 \begin{lstlisting}
 // 这是一行注释。
 
@@ -820,8 +1017,14 @@ for(int i=0; i < 10; ++i) {
 }
 \end{lstlisting}
 
+\index{while@\inlinecode=while=}
+\index{do@\inlinecode=do=}
+\index{break@\inlinecode=break=}
+\index{continue@\inlinecode=continue=}
 正如在 C/C++ 中一样，\prgname{Asymptote} 支持 |while|, |do|, |break| 和
 |continue| 语句。Java 风格的迭代遍历数组元素的简便形式也是支持的：
+\index{for@\inlinecode=for=}
+\index{遍历数组}
 \begin{lstlisting}
 // 迭代遍历一个数组
 int[] array={1,1,2,3,5};
@@ -835,11 +1038,18 @@ for(int k : array) {
 \section{数据类型}
 % 5.1 Data types
 
+\index{数据类型}
 \prgname{Asymptote} 支持下列数据类型（除用户自定义类型外）：
 \begin{typelist}
 
+\index{void@\inlinecode=void=}
+\index{空类型}
 \item[void] 空（|void|）类型仅用于无参数或无返回值的函数。
 
+\index{bool@\inlinecode=bool=}
+\index{布尔类型}
+\index{true@\inlinecode=true=}
+\index{false@\inlinecode=false=}
 \item[bool] 布尔类型只能取值 |true| 或 |false|。例如：
 \begin{lstlisting}
 bool b = true;
@@ -850,16 +1060,37 @@ bool b;
 \end{lstlisting}
 其值假定为 |false|。
 
+\index{bool3@\inlinecode=bool3=}
+\index{扩展布尔类型}
+\index{true@\inlinecode=true=}
+\index{false@\inlinecode=false=}
+\index{default@\inlinecode=default=}
 \item[bool3] 一种扩展的布尔类型，可以取值 |true|, |default| 或 |false|。
 |bool3| 类型可以与 |bool| 类型相互转换。|bool3| 的默认初始式为 |default|。
 
+\index{int@\inlinecode=int=}
+\index{整数}
+\index{intMin@\inlinecode=intMin=}
+\index{intMax@\inlinecode=intMax=}
 \item[int] 整数类型；如果没有给定初始式，隐式的值假定为 |0|。整数允许的最小值
 为 |intMin|，最大值为 |intMax|。
 
+\index{real@\inlinecode=real=}
+\index{实数}
+\index{realEpsilon@\inlinecode=realEpsilon=}
+\index{realDigits@\inlinecode=realDigits=}
+\index{realMin@\inlinecode=realMin=}
+\index{realMax@\inlinecode=realMax=}
 \item[real] 实数；它将设为计算机结构的本地浮点类型的最大精度。实数的隐式
 初始式为 |0.0|。实数具有精度 |realEpsilon|，有效数字为 |realDigits|。最小的
 正实数为 |realMin|，而最大的正实数为 |realMax|。
 
+\index{pair@\inlinecode=pair=}
+\index{复数}
+\index{x@\inlinecode=x=}
+\index{y@\inlinecode=y=}
+\index{实部}
+\index{虚部}
 \item[pair] 复数，即，实数构成的有序对 |(x, y)|。复数 |z| 的实部和虚部可读为
 |z.x| 和 |z.y|。我们称 |x| 和 |y| 为复数数据元素的虚拟成员；然而，它们不能
 直接修改。复数的隐式初始式为 |(0.0,0.0)|。
@@ -871,11 +1102,16 @@ z=(z.x,-z.y);
 z=z.x-I*z.y;
 z=conj(z);
 \end{lstlisting}
+\index{I@\inlinecode=I=}
 这里 |I| 是复数 |(0,1)|。复数类型定义了许多内部函数：
 \begin{funclist}
+\index{conf@\inlinecode=conf=}
+\index{复共轭}
 \item |pair conf(pair z)| \go
   返回 |z| 的复共轭。
 
+\index{length@\inlinecode=length=}
+\index{模长}
 \item |real length(pair z)| \go
   返回参数 |z| 的复数模长 $\vert$|z|$\vert$。例如，
 \begin{lstlisting}
@@ -884,98 +1120,175 @@ length(z);
 \end{lstlisting}
   返回结果 5。|abs(pair)| 与 |length(pair)| 同义；
 
-\item |real angle(pair z)| \go
-  返回 |z| 的幅角，单位为弧度，在区间 $[-\uppi, \uppi]$ 内；
+\index{angle@\inlinecode=angle=}
+\index{幅角}
+\item |real angle(pair z, bool warn=true)| \go
+  返回 |z| 的幅角，单位为弧度，在区间 $[-\uppi, \uppi]$ 内，而当 |warn| 为
+  |false| 且 |z|${}={}$|(0,0)| 时返回 |0|（而不是产生错误）；
 
+\index{degrees@\inlinecode=degrees=}
+\index{幅角}
 \item |real degrees(pair z, bool warn=true)| \go
-  返回 |z| 的幅角，单位为度，在区间 $[0,360)$ 内，当 |warn| 为 |false| 且
-  |z.x|${}={}$|z.y|${}={}$|0| 时返回 |0|（而不是产生错误）；
+  返回 |z| 的幅角，单位为度，在区间 $[0,360)$ 内，而当 |warn| 为 |false| 且
+  |z|${}={}$|(0,0)| 时返回 |0|（而不是产生错误）；
 
+\index{unit@\inlinecode=unit=}
+\index{单位向量}
 \item |pair unit(pair z)| \go
   返回以复数 |z| 同方向的单位向量；
 
+\index{expi@\inlinecode=expi=}
+\index{单位向量}
 \item |pair expi(real angle)| \go
   返回以弧度角 |angle| 为方向的单位向量；
 
+\index{dir@\inlinecode=dir=}
+\index{单位向量}
 \item |pair dir(real degrees)| \go
   返回以角度 |degrees| 为方向的单位向量；
 
+\index{xpart@\inlinecode=xpart=}
+\index{x 部分@$x$ 部分}
+\index{实部}
 \item |real xpart(pair z)| \go
   返回 |z.x|；
 
+\index{ypart@\inlinecode=ypart=}
+\index{y 部分@$y$ 部分}
+\index{虚部}
 \item |real ypart(pair z)| \go
   返回 |z.y|；
 
+\index{realmult@\inlinecode=realmult=}
+\index{逐元素乘积}
 \item |pair realmult(pair z, pair w)| \go
   返回逐元素乘积 |(z.x*w.x,z.y*w.y)|；
 
+\index{dot@\inlinecode=dot=}
+\index{点积}
 \item |real dot(pair z, pair w)| \go
   返回点积 |z.x*w.x+z.y*w.y|；
 
+\index{minbound@\inlinecode=minbound=}
 \item |pair minbound(pair z, pair w)| \go
   返回 |(min(z.x,w.x),min(z.y,w.y))|；
 
+\index{maxbound@\inlinecode=maxbound=}
 \item |pair maxbound(pair z, pair w)| \go
   返回 |(max(z.x,w.x),max(z.y,w.y))|。
 \end{funclist}
 
+\index{triple@\inlinecode=triple=}
+\index{三元组}
+\index{x@\inlinecode=x=}
+\index{y@\inlinecode=y=}
+\index{z@\inlinecode=z=}
 \item[triple] 有序实数三元组（向量）|(x,y,z)| 用于三维作图。三元组 |v| 的对应
 组成部分分别读为 |v.x|, |v.y| 和 |v.z|。隐式初始式为 |(0.0,0.0,0.0)|。
 
 这里是三元组的内部函数：
 \begin{funclist}
+\index{length@\inlinecode=length=}
+\index{模长}
 \item |real length(triple v)| \go
-  返回向量 |v| 的长度 $\vert$|v|$\vert$。|abs(triple)| 与 |length(triple)| 同义；
+  返回向量 |v| 的长度 $\vert$|v|$\vert$。|abs(triple)| 与 |length(triple)| 同
+  义；
 
-\item |real polar(triple v)| \go
-  返回 |v| 的余纬角，从 $z$ 轴计，单位为弧度；
+\index{polar@\inlinecode=polar=}
+\index{余纬角}
+\item |real polar(triple v, bool warn=true)| \go
+  返回 |v| 的余纬角，从 $z$ 轴计，单位为弧度，而当 |warn| 为 |false| 且
+  |v|${}={}$|O| 时\transnote{即 \inlinecode{v} 的所有坐标均为 0。
+  \inlinecode{O} 不是内部的常量，而是在 \prgname{three} 模块中定义的变量
+  \inlinecode{(0,0,0)}。后同。}返回 |0|（而不是产生错误）；
 
-\item |real azimuth(triple v)| \go
-  返回 |v| 的经度角，从 $x$ 轴计，单位为弧度；
+\index{azimuth@\inlinecode=azimuth=}
+\index{经度角}
+\item |real azimuth(triple v, bool warn=true)| \go
+  返回 |v| 的经度角，从 $x$ 轴计，单位为弧度，而当 |warn| 为 |false| 且
+  |v.x|${}={}$|v.y|${}={}$|0| 时返回 |0|（而不是产生错误）；
 
-\item |real colatitude(triple v)| \go
-  返回 |v| 的余纬角，从 $z$ 轴计，单位为度；
+\index{colatitude@\inlinecode=colatitude=}
+\index{余纬角}
+\item |real colatitude(triple v, bool warn=true)| \go
+  返回 |v| 的余纬角，从 $z$ 轴计，单位为度，而当 |warn| 为 |false| 且
+  |v|${}={}$|O| 时返回 |0|（而不是产生错误）；
 
-\item |real latitude(triple v)| \go
-  返回 |v| 的纬度角，从 $xy$ 平面计，单位为度；
+\index{latitude@\inlinecode=latitude=}
+\index{纬度角}
+\item |real latitude(triple v, bool warn=true)| \go
+  返回 |v| 的纬度角，从 $xy$ 平面计，单位为度，而当 |warn| 为 |false| 且
+  |v|${}={}$|O| 时返回 |0|（而不是产生错误）；
 
+\index{longitude@\inlinecode=longitude=}
+\index{经度角}
 \item |real longitude(triple v, bool warn=true)| \go
-  返回 |v| 的经度角，从 $x$ 轴计，单位为度；若 |warn| 为 |false| 且
+  返回 |v| 的经度角，从 $x$ 轴计，单位为度，而当 |warn| 为 |false| 且
   |v.x|${}={}$|v.y|${}={}$|0| 则返回 |0|（而非产生错误）；
 
+\index{unit@\inlinecode=unit=}
+\index{单位向量}
 \item |triple unit(triple v)| \go
   返回与三元组（向量）|v| 同方向的单位向量；
 
+\index{expi@\inlinecode=expi=}
+\index{单位向量}
 \item |triple expi(real polar, real azimuth)| \go
   返回方向为 |(polar,azimuth)|（单位为弧度）的单位向量；
 
+\index{dir@\inlinecode=dir=}
+\index{单位向量}
 \item |triple dir(real colatitude, real longitude)| \go
   返回方向为 |(colatitude,longitude)|（单位为度）的单位向量；
 
+\index{xpart@\inlinecode=xpart=}
+\index{x 部分@$x$ 部分}
 \item |real xpart(triple v)| \go
   返回 |v.x|；
 
+\index{ypart@\inlinecode=ypart=}
+\index{y 部分@$y$ 部分}
 \item |real ypart(triple v)| \go
   返回 |v.y|；
 
+\index{zpart@\inlinecode=zpart=}
+\index{z 部分@$z$ 部分}
 \item |real zpart(triple v)| \go
   返回 |v.z|；
 
+\index{realmult@\inlinecode=realmult=}
+\index{逐元素乘积}
+\item |triple realmult(triple u, triple v)| \go
+  返回逐元素乘积\transnote{这个函数在原手册中缺失，这里根据源代码加上。}
+  |(u.x*v.x, u.y*v.y, u.z*v.z)|；
+
+\index{dot@\inlinecode=dot=}
+\index{点积}
 \item |real dot(triple u, triple v)| \go
   返回点积 |u.x*v.x+u.y*v.y+u.z*v.z|；
 
+\index{cross@\inlinecode=cross=}
+\index{叉积}
 \item |triple cross(triple u, triple v)| \go
   返回叉积 |(u.y*v.z-u.z*v.y,u.z*v.x-u.x*v.z,u.x*v.y-v.x*u.y)|；
 
+\index{minbound@\inlinecode=minbound=}
 \item |triple minbound(triple u, triple v)| \go
   返回 |(min(u.x,v.x),min(u.y,v.y),min(u.z,v.z))|；
 
+\index{maxbound@\inlinecode=maxbound=}
 \item |triple maxbound(triple u, triple v)| \go
   返回 |(max(u.x,v.x),max(u.y,v.y),max(u.z,v.z))|。
 \end{funclist}
 
-\item[string] 字符串，它使用 STL 的 |string| 类实现。
+\index{string@\inlinecode=string=}
+\index{字符串}
+\item[string] 字符串，它使用 STL 的 \verb=string= 类实现。
 
+\index{""@\inlinecode=""=}
+\index{双引号}
+\index{引号}
+\index{映射}
 用双引号（|"|）界定的字符串受限于下列映射，以允许在 \TeX{} 中双引号的使用（如
 为了使用 \prgname{bable} 包，见文档 7.21 节 \prgname{babel}\transnote{本译本
 不包括此部分。}）：
@@ -984,7 +1297,10 @@ length(z);
   \item |\\| 映射到 |\\|
 \end{itemize}
 
+\index{单引号}
+\index{'@\inlinecode='=}
 用单引号（|'|）界定的字符串具有与 ANSI C 相同的字符映射：
+\index{映射}
 \begin{itemize}
   \item |\'| 映射到 |'|
   \item |\"| 映射到 |"|
@@ -1004,45 +1320,58 @@ length(z);
 \inlinecode{0x2F}）。}
 \end{itemize}
 
+\index{字符串!空串}
+\index{字符串!拼接}
 字符串的隐式初始式为空串 |""|。字符串可以用运算符 |+| 拼接。在下列字符串函数
 中，位置 |0| 表示字符串的开始：
 \begin{funclist}
+\index{length@\inlinecode=length=}
 \item |int length(string s)| \go
   返回字符串 |s| 的长度；
 
+\index{find@\inlinecode=find=}
 \item |int find(string s, string t, int pos=0)| \go
   返回字符串 |t| 在字符串 |s| 在位置 |pos| 处或之后，第一次出现的位置，或是
   在 |t| 不是 |s| 的子串时返回 |-1|；
 
+\index{rfind@\inlinecode=rfind=}
 \item |int rfind(string s, string t, int pos=-1)| \go
   返回字符串 |t| 在字符串 |s| 在位置 |pos| 处或之前（若 |pos|${}={}$|-1|，则
   在字符串 |s| 末尾），最后一次出现的位置，或是在 |t| 不是 |s| 的子串时返回
   |-1|；
 
+\index{insert@\inlinecode=insert=}
 \item |string insert(string s, int pos, string t)| \go
   返回将字符串 |t| 插入 |s| 位置 |pos| 处构成的字符串；
 
+\index{erase@\inlinecode=erase=}
 \item |string erase(string s, int pos, int n)| \go
   返回将字符串 |s| 在位置 |pos| 处删去长度为 |n| 的串（如果 |n|${}={}$|-1|，
   删至字符串 |s| 末尾）构成的字符串；
 
+\index{substr@\inlinecode=substr=}
 \item |string substr(string s, int pos, int n=-1)| \go
   返回从位置 |pos| 开始长度为 |n|（如果 |n|${}={}$|-1|，直至字符串 |s| 的
   末尾）的子串；
 
+\index{reverse@\inlinecode=reverse=}
 \item |string reverse(string s)| \go
   返回由字符串 |s| 翻转构成的字符串；
 
+\index{replace@\inlinecode=replace=}
 \item |string replace(string s, string before, string after)| \go
   返回将字符串 |s| 中所有串 |before| 的出现改为串 |after| 得到的字符串；
 
+\index{replace@\inlinecode=replace=}
 \item |string replace(string s, string[][] table)| \go
   返回将字符串 |s| 中将数组 |table| 中字符串对 |{before,after}| 中的串
   |before| 的所有出现转换为对应的串 |after| 构成的字符串；
 
+\index{split@\inlinecode=split=}
 \item |string[] split(string s, string delimiter)| \go
   返回一个字符串数组，包含将 |s| 用 |delimiter| 定界分割而成的子串；
 
+\index{format@\inlinecode=format=}
 \item |string format(string s, int n)| \go
   返回使用当前区域设置（locale），将 |n| 用 C 风格格式化串格式化得到的字符
   串\transnote{例如，\inlinecode{format("\%04d", 3)} 得到字符串
@@ -1058,6 +1387,7 @@ length(z);
   支持 \inlinecode{\%*d} 这种具有不同函数原型的复杂语法（其功能可以用
   \inlinecode{format("\%"+string(4)+"d", 3)} 这种用法代替）。}；
 
+\index{format@\inlinecode=format=}
 \item |string format(string s, real x, string locale="")| \go
   返回使用区域设置 |locale|（或当前区域设置，如果设定为空串），按照 C 函数
   |fprintf| 的行为方式用 C 风格格式化串格式化 |x| 得到的字符串，除了只允许
@@ -1073,15 +1403,19 @@ length(z);
   \inlinecode{format("\%+.3g", 0.00001234)} 则得到
   \inlinecode{+1.23\\!\\times\\!10\^\{-5\}}。}；
 
+\index{hex@\inlinecode=hex=}
 \item |int hex(string s)| \go
   将十六进制字符串 |s| 转换为一个整数。
 
+\index{string@\inlinecode=string=}
 \item |string string(real x, int digits=realDigits)| \go
   使用精度 |digits| 和 C 区域设置（locale）将 |x| 转换为字符串；
 
+\index{locale@\inlinecode=locale=}
 \item |string locale(string s="")| \go
   设定区域设置为给定的字符串（如果此字符串非空），并返回当前的区域设置；
 
+\index{time@\inlinecode=time=}
 \item |string time(string format="%a %b %d %T %Z %Y")| \go
   返回用 ANSI C 过程 \prgname{strftime}，依字符串 |format| 和当前区域设置
   格式化的当前时间\transnote{如下日期格式串的格式化字符表格参考 K\&R 和 C99
@@ -1135,6 +1469,7 @@ time("%a %b %d %H:%M:%S %Z %Y");
 \end{lstlisting}
   是返回以 \prgname{Unix date} 命令默认格式化的当前时间的等价的方法；
 
+\index{seconds@\inlinecode=seconds=}
 \item |int seconds(string t="", string format="")| \go
   返回新纪元（UTC 1970 年 1 月 1 日星期四，00:00:00）之后到某一时间的秒数。
   此时间由 ANSI C 过程 \prgname{strptime} 使用当前区域设置按字符串 |format|
@@ -1149,6 +1484,7 @@ seconds(time("%b %d %r %Z %Y"),"%b %d %r "+time("%Z")+" %Y");
   最后一个例子返回从元旦开始，今天的日期序数\transnote{相当于 
   \inlinecode{(int)time("\%j")}。}。
 
+\index{time@\inlinecode=time=}
 \item |string time(int seconds, string format="%a %b %d %T %Z %Y")| \go
   返回对应于新纪元（UTC 1970 年 1 月 1 日星期四，00:00:00）之后 |seconds| 秒
   的时间，由 ANSI C 过程 \prgname{strftime} 使用当前区域设置按字符串 |format|
@@ -1157,24 +1493,30 @@ seconds(time("%b %d %r %Z %Y"),"%b %d %r "+time("%Z")+" %Y");
 time(seconds()-24*60*60);
 \end{lstlisting}
 
+\index{abort@\inlinecode=abort=}
 \item |void abort(string s)| \go
   中止执行（在批处理模式时返回一个非零值）；如果字符串 |s| 非空，则会打印由
   源文件名、行号和 |s| 构成的诊断信息。
 
+\index{exit@\inlinecode=exit=}
 \item |void exit()| \go
   在批处理模式以错误返回值零退出\transnote{程序退出时返回值为零即为无错误。}。
 
+\index{sleep@\inlinecode=sleep=}
 \item |void sleep(int seconds)| \go
   暂停给定的秒数。
 
+\index{usleep@\inlinecode=usleep=}
 \item |void usleep(int microseconds)| \go
   暂停给定的毫秒数。
 
+\index{beep@\inlinecode=beep=}
 \item |void beep()| \go
   在控制台产生一声蜂鸣（哔声）。
 \end{funclist}
 \end{typelist}
 
+\index{typedef@\inlinecode=typedef=}
 像在 C/C++ 中一样，复合类型可以用 |typedef| 缩写\transnote{但
 \inlinecode{typedef} 定义的类型缩写对函数类型有一定限制：它不能用于
 \inlinecode{new} 之后构成匿名函数，其中也不能有函数的默认参数（注意默认参数
@@ -1188,8 +1530,13 @@ time(seconds()-24*60*60);
 \label{sec:pathsandguides}
 
 \begin{typelist}
+\index{path@\inlinecode=path=}
+\index{路径}
 \item[path] 解析为确定路径的三次样条。路径的隐式的初始式为 |nullpath|。
 
+\index{圆}
+\index{circle@\inlinecode=circle=}
+\index{unitcircle@\inlinecode=unitcircle=}
 例如，过程 |circle(pair c, real r)|，返回一条近似为原点在 |c| 半径为 |r| 的
 圆的 Bézier 曲线，它基于 |unitcircle|（见 \pageref{chap:tutorial} 页第%
 \ref{chap:tutorial}章\transnote{\inlinecode{unitcircle} 的定义为
@@ -1204,6 +1551,7 @@ path circle(pair c, real r)
   return shift(c)*scale(r)*unitcircle;
 }
 \end{lstlisting}
+\index{Circle@\inlinecode=Circle=}
 如果需要高精度，可以用模块 \prgname{graph.asy} 中定义的 |Circle| 过程来产生
 真圆\transnote{即返回结点数为 \inlinecode{nCircle} 的路径来逼近圆。在
 \prgname{graph} 模块中，\inlinecode{nCircle} 的默认值是 $400$，实用上这个数值
@@ -1216,6 +1564,8 @@ import graph;
 path Circle(pair c, real r, int n=nCircle);
 \end{lstlisting}
 
+\index{圆弧}
+\index{arc@\inlinecode=arc=}
 与 |circle| 一致，圆心为 |c| 半径为 |r|，从 |angle1| 到 |angle2| 度，在
 |angle2|${}\geq{}$|angle1| 时逆时针绘制的圆弧，可以这样构造：
 \index{arc@\inlinecode=arc=}
@@ -1227,6 +1577,10 @@ path arc(pair c, real r, real angle1, real angle2);
 \begin{lstlisting}
 path arc(pair c, real r, real angle1, real angle2, bool direction);
 \end{lstlisting}
+\index{逆时针}
+\index{顺时针}
+\index{CCW@\inlinecode=CCW=}
+\index{CW@\inlinecode=CW=}
 这里方向 |direction| 可以指定为 |CCW|（counter-clockwise，逆时针）或 |CW|%
 （clockwise，顺时针）。为方便计，从复数（点）|z1| 到 |z2|，圆心为 |c| 的圆弧
 （假定\transnote{从 \prgname{plain} 模块源码来看，这个函数实际得到的是圆心在
@@ -1251,6 +1605,7 @@ path Arc(pair c, explicit pair z1, explicit pair z2,
          bool direction=CCW, int n=nCircle);
 \end{lstlisting}
 
+\index{椭圆}
 椭圆可以用此过程绘制：
 \index{ellipse@\inlinecode=ellipse=}
 \begin{lstlisting}
@@ -1269,99 +1624,125 @@ path ellipse(pair c, real a, real b)
 
 这里是一些对路径有用的函数：
 \begin{funclist}
+\index{length@\inlinecode=length=}
 \item |int length(path p);| \go
   这是路径 |p| 的（直线或三次曲线）段数。如果 |p| 是环形，这就与 |p| 的结点
   数相同。
 
+\index{size@\inlinecode=size=}
 \item |int size(path p);| \go
   这是路径 |p| 的结点数。如果 |p| 是环形，这就与 |length(p)| 相同。
 
+\index{cyclic@\inlinecode=cyclic=}
 \item |bool cyclic(path p);| \go
   返回 |true| 当且仅当路径 |p| 为环形\transnote{即封闭路径。}。
 
+\index{straight@\inlinecode=straight=}
 \item |bool straight(path p, int i);| \go
   返回 |true| 当且仅当路径 |p| 在结点 |i| 和结点 |i+1| 之间的线段是直的。
 
+\index{piecewisestraight@\inlinecode=piecewisestraight=}
 \item |bool piecewisestraight(path p);| \go
   返回 |true| 当且仅当路径 |p| 是分段直的（即为折线）。
 
+\index{point@\inlinecode=point=}
 \item |pair point(path p, int t);| \go
   如果 |p| 是环形，返回结点 |t| mod |length(p)| 的坐标。否则，返回结点 |t|
   的坐标，除非 |t|${}<0$（此时返回 |point(0)|）或 |t|${}>{}$|length(p)|（此时
   返回 |point(length(p))|）。
 
+\index{point@\inlinecode=point=}
 \item |pair point(path p, real t);| \go
   这将返回结点 |floor(t)| 与 |floor(t)+1| 之间对应于三次样条参数 |t-floor(t)|
   的点的坐标（参看手册第\ref{chap:tutorial}章\nameref{chap:tutorial} Bézier
   曲线部分）。如果 |t| 在 $[0,{}$|length(p)|$]$ 的范围之外，则在 |p| 是环形的
   情况下首先模 |length(p)| 约化或在 |p| 非环形的情况下转化为 |p| 的对应终点。
 
+\index{dir@\inlinecode=dir=}
 \item |pair dir(path p, int t, int sign=0, bool normalize=true);| \go
   如果 |sign|${}<0$，则返回路径 |p| 在结点 |t| 处的入向切线方向（作为一个
   复数）；如果 |sign|${}>0$，则返回出向切线方向。如果 |sign|${}=0$，则返回
   两个方向的平均值。
 
+\index{dir@\inlinecode=dir=}
 \item |pair dir(path p, real t, bool normalize=true);| \go
   返回路径 |p| 在结点 |floor(t)| 和 |floor(t)+1| 之间对应于三次样条参数
   |t-floor(t)| 的点的切线方向（参看手册第\ref{chap:tutorial}章%
   \nameref{chap:tutorial}，Bézier 曲线部分）。
 
+\index{accel@\inlinecode=accel=}
 \item |pair accel(path p, int t, int sign=0);| \go
   如果 |sign|${}<0$，则返回路径 |p| 在结点 |t| 处的入向加速度（作为一个
   复数）；如果 |sign|${}>0$，则返回出向加速度。如果 |sign|${}=0$，则返回
   两个加速度的平均值。
 
+\index{accel@\inlinecode=accel=}
 \item |pair accel(path p, real t);| \go
   返回路径 |p| 在点 |t| 处的加速度。
 
+\index{radius@\inlinecode=radius=}
 \item |pair radius(path p, real t);| \go
   返回路径 |p| 在点 |t| 处的半径\transnote{指曲率半径，即密切圆的半径。}。
 
+\index{precontrol@\inlinecode=precontrol=}
 \item |pair precontrol(path p, int t);| \go
   返回 |p| 在结点 |t| 处的前控制点。
 
+\index{precontrol@\inlinecode=precontrol=}
 \item |pair precontrol(path p, real t);| \go
   返回 |p| 在参数 |t| 处的有效前控制点。
 
+\index{postcontrol@\inlinecode=postcontrol=}
 \item |pair postcontrol(path p, int t);| \go
   返回 |p| 在结点 |t| 处的后控制点。
 
+\index{postcontrol@\inlinecode=postcontrol=}
 \item |pair postcontrol(path p, real t);| \go
   返回 |p| 在结点 |t| 处的有效后控制点。
 
+\index{arclength@\inlinecode=arclength=}
 \item |real arclength(path p);| \go
   返回路径 |p| 表示的分段线性或三次曲线的长度（按用户坐标）。
 
+\index{arctime@\inlinecode=arctime=}
 \item |real arctime(path p, real L);| \go
   返回路径的“时刻\transnote{指曲线的时间参数。}”，一个在 0 和路径长度之间，
   在 |point(path p, real t)| 意义下的实数，在此时刻累积弧长（从路径开始处
   度量）等于 |L|。
 
+\index{dirtime@\inlinecode=dirtime=}
 \item |real dirtime(path p, pair z);| \go
   返回第一个“时刻”，它是在 0 和路径长度之间，在 |point(path, real)| 意义下
   的实数，在此时刻路径的切线具有复数 |z| 的方向，否则若没有这样的时刻则返回
   |-1|。
 
+\index{reltime@\inlinecode=reltime=}
 \item |real reltime(path p, real l);| \go
   返回路径 |p| 在其弧长的相对分数 |l| 处的时刻。
 
+\index{relpoint@\inlinecode=relpoint=}
 \item |pair relpoint(path p, real l);| \go
   返回路径 |p| 在其弧长的相对分数 |l| 处的点。
 
+\index{midpoint@\inlinecode=midpoint=}
 \item |pair midpoint(path p);| \go
   返回路径 |p| 在其一半弧长处的点。
 
+\index{reverse@\inlinecode=reverse=}
 \item |path reverse(path p);| \go
   返回一条沿 |p| 反向行进的路径。
 
+\index{subpath@\inlinecode=subpath=}
 \item |path subpath(path p, int a, int b);| \go
   返回 |p| 从结点 |a| 到结点 |b| 行进的子路径。如果 |a|${}<{}$|b|，则子路径的
   方向会反向。
 
+\index{subpath@\inlinecode=subpath=}
 \item |path subpath(path p, real a, real b);| \go
   返回 |p| 从路径时刻 |a| 到路径时刻 |b| 行进的子路径。如果 |a|${}<{}$|b|，则
   子路径的方向会反向。
 
+\index{intersect@\inlinecode=intersect=}
 \item |real[] intersect(path p, path q, real fuzz=-1);| \go
   如果 |p| 与 |q| 至少有一个交点，则返回一个长度为 2 的实数数组，它包含表示
   对于这样一个交点（交点按 \textit{The \MF{}book} 137 页描述的算法选择%
@@ -1376,39 +1757,49 @@ path ellipse(pair c, real a, real b)
   时刻。计算以 |fuzz| 确定的绝对误差执行，或者如果 |fuzz|${}<0$，则达到机器
   精度。如果路径不相交，返回一个长度为 0 的实数数组。
 
+\index{intersections@\inlinecode=intersections=}
 \item |real[][] intersections(path p, path q, real fuzz=-1);| \go
   以排序的（参看 \pageref{sec:arrays} 页 \ref{sec:arrays} 节排序的介绍），
   长度为 2 的实数数组的数组，返回路径 |p| 和 |q| 的所有（除非有无穷多个）相交
   时刻。计算以 |fuzz| 确定的绝对误差进行，或者如果 |fuzz|${}<0$，则达到机器
   精度。
 
+\index{intersections@\inlinecode=intersections=}
 \item |real[] intersections(path p, explicit pair a, explicit pair b, real fuzz=-1);| \go
   以已排序数组返回路径 |p| 与通过 |a|、|b| 两点的（无穷）直线的所有（除非有
   无穷多个）相交时刻。返回的相交时刻保证在绝对误差 |fuzz| 以内正确，或者，
   如果 |fuzz|${}<0$，则达到机器精度。
 
+\index{times@\inlinecode=times=}
 \item |real[] times(path p, real x)| \go
   返回路径 |p| 与通过 |(x,0)| 点的竖直直线的所有相交时刻。
 
+\index{times@\inlinecode=times=}
 \item |real[] times(path p, explicit pair z)| \go
   返回路径 |p| 与通过 |(0,z.y)| 点的水平直线的所有相交时刻。
 
+\index{mintimes@\inlinecode=mintimes=}
 \item |real[] mintimes(path p)| \go
   返回长度为 2，包含路径 |p| 分别达到其最小水平与竖直范围的时刻的数组。
 
+\index{maxtimes@\inlinecode=maxtimes=}
 \item |real[] maxtimes(path p)| \go
   返回长度为 2，包含路径 |p| 分别达到其最大水平与竖直范围的时刻的数组。
 
+\index{intersectionpoint@\inlinecode=intersectionpoint=}
 \item |pair intersectionpoint(path p, path q, real fuzz=-1);| \go
   返回交点 |point(p,intersect(p,q,fuzz)[0])|。
 
+\index{intersectionpoints@\inlinecode=intersectionpoints=}
 \item |pair[] intersectionpoints(path p, path q, real fuzz=-1);| \go
   返回包含路径 |p| 与 |q| 所有交点的数组。
 
+\index{extension@\inlinecode=extension=}
 \item |pair extension(pair P, pair Q, pair p, pair q);| \go
   返回线段 |P--Q| 与 |p--q| 延长线的交点，否则，如果两直线平行，返回
   |(infinity,infinity)|。
 
+\index{slice@\inlinecode=slice=}
 \item |slice cut(path p, path knife, int n);| \go
   以结构体 |slice|：
 \begin{lstlisting}
@@ -1419,14 +1810,17 @@ struct slice {
   返回路径 |p| 与路径 |knife| 第 |n| 次相交前后的路径 |p| 的划分（如果未找到
   交点，整个路径将被认为是在相交之“前”）。参数 |n| 会与相交次数取模。
 
+\index{firstcut@\inlinecode=firstcut=}
 \item |slice firstcut(path p, path knife);| \go
   等价于 |cut(p,knife,0)|；注意 |firstcut.after| 起到 \MP{} |cutbefore| 命令
   的作用。
 
+\index{lastcut@\inlinecode=lastcut=}
 \item |slice lastcut(path p, path knife);| \go
   等价于 |cut(p,knife,-1)|；注意 |lastcut.before| 起到 \MP{} |cutafter| 命令
   的作用。
 
+\index{buildcycle@\inlinecode=buildcycle=}
 \item |path buildcycle(... path[] p);| \go
   依照 \MP{} |buildcycle| 命令的行为\transnote{在 \MP{} 中的行为方式是：对于
   路径 $p_1$, $p_2$, \ldots, $p_k$，在每个 $p_i$ 和 $p_{i+1}$ 之间选取对
@@ -1434,12 +1828,15 @@ struct slice {
   \textit{\MP{}: A User's Manual} 中 9.1 节 Building Cycles。}，返回围绕由
   两个或更多相交的一列路径连续地界定的区域得到的路径。
 
+\index{min@\inlinecode=min=}
 \item |pair min(path p);| \go
   返回路径 |p| 的路径边框的 $(\text{左}, \text{下})$ 角复数。
 
+\index{max@\inlinecode=max=}
 \item |pair max(path p);| \go
   返回路径 |p| 的路径边框的 $(\text{右}, \text{上})$ 角复数。
 
+\index{windingnumber@\inlinecode=windingnumber=}
 \item |int windingnumber(path p, pair z);| \go
   返回环形路径 |p| 关于点 |z| 的卷绕数\transnote{这是一个拓扑不变量，如图：
   \\\centerline{\includegraphics[width=0.8\textwidth]{windingnumber.pdf}}\\
@@ -1449,23 +1846,30 @@ struct slice {
   \tilde\theta(t))$。}。若路径以逆时针方向环绕 |z|，则卷绕数是正数。如果 |z|
   在路径 |p| 上，则返回常数 |undefined|（定义为最大的奇数）。
 
+\index{inside@\inlinecode=inside=}
 \item |bool inside(path p, pair z, pen fillrule=currentpen);| \go
   返回 |true| 当且仅当点 |z| 在环形路径 |p| 据填充规则 |fillrule|（见
   \pageref{sec:pens} 页 \ref{sec:pens} 节）界定的区域内部或边界上。
 
+\index{inside@\inlinecode=inside=}
 \item |int inside(path p, path q, pen fillrule=currentpen);| \go
   如果环形路径 |p| 按填充规则 |fillrule|（见 \pageref{sec:pens} 页
   \ref{sec:pens} 节）严格包含 |q| 则返回 |1|，如果路径 |q| 严格包含 |p| 则
   返回 |-1|，否则返回 |0|。
 
+\index{inside@\inlinecode=inside=}
 \item |pair inside(path p, pen fillrule=currentpen);| \go
   返回按填充规则 |fillrule|（见 \pageref{sec:pens} 页 \ref{sec:pens} 节）在
   一条环形路径 |p| 严格内部的任意一点。
 
+\index{strokepath@\inlinecode=strokepath=}
 \item |path[] strokepath(path g, pen p=currentpen);| \go
   返回 \prgname{PostScript} 用画笔 |p| 绘制路径 |g| 时将会填充的路径数组。
 \end{funclist}
 
+\index{guide@\inlinecode=guide=}
+\index{路向}
+\index{nullpath@\inlinecode=nullpath=}
 \item[guide] 未解析的三次样条（一列三次样条结点与控制点）。路向（|guide|）的
 隐式初始式为 |nullpath|；这对在循环中建立路向有用。
 
@@ -1496,23 +1900,29 @@ for(int i=0; i < 10; ++i)
 下列过程可用于在不将路向实际解析为确定的路径的情况下检查路向的个别元素（除了
 内部环形，它们会被解析）：
 \begin{funclist}
+\index{size@\inlinecode=size=}
 \item |int size(guide g);| \go
   与 |size(path p)| 类似。
 
+\index{length@\inlinecode=length=}
 \item |int length(guide g);| \go
   与 |length(path p)| 类似。
 
+\index{cyclic@\inlinecode=cyclic=}
 \item |bool cyclic(path p);| \go
   与 |cyclic(path p)| 类似。
 
+\index{point@\inlinecode=point=}
 \item |pair point(guide g, int t);| \go
   与 |point(path p, int t)| 类似。
 
+\index{reverse@\inlinecode=reverse=}
 \item |guide reverse(guide g);| \go
   与 |reverse(path p)| 类似。如果 |g| 是环形的而且也包含次级环，它首先会被
   解析为一条路径，然后反向。如果 |g| 不是环形的但包含内部环，只有内部环先会被
   解决。如果没有内部环，路向会反向但不会解析为路径。
 
+\index{dirSpecifier@\inlinecode=dirSpecifier=}
 \item |pair[] dirSpecifier(guide g, int i);| \go
   返回一个长度为 2 的复数数组，包含对路向 |g| 在结点 |i| 和 |i+1| 之间的段的
   出向（在元素 0）和入向（在元素 1）的方向限定子\transnote{在形如
@@ -1520,6 +1930,7 @@ for(int i=0; i < 10; ++i)
   \inlinecode{d1} 和 \inlinecode{d2}，模长会被约化为 1。}（或 |(0,0)|，如果
   没有限定）。
 
+\index{controlSpecifier@\inlinecode=controlSpecifier=}
 \item |pair[] controlSpecifier(guide g, int i);| \go
   如果路向 |g| 在结点 |i| 和 |i+1| 之间的段有明确的出向和入向控制点%
   \transnote{在形如 \inlinecode{z1 .. controls c1 and c2 .. z2} 的路向中，
@@ -1528,6 +1939,7 @@ for(int i=0; i < 10; ++i)
   \inlinecode{z1 .. controls c and c .. z2}。}，它们会被分别以一个两元素的
   数组的元素 0 和 1 返回。否则，会返回一个空白数组。
 
+\index{tensionSpecifier@\inlinecode=tensionSpecifier=}
 \item |tensionSpecifier tensionSpecifier(guide g, int i);| \go
   返回路向 |g| 在结点 |i| 和 |i+1| 之间的段的张力限定子。|tensionSpecifier|
   类型的个别组成部分可以按虚拟成员 |in|、|out| 和 |atLeast| 访问%
@@ -1541,6 +1953,7 @@ for(int i=0; i < 10; ++i)
   \inlinecode{tensionSpecifier} 类型的变量 \inlinecode{tens}，可以使用
   \inlinecode{z1 .. tens .. z2} 的语法构造路向。}。
 
+\index{curlSpecifier@\inlinecode=curlSpecifier=}
 \item |real[] curlSpecifier(guide g);| \go
   返回一个数组，它包含路向 |g| 的起点卷曲限定子（在元素 0 中）和终点卷曲限定
   子（在元素 1 中）\transnote{在形如
@@ -1566,13 +1979,21 @@ e{down}..nullpath..{up}f;
 % 5.3 Pens
 \label{sec:pens}
 
+\index{画笔}
+\index{pen@\inlinecode=pen=}
+\index{currentpen@\inlinecode=currentpen=}
+\index{defaultpen@\inlinecode=defaultpen=}
 在 \prgname{Asymptote} 中，画笔为四个基本绘图命令提供了上下文（见
 \pageref{chap:drawingcommands} 页第\ref{chap:drawingcommands}章）。它们用于
 限定如下的绘图属性：颜色、线型、线宽、线端、线连接、填充规则、文字对齐、
 字体、字体大小、图案、覆写模式以及笔尖的书写变换。绘图过程默认使用的画笔叫做
-|currentpen|。它提供了与 \MP{} 命令 |pickup| 相当的功能。画笔的隐式初始式为
-|defaultpen|。
+|currentpen|。它提供了与 \MP{} 命令 \verb=pickup= 相当的功能。画笔的隐式初始
+式为 |defaultpen|。
 
+\index{+@\inlinecode=+=}
+\index{画笔!相加}
+\index{*@\inlinecode=*=}
+\index{画笔!数乘}
 画笔可以用非结合的二元运算符 |+| 相加。这将加起两个画笔的颜色。右端画笔的所有
 其他非默认属性将覆盖左端的画笔。因而，比如说，可以用 |dashed+red+green| 或
 |red+green+dashed| 或 |red+dashed+green| 来得到黄色虚线笔。二元运算符 |*| 可
@@ -1585,38 +2006,55 @@ e{down}..nullpath..{up}f;
 语法接近 \LaTeX 的 \prgname{xcolor} 宏包）。}。
 
 \begin{itemize}
+\index{画笔!颜色}
   \item 颜色用下列颜色空间之一限定：
 \begin{funclist}
+\index{灰阶颜色}
+\index{gray@\inlinecode=gray=}
 \item |pen gray(real g);| \go
   产生灰阶颜色，其中亮度 |g| 在区间 $[0,1]$ 内，$0.0$ 表示黑色而 $1.0$ 表示
   白色。
 
+\index{RGB 颜色}
+\index{rgb@\inlinecode=rgb=}
 \item |pen rgb(real r, real g, real b);| \go
   产生 RGB 颜色\transnote{红（red）、绿（green）、蓝（blue）颜色，这三种颜色
   是色光三原色，计算机屏幕输出即以这种颜色空间为基础。}，其中红、绿、蓝每个的
   亮度都在区间 $[0,1]$ 内。
 
+\index{CMYK 颜色}
+\index{cmyk@\inlinecode=cmyk=}
 \item |pen cmyk(real c, real m, real y, real k);| \go
   产生 CMYK 颜色\transnote{青（cyan）、品红（magenta）、黄（yellow）、黑
   （black）颜色，这是印刷工业常用的标准颜色空间。}，其中青、品红、黄、黑每个
   的亮度都在区间 $[0,1]$ 内。
 
+\index{invisible@\inlinecode=invisible=}
 \item |pen invisible;| \go
   这是使用不可见墨水书写的特殊画笔，但就像什么东西被画了一样调节边框（类似
   \TeX{} 中的 \verb=\phantom= 命令）。函数 |bool invisible(pen)| 可用来测试
   一支画笔是否不可见。
 \end{funclist}
 
+\index{defaultpen@\inlinecode=defaultpen=}
+\index{colorspace@\inlinecode=colorspace=}
+\index{颜色空间}
 默认的颜色是 |black|（黑色）；这个可以使用过程 |defaultpen(pen)| 来改变。函数
 |colorspace(pen p)| 以字符串返回画笔 |p| 的颜色空间（|"gray"|、|"rgb"|、
 |"cmyk"| 或 |""|）。
 
+\index{colors@\inlinecode=colors=}
+\index{gray@\inlinecode=gray=}
+\index{rgb@\inlinecode=rgb=}
+\index{cmyk@\inlinecode=cmyk=}
+\index{colorless@\inlinecode=colorless=}
 函数 |real[] colors(pen)| 返回画笔的各颜色分量。函数 |pen gray(pen)|、
 |pen rgb(pen)| 以及 |pen cmyk(pen)| 返回分别将其参数转化为对应颜色空间的得到
 的新画笔。函数 |colorless(pen=currentpen)| 返回其参数的复本，而剥离其颜色属性
 （以避免混色）。
 
 使用如下过程，可以将 6 字符的 RGB 十六进制串转换为画笔：
+\index{rgb@\inlinecode=rgb=}
 \begin{lstlisting}
 pen rgb(string s);
 \end{lstlisting}
@@ -1626,19 +2064,144 @@ pen rgb(string s);
 |blue|（蓝），以及 RGB 次级基本色 |cyan|（青）、|magenta|（品红）、
 |yellow|（黄），还有 CMYK 基本色 |Cyan|、|Magenta|、|Yellow|、|Black|：
 \begin{center}
+  \index{palered@\inlinecode=palered=}
+  \index{颜色!palered@\inlinecode=palered=}
+  \index{lightred@\inlinecode=lightred=}
+  \index{颜色!lightred@\inlinecode=lightred=}
+  \index{mediumred@\inlinecode=mediumred=}
+  \index{颜色!mediumred@\inlinecode=mediumred=}
+  \index{red@\inlinecode=red=}
+  \index{颜色!red@\inlinecode=red=}
+  \index{heavyred@\inlinecode=heavyred=}
+  \index{颜色!heavyred@\inlinecode=heavyred=}
+  \index{brown@\inlinecode=brown=}
+  \index{颜色!brown@\inlinecode=brown=}
+  \index{darkbrown@\inlinecode=darkbrown=}
+  \index{颜色!darkbrown@\inlinecode=darkbrown=}
+  \index{palegreen@\inlinecode=palegreen=}
+  \index{颜色!palegreen@\inlinecode=palegreen=}
+  \index{lightgreen@\inlinecode=lightgreen=}
+  \index{颜色!lightgreen@\inlinecode=lightgreen=}
+  \index{mediumgreen@\inlinecode=mediumgreen=}
+  \index{颜色!mediumgreen@\inlinecode=mediumgreen=}
+  \index{green@\inlinecode=green=}
+  \index{颜色!green@\inlinecode=green=}
+  \index{heavygreen@\inlinecode=heavygreen=}
+  \index{颜色!heavygreen@\inlinecode=heavygreen=}
+  \index{deepgreen@\inlinecode=deepgreen=}
+  \index{颜色!deepgreen@\inlinecode=deepgreen=}
+  \index{darkgreen@\inlinecode=darkgreen=}
+  \index{颜色!darkgreen@\inlinecode=darkgreen=}
+  \index{paleblue@\inlinecode=paleblue=}
+  \index{颜色!paleblue@\inlinecode=paleblue=}
+  \index{lightblue@\inlinecode=lightblue=}
+  \index{颜色!lightblue@\inlinecode=lightblue=}
+  \index{mediumblue@\inlinecode=mediumblue=}
+  \index{颜色!mediumblue@\inlinecode=mediumblue=}
+  \index{blue@\inlinecode=blue=}
+  \index{颜色!blue@\inlinecode=blue=}
+  \index{heavyblue@\inlinecode=heavyblue=}
+  \index{颜色!heavyblue@\inlinecode=heavyblue=}
+  \index{deepblue@\inlinecode=deepblue=}
+  \index{颜色!deepblue@\inlinecode=deepblue=}
+  \index{darkblue@\inlinecode=darkblue=}
+  \index{颜色!darkblue@\inlinecode=darkblue=}
+  \index{palecyan@\inlinecode=palecyan=}
+  \index{颜色!palecyan@\inlinecode=palecyan=}
+  \index{lightcyan@\inlinecode=lightcyan=}
+  \index{颜色!lightcyan@\inlinecode=lightcyan=}
+  \index{mediumcyan@\inlinecode=mediumcyan=}
+  \index{颜色!mediumcyan@\inlinecode=mediumcyan=}
+  \index{cyan@\inlinecode=cyan=}
+  \index{颜色!cyan@\inlinecode=cyan=}
+  \index{heavycyan@\inlinecode=heavycyan=}
+  \index{颜色!heavycyan@\inlinecode=heavycyan=}
+  \index{deepcyan@\inlinecode=deepcyan=}
+  \index{颜色!deepcyan@\inlinecode=deepcyan=}
+  \index{darkcyan@\inlinecode=darkcyan=}
+  \index{颜色!darkcyan@\inlinecode=darkcyan=}
+  \index{pink@\inlinecode=pink=}
+  \index{颜色!pink@\inlinecode=pink=}
+  \index{lightmagenta@\inlinecode=lightmagenta=}
+  \index{颜色!lightmagenta@\inlinecode=lightmagenta=}
+  \index{mediummagenta@\inlinecode=mediummagenta=}
+  \index{颜色!mediummagenta@\inlinecode=mediummagenta=}
+  \index{magenta@\inlinecode=magenta=}
+  \index{颜色!magenta@\inlinecode=magenta=}
+  \index{heavymagenta@\inlinecode=heavymagenta=}
+  \index{颜色!heavymagenta@\inlinecode=heavymagenta=}
+  \index{deepmagenta@\inlinecode=deepmagenta=}
+  \index{颜色!deepmagenta@\inlinecode=deepmagenta=}
+  \index{darkmagenta@\inlinecode=darkmagenta=}
+  \index{颜色!darkmagenta@\inlinecode=darkmagenta=}
+  \index{paleyellow@\inlinecode=paleyellow=}
+  \index{颜色!paleyellow@\inlinecode=paleyellow=}
+  \index{lightyellow@\inlinecode=lightyellow=}
+  \index{颜色!lightyellow@\inlinecode=lightyellow=}
+  \index{mediumyellow@\inlinecode=mediumyellow=}
+  \index{颜色!mediumyellow@\inlinecode=mediumyellow=}
+  \index{yellow@\inlinecode=yellow=}
+  \index{颜色!yellow@\inlinecode=yellow=}
+  \index{lightolive@\inlinecode=lightolive=}
+  \index{颜色!lightolive@\inlinecode=lightolive=}
+  \index{olive@\inlinecode=olive=}
+  \index{颜色!olive@\inlinecode=olive=}
+  \index{darkolive@\inlinecode=darkolive=}
+  \index{颜色!darkolive@\inlinecode=darkolive=}
+  \index{palegray@\inlinecode=palegray=}
+  \index{颜色!palegray@\inlinecode=palegray=}
+  \index{lightgray@\inlinecode=lightgray=}
+  \index{颜色!lightgray@\inlinecode=lightgray=}
+  \index{mediumgray@\inlinecode=mediumgray=}
+  \index{颜色!mediumgray@\inlinecode=mediumgray=}
+  \index{gray@\inlinecode=gray=}
+  \index{颜色!gray@\inlinecode=gray=}
+  \index{heavygray@\inlinecode=heavygray=}
+  \index{颜色!heavygray@\inlinecode=heavygray=}
+  \index{deepgray@\inlinecode=deepgray=}
+  \index{颜色!deepgray@\inlinecode=deepgray=}
+  \index{darkgray@\inlinecode=darkgray=}
+  \index{颜色!darkgray@\inlinecode=darkgray=}
+  \index{black@\inlinecode=black=}
+  \index{颜色!black@\inlinecode=black=}
+  \index{white@\inlinecode=white=}
+  \index{颜色!white@\inlinecode=white=}
+  \index{orange@\inlinecode=orange=}
+  \index{颜色!orange@\inlinecode=orange=}
+  \index{fuchsia@\inlinecode=fuchsia=}
+  \index{颜色!fuchsia@\inlinecode=fuchsia=}
+  \index{chartreuse@\inlinecode=chartreuse=}
+  \index{颜色!chartreuse@\inlinecode=chartreuse=}
+  \index{springgreen@\inlinecode=springgreen=}
+  \index{颜色!springgreen@\inlinecode=springgreen=}
+  \index{purple@\inlinecode=purple=}
+  \index{颜色!purple@\inlinecode=purple=}
+  \index{royalblue@\inlinecode=royalblue=}
+  \index{颜色!royalblue@\inlinecode=royalblue=}
+  \index{Cyan@\inlinecode=Cyan=}
+  \index{颜色!Cyan@\inlinecode=Cyan=}
+  \index{Magenta@\inlinecode=Magenta=}
+  \index{颜色!Magenta@\inlinecode=Magenta=}
+  \index{Yellow@\inlinecode=Yellow=}
+  \index{颜色!Yellow@\inlinecode=Yellow=}
+  \index{Black@\inlinecode=Black=}
+  \index{颜色!Black@\inlinecode=Black=}
   \includegraphics{colors.pdf}
 \end{center}
 
+\index{x11colors@\prgname{x11colors}}
 标准的 140 种 RGB \prgname{X11} 颜色可以使用如下命令导入：
 \begin{lstlisting}
 import x11colors;
 \end{lstlisting}
+\index{texcolors@\prgname{texcolors}}
 而标准的 68 种 CMYK \TeX{} 颜色可以使用如下命令导入：
 \begin{lstlisting}
 import texcolors;
 \end{lstlisting}
 注意两个标准重复定义的一些颜色（如 |Green|）实际并不一致。
 
+\index{asycolors.sty@\prgname{asycolors.sty}}
 \prgname{Asymptote} 还附有一个 \prgname{asycolors.sty} 的 \LaTeX{} 宏包，定义
 了 \LaTeX{} CMYK 版本的 \prgname{Asymptote} 预定义颜色，从而使其可以直接用于
 \LaTeX{} 字符串中。通常，这些颜色通过画笔参数传递给 \LaTeX{}；然而，要仅对
@@ -1649,6 +2212,7 @@ import texcolors;
 usepackage("asycolors");
 \end{lstlisting}
 
+\index{hsv@\inlinecode=hsv=}
 定义于 \prgname{plain\_pens.asy} 的结构体 |hsv| 可以用于在 HSV（Hue
 Saturation Value，色调饱和度明度）和 RGB 空间相互转换，其中色调 |h| 是一个在
 $[0,360)$ 内的角度而饱和度 |s| 和明度 |v| 在 $[0,1]$ 内：
@@ -1659,6 +2223,8 @@ hsv q=p;
 write(q.h,q.s,q.v);   // 180    0.5   0.75
 \end{lstlisting}
 
+\index{画笔!线型}
+\index{linetype@\inlinecode=linetype=}
 \item 线型用函数
   |pen linetype(string s, real offset=0, bool scale=true, bool adjust=true)|
   确定，其中 |s| 是一个由空格分隔的若干整数或实数组成的字符串。可选参数
@@ -1667,6 +2233,13 @@ write(q.h,q.s,q.v);   // 180    0.5   0.75
   第二个数字限定在画笔抬起时画多远，以此类推。如果 |adjust| 为 |true|，这此
   间距将自动由 \prgname{Asymptote} 调整以适合路径的弧长。这里是一些预定义的
   线型：
+\index{solid@\inlinecode=solid=}
+\index{dotted@\inlinecode=dotted=}
+\index{dashed@\inlinecode=dashed=}
+\index{longdashed@\inlinecode=longdashed=}
+\index{dashdotted@\inlinecode=dashdotted=}
+\index{longdashdotted@\inlinecode=longdashdotted=}
+\index{Dotted@\inlinecode=Dotted=}
 \begin{lstlisting}
 pen solid=linetype("");
 pen dotted=linetype("0 4");
@@ -1683,6 +2256,8 @@ pen Dotted(pen p=currentpen) {return dotted+2*linewidth(p);}
 
   默认的线型是 |solid|；这可以用 |defaultpen(pen)| 改变。
 
+\index{画笔!线宽}
+\index{linewidth@\inlinecode=linewidth=}
 \item 画笔的线宽使用 |pen linewidth(real)| 按 \prgname{PostScript} 单位来
   限定\transnote{在 \prgname{Asymptote} 中，用 \prgname{PostScript} 单位表示
   的长度是最终输出图形中的绝对长度，不会被放缩。}。默认的线宽为 $0.5$\,dp；
@@ -1700,10 +2275,15 @@ defaultpen(2);
 pen p=red+0.5;
 \end{lstlisting}
 
+\index{画笔!线端}
+\index{linecap@\inlinecode=linecap=}
 \item 特定 \prgname{PostScript} 线端的画笔可以通过以一个整数参数调用
   |linecap| 返回\transnote{线端（line cap）指曲线端点的形状，
   \prgname{PostScript} 三种线端有方形、圆形和外扩方形，如下图所示：
   \begin{center}\includegraphics{linecap.pdf}\end{center}}：
+\index{squarecap@\inlinecode=squarecap=}
+\index{roundcap@\inlinecode=roundcap=}
+\index{extendcap@\inlinecode=extendcap=}
 \begin{lstlisting}
 pen squarecap=linecap(0);
 pen roundcap=linecap(1);
@@ -1712,9 +2292,14 @@ pen extendcap=linecap(2);
   默认的线端为 |roundcap|，可以用 |defaultpen(pen)| 改变。画笔的线端由
   |int linecap(pen p=currentpen)| 返回。
 
+\index{画笔!连接样式}
+\index{linejoin@\inlinecode=linejoin=}
 \item 特定 \prgname{PostScript} 连接样式的画笔可以以一个整数参数调用
   |linejoin| 返回\transnote{\prgname{PostScript} 三种折线的连接样式为尖角
   连接、圆角连接和斜角连接：\begin{center}\includegraphics{linejoin.pdf}\end{center}}：
+\index{miterjoin@\inlinecode=miterjoin=}
+\index{roundjoin@\inlinecode=roundjoin=}
+\index{beveljoin@\inlinecode=beveljoin=}
 \begin{lstlisting}
 pen miterjoin=linejoin(0);
 pen roundjoin=linejoin(1);
@@ -1723,13 +2308,19 @@ pen beveljoin=linejoin(2);
   默认的连接样式为 |roundjoin|，可以用 |defaultpen(pen)| 改变。画笔的连接样式
   由 |int linejoin(pen p=currentpen)| 返回。
 
+\index{画笔!尖角限量}
+\index{miterlimit@\inlinecode=miterlimit=}
 \item 有一定 \prgname{PostScript} 尖角限量（miter limit）的画笔由
   |miterlimit(real)| 的调用返回。默认的尖角限量，|10.0|，可以用
   |defaultpen(pen)| 改变。画笔的尖角限量由 |real miterlimit(pen p=currentpen)|
   返回。
 
+\index{画笔!填充规则}
+\index{fillrule@\inlinecode=fillrule=}
 \item 特定 \prgname{PostScript} 填充规则的画笔可以以一个整数参数调用
   |fillrule| 返回：
+\index{zerowinding@\inlinecode=zerowinding=}
+\index{evenodd@\inlinecode=evenodd=}
 \begin{lstlisting}
 pen zerowinding=fillrule(0);
 pen evenodd=fillrule(1);
@@ -1741,7 +2332,11 @@ pen evenodd=fillrule(1);
   区域外面。默认的填充规则为 |zerowinding|，可以用 |defaultpen(pen)| 改变。
   画笔的填充规则由 |int fillrule(pen p=currentpen)| 返回。
 
+\index{画笔!文字对齐}
+\index{basealign@\inlinecode=basealign=}
 \item 特定文字对齐设置的画笔能以一个整数参数调用 |basealign| 返回：
+\index{nobasealign@\inlinecode=nobasealign=}
+\index{basealign@\inlinecode=basealign=}
 \begin{lstlisting}
 pen nobasealign=basealign(0);
 pen basealign=basealign(1);
@@ -1750,9 +2345,12 @@ pen basealign=basealign(1);
   用 |defaultpen(pen)| 改变。相反，|baseline| 要求考虑 \TeX{} 基线。
   画笔的基线对齐设置由 |int basealign(pen p=currentpen)| 返回。
 
+\index{画笔!字体大小}
+\index{fontsize@\inlinecode=fontsize=}
 \item 字体大小用函数 |pen fontsize(real size, real lineskip=1.2*size)| 按
   \TeX{} 点（$1\,\text{pt}=1/72.27 \,\text{英寸}$）确定。默认的字体大小为
   $12$\,pt，可以用 |defaultpen(pen)| 改变。非标准的字体大小需要在文件开头插入
+\index{fontsize.asy@\prgname{fontsize.asy}}
 \begin{lstlisting}
 import fontsize;
 \end{lstlisting}
@@ -1762,7 +2360,10 @@ import fontsize;
   |real fontsize(pen p=currentpen)| 与 |real lineskip(pen p=currentpen)| 进行
   检查。
 
+\index{画笔!字体}
+\index{LaTeX NFSS 字体@\LaTeX\ NFSS 字体}
 \item 使用特定 \LaTeX\ NFSS 字体的画笔可调用函数
+\index{font@\inlinecode=font=}
 \begin{lstlisting}
 pen font(string encoding, string family, string series="m", string shape="n")
 \end{lstlisting}
@@ -1779,9 +2380,22 @@ pen font(string encoding, string family, string series="m", string shape="n")
   |pcrr|（Courier）。还可以给定可选的大小参数来将字体放缩到要求的大小：
   |pen font(string name, real size)|。
 
+  \index{字体命令}
+  \index{fontcommand@\inlinecode=fontcommand=}
   非标准的字体命令可以用 |pen fontcommand(string)| 生成。
 
+  \index{PostScript 字体@\prgname{PostScript} 字体}
   下面提供了标准 \prgname{PostScript} 字体的方便界面：
+\index{AvantGarde@\inlinecode=AvantGarde=}
+\index{Bookman@\inlinecode=Bookman=}
+\index{Courier@\inlinecode=Courier=}
+\index{Helvetica@\inlinecode=Helvetica=}
+\index{NewCenturySchoolBook@\inlinecode=NewCenturySchoolBook=}
+\index{Palatino@\inlinecode=Palatino=}
+\index{TimesRoman@\inlinecode=TimesRoman=}
+\index{ZapfChancery@\inlinecode=ZapfChancery=}
+\index{Symbol@\inlinecode=Symbol=}
+\index{ZapfDingbats@\inlinecode=ZapfDingbats=}
 \begin{lstlisting}
 pen AvantGarde(string series="m", string shape="n");
 pen Bookman(string series="m", string shape="n");
@@ -1795,7 +2409,9 @@ pen Symbol(string series="m", string shape="n");
 pen ZapfDingbats(string series="m", string shape="n");
 \end{lstlisting}
 
+\index{画笔!透明度}
 \item 画笔的透明度可以用此命令改变：
+\index{opacity@\inlinecode=opacity=}
 \begin{lstlisting}
 pen opacity(real opacity=1, string blend="Compatible");
 \end{lstlisting}
@@ -1817,16 +2433,22 @@ pen opacity(real opacity=1, string blend="Compatible");
   \setbox0\vbox{\lstinputlisting{transparency.asy}}%
   \includegraphics[height=\ht0]{transparency.pdf}\box0}。
 
+\index{画笔!铺砌图案}
 \item |picture| 中的 \prgname{PostScript} 命令可以用于创建一个以字符串 |name|
   标识的铺砌图案，通过将其加在全局 \prgname{PostScript} 帧 |currentpatterns|
   上来影响 |fill| 和 |draw| 操作，外带可选的左下边界 |lb| 和右上边界 |rt|。
+\index{add@\inlinecode=add=}
 \begin{lstlisting}
 import patterns;
 void add(string name, picture pic, pair lb=0, pair rt=0);
 \end{lstlisting}
 
+  \index{pattern@\inlinecode=pattern=}
   要使用图案 |name| 进行 |fill| 或 |draw|，使用画笔 |pattern("name")|。例如，
   矩形铺砌可以使用定义于 \prgname{patternss.asy} 的过程
+\index{tile@\inlinecode=tile=}
+\index{checker@\inlinecode=checker=}
+\index{brick@\inlinecode=brick=}
 \begin{lstlisting}
 picture tile(real Hx=5mm, real Hy=0, pen p=currentpen,
              filltype filltype=NoFill);
@@ -1838,6 +2460,8 @@ picture brick(real Hx=5mm, real Hy=0, pen p=currentpen);
 \begin{center}
   \includegraphics{tile.pdf}
 \end{center}
+\index{hatch@\inlinecode=hatch=}
+\index{crosshatch@\inlinecode=crosshatch=}
   阴影线图案可以通过过程
   |picture hatch(real H=5mm, pair dir=NE, pen p=currentpen)|、
   |picture crosshatch(real H=5mm, pen p=currentpen)| 生成：
@@ -1857,6 +2481,9 @@ picture brick(real Hx=5mm, real Hy=0, pen p=currentpen);
   \includegraphics{shadedtiling.pdf}
 \end{center}
 
+\index{画笔!笔尖}
+\index{makepen@\inlinecode=makepen=}
+\index{nib@\inlinecode=nib=}
 \item 可以使用 |pen makepen(path)| 来以任意多边形路径确定自定义的笔尖；此路径
   表示用以绘制包含单个点的路径的记号。笔尖路径可以用 |path nib(pen)| 从一个
   画笔中恢复出来。不像 \MP{} 中那样，路径不必是凸的：
@@ -1868,21 +2495,28 @@ picture brick(real Hx=5mm, real Hy=0, pen p=currentpen);
   值 |nullpath| 表示一个圆形笔尖（默认值）；椭圆形画笔可以仅仅通过给画笔乘以
   一个变换得到：|yscale(2)*currentpen|。
 
+\index{画笔!覆写}
+\index{overwrite@\inlinecode=overwrite=}
 \item 使用画笔属性 |overwrite|，可以避免标签互相覆写，它取单独一个参数：
 \begin{funclist}
+\index{Allow@\inlinecode=Allow=}
 \item |Allow| \go
   允许标签互相覆写。这是默认行为（除非用 |defaultpen(pen)| 废除）。
 
+\index{Suppress@\inlinecode=Suppress=}
 \item |Suppress| \go
   禁止，对每个将覆写另一个标签的标签，连带一个警告。
 
+\index{SuppressQuiet@\inlinecode=SuppressQuiet=}
 \item |SuppressQuiet| \go
   禁止，对每个将覆写另一个标签的标签，没有警告。
 
+\index{Move@\inlinecode=Move=}
 \item |Move| \go
   把将要覆写另一个标签的标签移走并发出警告。由于此调整是在最终输出阶段（以
   \prgname{PostScript} 坐标），可能结果会得到比要求的更大一些的图形。
 
+\index{MoveQuiet@\inlinecode=MoveQuiet=}
 \item |MoveQuiet| \go
   把将要覆写另一个标签的标签移走而不发出警告。由于此调整是在最终输出阶段（以
   \prgname{PostScript} 坐标），可能结果会得到比要求的更大一些的图形。
@@ -1898,6 +2532,7 @@ picture brick(real Hx=5mm, real Hy=0, pen p=currentpen);
 % 5.4 Transforms
 \label{sec:transforms}
 
+\index{仿射变换}\index{变换}
 \prgname{Asymptote} 广泛利用仿射变换。复数 |(x,y)| 由变换
 |t=(t.x,t.y,t.xx,t.xy,t.yx,t.yy)| 变换到
 \lstinline[stringstyle={\color{black}}]=(x',y')=，其中
@@ -1908,6 +2543,13 @@ y' = t.y + t.yx * x + t.yy * y
 \lstset{}
 这等价于 \prgname{PostScript} 变换 |[t.xx t.yx t.xy t.yy t.x t.y]|。
 
+\index{transform@\inlinecode=transform=}
+\index{inverse@\inlinecode=inverse=}
+\index{逆变换}
+\index{变换!逆}
+\index{^@\inlinecode=^=}
+\index{*@\inlinecode=*=}
+\index{变换!复合}
 变换可以用左乘（通过二元运算符 |*|）应用于复数、路向、路径、画笔、字符串、
 变换、帧与图（见 \pageref{sec:pathsandguides} 页 \ref{sec:pathsandguides} 节
 圆的例子）。变换可以互相复合并通过函数 |transform inverse(transform t)| 取
@@ -1917,37 +2559,59 @@ $n$ 次幂（$n>0$）表示 $n$ 个自身复合；变换的 $-n$ 次幂表示其
 
 内建的变换有：
 \begin{funclist}
+\index{变换!恒同变换}
+\index{identity@\inlinecode=identity=}
 \item |transform identity();| \go
   恒同变换；
 
+\index{变换!平移}
+\index{shift@\inlinecode=shift=}
 \item |transform shift(pair z);| \go
   按复数 |z| 平移；
 
+\index{变换!平移}
+\index{shift@\inlinecode=shift=}
 \item |transform shift(real x, real y);| \go
   按复数 |(x,y)| 平移；
 
+\index{变换!放缩}
+\index{xscale@\inlinecode=xscale=}
 \item |transform xscale(real x);| \go
   在 $x$ 方向按 |x| 放缩；
 
+\index{变换!放缩}
+\index{yscale@\inlinecode=yscale=}
 \item |transform yscale(real y);| \go
   在 $y$ 方向按 |y| 放缩；
 
+\index{变换!放缩}
+\index{scale@\inlinecode=scale=}
 \item |transform scale(real s);| \go
   在 $x$ 与 $y$ 方向都按 |s| 放缩；
 
+\index{变换!放缩}
+\index{scale@\inlinecode=scale=}
 \item |transform scale(real x, real y);| \go
   在 $x$ 方向按 |x| 而在 $y$ 方向按 |y| 放缩；
 
+\index{变换!倾斜}
+\index{变换!错切}
+\index{slant@\inlinecode=slant=}
 \item |transform slant(real s);| \go
   映射 $(x,y) \mapsto (x+{}$|s|${}\cdot y, y)$；
 
+\index{变换!旋转}
+\index{rotate@\inlinecode=rotate=}
 \item |transform rotate(real angle, pair z=(0,0));| \go
   关于 |z| 旋转 |angle| 度；
 
+\index{变换!反射}
+\index{reflect@\inlinecode=reflect=}
 \item |transform reflect(pair a, pair b);| \go
   关于直线 |a--b| 反射。
 \end{funclist}
 
+\index{shiftless@\inlinecode=shiftless=}
 变换的隐式初始式是 |identity()|。过程 |shift(transform t)| 和
 |shiftless(transform t)| 分别返回变换 |(t.x,t.y,0,0,0,0)| 和
 |(0,0,t.xx,t.xy,t.yx,t.yy)|\transnote{变换除了可以相乘、取幂，也可以相加，
@@ -2062,16 +2726,16 @@ transform fixedscaling(picture pic=currentpicture, pair min,
 \verb=prefix.fotmat=：
 \index{shipout@\inlinecode=shipout=}
 \begin{lstlisting}
-void shipout(string prefix=defaultfilename, picture pic,
+void shipout(string prefix=defaultfilename, picture pic=currentpicture,
              orientation orientation=orientation,
-             string format="", bool wait=false, bool view=true);
-void shipout(string prefix=defaultfilename,
-             orientation orientation=orientation,
-             string format="", bool wait=false, bool view=true);
+             string format="", bool wait=false, bool view=true,
+             string options="", string script="",
+             projection P=currentprojection);
 \end{lstlisting}
 默认的输出格式为 \prgname{PostScript}，可用命令行选项 \verb=-f= 或
-\verb=-tex= 改变。如果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加
-上一条 |shipout()| 命令。
+\verb=-tex= 改变。参数 |options|, |script| 与 |projection| 仅与 3D 图相关。如
+果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加上一条 |shipout()| 
+命令。
 
 \index{orientation@\inlinecode=orientation=}
 \index{Portrait@\inlinecode=Portrait=}
@@ -3206,7 +3870,8 @@ $\lfloor x \rfloor$，\inlinecode{ceil} 是向上取整 $\lceil x \rceil$，而
 （直方图），由基础模块文件 \prgname{stats.asy} 提供\transnote{这里的介绍十分
 简略，有需要的用户应去参考 \prgname{stats.asy} 的源文件以获得详细的函数参数
 形式。}。还定义了函数\transnote{这两个函数都返回 \inlinecode{int} 类型。}%
-|factorial(int n)|，返回 $n!$，以及 |choose(int n, int k)|，返回 $n!/(k!(n-k)!$。
+|factorial(int n)|，返回 $n!$，以及 |choose(int n, int k)|，返回
+$n!/(k!(n-k))!$。
 
 \bgroup\sloppy
 如果配置加上了 GNU 科学计算库（GNU Scientific Library, GSL），它在
@@ -4015,6 +4680,8 @@ int y=A.x;
 类型。这与那个变量事实上究竟有什么域无关。
 
 
+
+\printindex
 \end{document}
 
 % vim:tw=77:

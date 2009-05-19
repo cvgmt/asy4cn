@@ -1,1 +1,1 @@
-del *.???~ *.bak *.log *.toc *.aux *.out *.xdv
+del *.???~ *.bak *.log *.toc *.aux *.out *.xdv *.ind *.ilg *.idx

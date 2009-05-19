@@ -5,4 +5,6 @@ for %%I in (*.asy) do (
   )
 )
 xelatex main
+makeindex main
+xelatex main
 xelatex main

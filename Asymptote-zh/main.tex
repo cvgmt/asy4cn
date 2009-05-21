@@ -2633,23 +2633,33 @@ shift(x,y) * (rotate(90)*scale(yx,-xy) + scale(xx,yy))^^J
 \label{sec:framepicture}
 
 \begin{typelist}
+\index{frame@\inlinecode=frame=}
+\index{帧}
 \item[frame]
+\index{newframe@\inlinecode=newframe=}
+\index{empty@\inlinecode=empty=}
+\index{erase@\inlinecode=erase=}
+\index{min@\inlinecode=min=}
+\index{max@\inlinecode=max=}
 帧（|frame|）是在 \prgname{PostScript} 坐标中绘画的画布。偶尔需要为了构造延时
 作图过程而直接在帧上工作，通常在图（|picture|）上工作更为方便。帧的隐式初始式
 为 |newframe|。仅当帧 |f| 是空的时，函数 |bool empty(frame f)| 返回 |true|。
 一帧可以用 |erase(frame)| 过程擦除。函数 |pair min(frame)| 和
 |pair max(frame)| 分别返回帧边框的 $(\text{左},\text{下})$ 和 $(\text{右},
 \text{上})$ 坐标。用命令
+\index{add@\inlinecode=add=}
 \begin{lstlisting}
 void add(frame dest, frame src);
 \end{lstlisting}
 可以将帧 |src| 的内容附加在帧 |dest| 的后面，或用命令
+\index{prepend@\inlinecode=prepend=}
 \begin{lstlisting}
 void prepend(frame dest, frame src);
 \end{lstlisting}
 添加在前面\transnote{附加在后面的帧在较上的位置（较晚绘制），添加在前面的帧
 在较下的位置（较早绘制）。}。
 
+\index{align@\inlinecode=align=}
 按照与 |label| 使用 |align| 参数（参看 \pageref{sec:label} 页 \ref{sec:label}
 节标签部分）类似的方式，把帧 |f| 按方向 |align| 对齐得到的帧，可由
 \begin{lstlisting}
@@ -2657,10 +2667,14 @@ frame align(frame f, pair align);
 \end{lstlisting}
 返回。
 
+\index{envelope@\inlinecode=envelope=}
 为描画或填充围绕标签或帧的盒形或椭圆并返回边界路径，使用如下预定义的
 |envelope| 过程之一\transnote{这几个过程使用对应的画笔、填充类型等在帧
 \inlinecode{f} 中绘制对应的形状（其边界由 \inlinecode{f} 原有的内容和标签
 \inlinecode{L} 决定），并返回此形状的边界路径。}：
+\index{box@\inlinecode=box=}
+\index{roundbox@\inlinecode=roundbox=}
+\index{ellipse@\inlinecode=ellipse=}
 \begin{lstlisting}
 path box(frame f, Label L="", real xmargin=0,
          real ymargin=xmargin, pen p=currentpen,
@@ -2673,6 +2687,8 @@ path ellipse(frame f, Label L="", real xmargin=0,
              filltype filltype=NoFill, bool above=true);
 \end{lstlisting}
 
+\index{picture@\inlinecode=picture=}
+\index{图}
 \item[picture]
 图是在模块 \prgname{plain} 中定义的高级结构（参见 \pageref{sec:structures} 页
 \ref{sec:structures} 节结构体部分），提供以用户坐标绘图的画布。默认的图叫做
@@ -2682,6 +2698,7 @@ picture pic;
 \end{lstlisting}
 匿名图可以用表达式 |new picture| 创建。
 
+\index{size@\inlinecode=size=}
 |size| 过程限定要求的图的尺寸：
 \begin{lstlisting}
 void size(picture pic=currentpicture, real x, real y=x,
@@ -2693,20 +2710,24 @@ void size(picture pic=currentpicture, real x, real y=x,
 如果 |x| 或 |y| 恰有一个为 |0|，该方向则不施加限制；它将与另一方向一致地
 放缩。
 
+\index{Aspect@\inlinecode=Aspect=}
 如果 |keepAspect| 设为 |Aspect| 或 |true|，该图将按原比例放缩，并保持最终宽度
 不大于 |x| 而最终高度不大于 |y|。
 
+\index{IgnoreAspect@\inlinecode=IgnoreAspect=}
 如果 |keepAspect| 设为 |IgnoreAspect| 或 |false|，该图将以两个方向放缩以使
 最终宽度为 |x| 而最终高度为 |y|。
 
 要令图 |pic| 的用户坐标表示在 $x$ 方向的 |x| 单位倍和 $y$ 方向的 |y| 单位倍，
 使用
+\index{unitsize@\inlinecode=unitsize=}
 \begin{lstlisting}
 void unitsize(picture pic=currentpicture, real x, real y=x);
 \end{lstlisting}
 如果非零，这里 |x| 与 |y| 值将覆盖图 |pic| 的对应尺寸参数。
 
 过程
+\index{size@\inlinecode=size=}
 \begin{lstlisting}
 void size(picture pic=currentpicture, real xsize, real ysize,
           pair min, pair max);
@@ -2715,6 +2736,7 @@ void size(picture pic=currentpicture, real xsize, real ysize,
 区域（当这些参数非零时）。
 
 此外，调用过程
+\index{fixedscaling@\inlinecode=fixedscaling=}
 \begin{lstlisting}
 transform fixedscaling(picture pic=currentpicture, pair min,
                        pair max, pen p=nullpen, bool warn=false);
@@ -2750,6 +2772,8 @@ shipout(Landscape);
 |UpsideDown|（上下颠倒）。
 
 可以调用函数明确将图 |pic| 装入一帧：
+\index{fit@\inlinecode=fit=}
+\index{calculateTransform@\inlinecode=calculateTransform=}
 \begin{lstlisting}
 frame pic.fit(real xsize=pic.xsize, real ysize=pic.ysize,
               bool keepAspect=pic.keepAspect);
@@ -2759,6 +2783,7 @@ frame pic.fit(real xsize=pic.xsize, real ysize=pic.ysize,
 |pic.calculateTransform()| 返回。
 
 在某些只能对 |pic| 的近似尺寸做出估计的情形（例如 2D 图表），图装入过程
+\index{scale@\inlinecode=scale=}
 \begin{lstlisting}
 frame pic.scale(real xsize=this.xsize, real ysize=this.ysize,
                 bool keepAspect=this.keepAspect);
@@ -2767,16 +2792,20 @@ frame pic.scale(real xsize=this.xsize, real ysize=this.ysize,
 通常应该并不需要。
 
 要在图外一定边距画出边框，使用函数
+\index{bbox@\inlinecode=bbox=}
 \begin{lstlisting}
 frame bbox(picture pic=currentpicture, real xmargin=0,
            real ymargin=xmargin, pen p=currentpen,
            filltype filltype=NoFill);
 \end{lstlisting}
+\index{filltype@\inlinecode=filltype=}
 将图装入帧。这里 |filltype| 限定为如下填充类型之一：
 \begin{funclist}
+\index{FillDraw@\inlinecode=FillDraw=}
 \item |FillDraw| \go
   填充内部并绘出边界。
 
+\index{FillDraw@\inlinecode=FillDraw=}
 \item 
 \begin{lstlisting}[style=funclist]
 FillDraw(real xmargin=0, real ymargin=xmargin, pen fillpen=nullpen,
@@ -2786,31 +2815,39 @@ FillDraw(real xmargin=0, real ymargin=xmargin, pen fillpen=nullpen,
   填充；如果 |drawpen| 为 |nullpen|，则用 |fillpen| 填充；否则用 |drawpen|
   填充。可以设定可选的边距 |xmargin| 和 |ymargin|。
 
+\index{Fill@\inlinecode=Fill=}
 \item |Fill| \go
   填充内部。
 
+\index{Fill@\inlinecode=Fill=}
 \item |Fill(real xmargin=0, real ymargin=xmargin, pen p=nullpen)| \go
   如果 |p| 为 |nullpen|，则用正在绘图的画笔填充；否则用画笔 |p| 填充。
   可以设定可选的边距 |xmargin| 和 |ymargin|。
 
+\index{NoFill@\inlinecode=NoFill=}
 \item |NoFill| \go
   不填充.
 
+\index{Draw@\inlinecode=Draw=}
 \item |Draw| \go
   仅绘制边界。
 
+\index{Draw@\inlinecode=Draw=}
 \item |Draw(real xmargin=0, real ymargin=xmargin, pen p=nullpen)| \go
   如果 |p| 是 |nullpen|，用正在绘图的画笔绘制边界；否则用画笔 |p| 绘制。
   可以设定可选的边距 |xmargin| 和 |ymargin|。
 
+\index{UnFill@\inlinecode=UnFill=}
 \item |UnFill| \go
   剪裁区域\transnote{与 \inlinecode{clip} 命令的结果不同，\inlinecode{UnFill}
   选项把区域内部剪掉，保留外部，而 \inlinecode{clip} 命令则保留被剪裁路径的
   内部。}。
 
+\index{UnFill@\inlinecode=UnFill=}
 \item |UnFill(real xmargin=0, real ymargin=xmargin)| \go
   以四周边距 |xmargin| 和 |ymargin| 剪裁区域。
 
+\index{RadialShade@\inlinecode=RadialShade=}
 \item |RadialShade(pen penc, pen penr)| \go
   从边框中心的 |penc| 到边界的 |penr| 放射状渐变填充。
 \end{funclist}
@@ -2823,6 +2860,9 @@ shipout(bbox(0.25cm));
 用函数 |bbox(p,Fill)| 可以用画笔 |p| 的背景色将图装入帧。
 
 函数
+\index{min@\inlinecode=min=}
+\index{max@\inlinecode=max=}
+\index{size@\inlinecode=size=}
 \begin{lstlisting}
 pair min(picture pic, user=false);
 pair max(picture pic, user=false);
@@ -2833,6 +2873,7 @@ pair size(picture pic, user=false);
 \prgname{PostScript} 坐标，否则以用户坐标返回。
 
 函数
+\index{point@\inlinecode=point=}
 \begin{lstlisting}
 pair point(picture pic=currentpicture, pair dir, bool user=true);
 \end{lstlisting}
@@ -2841,6 +2882,7 @@ pair point(picture pic=currentpicture, pair dir, bool user=true);
 \prgname{PostScript} 坐标，否则以用户坐标返回。
 
 函数
+\index{truepoint@\inlinecode=truepoint=}
 \begin{lstlisting}
 pair truepoint(picture pic=currentpicture, pair dir, bool user=true);
 \end{lstlisting}
@@ -2849,6 +2891,7 @@ pair truepoint(picture pic=currentpicture, pair dir, bool user=true);
 \prgname{PostScript} 坐标，否则以用户坐标返回。
 
 有时在分开的图上绘制对象使用 |add| 函数将图互相加入是有用的：
+\index{add@\inlinecode=add=}
 \begin{lstlisting}
 void add(picture src, bool group=true,
          filltype filltype=NoFill, bool above=true);
@@ -2862,6 +2905,7 @@ void add(picture dest, picture src, bool group=true,
 
 同样还有过程将一个以 \prgname{PostScript} 坐标限定的图或帧 |src|，按照用户
 坐标 |position| 加入到另一图 |dest|（或 |currentpicture|）中。
+\index{add@\inlinecode=add=}
 \begin{lstlisting}
 void add(picture src, pair position, bool group=true,
          filltype filltype=NoFill, bool above=true);
@@ -2887,6 +2931,7 @@ void add(picture dest=currentpicture, frame src, pair position,
   \includegraphics{subpictures.pdf}
 \end{center}
 
+\index{attach@\inlinecode=attach=}
 此外，也可以使用 |attach| 自动增加图 |dest| 的尺寸以适应按用户坐标 |position|
 加入的帧 |src|：
 \begin{lstlisting}
@@ -2898,14 +2943,20 @@ void attach(picture dest=currentpicture, frame src,
             filltype filltype=NoFill, bool above=true);
 \end{lstlisting}
 
+\index{erase@\inlinecode=erase=}
 要清除一幅图的内容（但不清除尺寸设定），使用函数
 \begin{lstlisting}
 void erase(picture pic=currentpicture);
 \end{lstlisting}
 
+\index{currentpicture@\inlinecode=currentpicture=}
+\index{currentpen@\inlinecode=currentpen=}
+\index{currentprojection@\inlinecode=currentprojection=}
+\index{save@\inlinecode=save=}
 要保存 |currentpicture|、|currentpen| 和 |currentprojection| 的快照，使用函数
 |save()|。
 
+\index{restore@\inlinecode=restore=}
 要恢复 |currentpicture|、|currentpen| 和 |currentprojection| 的快照，使用函数
 |restore()|。\transnote{\inlinecode{save()} 函数和 \inlinecode{restore} 函数
 维护一个栈，可以嵌套使用。}
@@ -2915,6 +2966,7 @@ void erase(picture pic=currentpicture);
 相关代码。}。
 
 使用如下过程之一，可以向一幅图中逐字插入 \prgname{PostScript} 命令：
+\index{postscript@\inlinecode=postscript=}
 \begin{lstlisting}
 void postscript(picture pic=currentpicture, string s);
 void postscript(picture pic=currentpicture, string s, pair min,
@@ -2924,6 +2976,7 @@ void postscript(picture pic=currentpicture, string s, pair min,
 边界。
 
 逐字的 \TeX{} 命令可以使用如下函数之一插入到中间 \LaTeX{} 输出文件中：
+\index{tex@\inlinecode=tex=}
 \begin{lstlisting}
 void tex(picture pic=currentpicture, string s);
 void tex(picture pic=currentpicture, string s, pair min, pair max);
@@ -2933,17 +2986,20 @@ void tex(picture pic=currentpicture, string s, pair min, pair max);
 要在 \TeX{} 导言区（在顶层模块的剩余部分有效\transnote{意谓在导言区的命令是
 全局有效的，能影响所有的标签，包括此函数执行前的标签。}）发出一个全局的
 \TeX{} 命令（如一个 \TeX{} 宏定义），使用：
+\index{texpreamble@\inlinecode=texpreamble=}
 \begin{lstlisting}
 void texpreamble(string s);
 \end{lstlisting}
 
 可以重设 \TeX{} 环境为初始状态，清除所有的宏定义，使用函数\transnote{此函数的
 作用也是全局的，可以影响执行此函数之前的标签。}
+\index{texreset@\inlinecode=texreset=}
 \begin{lstlisting}
 void texreset();
 \end{lstlisting}
 
 过程
+\index{usepackage@\inlinecode=usepackage=}
 \begin{lstlisting}
 void usepackage(string s, string options="");
 \end{lstlisting}
@@ -2959,9 +3015,13 @@ texpreamble("\usepackage["+options+"]{"+s+"}");
 \section{文件}
 % 5.6 Files
 
+\index{文件}
+\index{file@\inlinecode=file=}
+\index{CSV@\inlinecode=CSV=}
 \prgname{Asymptote} 能读写文本文件（包括逗号分隔值文件 CSV）和可移植 XDR
 （External Data Representation 外部数据表示）二进制文件。
 
+\index{input@\inlinecode=input=}
 一个输入文件必须首先由 |input(string name, bool check=true, string comment="#")|
 打开；于是读文件由赋值完成：
 \begin{lstlisting}
@@ -2969,32 +3029,44 @@ file fin=input("test.txt");
 real a=fin;
 \end{lstlisting}
 
+\index{error@\inlinecode=error=}
 如果可选的布尔参数 |check| 为 |false|，则不会检查文件是否存在。如果文件不存在
 或不可读，函数 |bool error(file)| 将返回 |true|。字符串 |comment| 的第一个
 字符指定一个注释字符。如果这个字符在数据文件中出现，此行的剩余部分会被忽略。
 当读字符串时，一个注释字符后紧跟另一个注释字符会被看作一个注释字符的字面量。
 
-如果 |-globalwrite|（或 |-nosafe|）选项可用，则可以利用函数
+\index{-globalwrite@\verb=-glo=}
+\index{-nosafe@\verb=-nosafe=}
+\index{cd@\inlinecode=cd=}
+如果 \verb=-globalwrite=（或 \verb=-nosafe=）选项可用，则可以利用函数
 |string cd(string s)| 改变当前工作目录为串 |s|，此函数返回新的工作目录。如果
 |string s| 为空，路径将被重设为程序启动时的值。
 
+\index{getc@\inlinecode=getc=}
 当读入复数（序对）时，括号对是可选的。字符串也通过赋值读入，一起读入字符直到但不包括
 换行符。此外，\prgname{Asymptote} 提供函数 |string getc(file)| 读入下一个字符（它把注释
 字符当做普通字符）并将其作为一个字符串返回。
 
+\index{output@\inlinecode=output=}
 一个名为 |name| 的文件可以用
 \begin{lstlisting}
 file output(string name, bool update=false);
 \end{lstlisting}
+\index{-globalwrite@\verb=-glo=}
+\index{-nosafe@\verb=-nosafe=}
 打开用作输出文件。如果 |update=false|，则文件中已有的全部数据将被清除，并且
 只能对文件做写操作。如果 |update=true|，则所有已有的数据都会被保留，读写位置
 会设为文件末尾，此时读写操作都可以使用。出于安全原因，只有在 |-globalwrite|
 （或 |-nosafe|）命令行选项被设置时，才允许向当前目录以外的文件中写入。
 
+\index{stdin@\inlinecode=stdin=}
+\index{stdout@\inlinecode=stdout=}
+\index{null@\inlinecode=null=}
 有两个特殊的文件：|stdin|（标准输入），它从键盘读入；以及 |stdout|（标准
 输出），它向终端输出。文件的隐式初始式为 |null|。
 
 内部类型 |T| 的数据可以通过调用下列函数写入输出文件：
+\index{write@\inlinecode=write=}
 \begin{lstlisting}
 write(string s="", T x, suffix suffix=endl ... T[]);
 write(file file, string s="", T x, suffix suffix=none ... T[]);
@@ -3005,6 +3077,12 @@ write(suffix suffix=endl);
 write(file file, suffix suffix=none);
 \end{lstlisting}
 
+\index{none@\inlinecode=none=}
+\index{flush@\inlinecode=flush=}
+\index{endl@\inlinecode=endl=}
+\index{newl@\inlinecode=newl=}
+\index{tab@\inlinecode=tab=}
+\index{comma@\inlinecode=comma=}
 如果 |file| 未被指定，则 |stdout| 将被使用并且默认用换行符结束。如果指定，则
 可选的标识字符串 |s| 则会在数据 |x| 之前写入。在写入一维数组时，可以列出任意
 数量的数据值。参数 |suffix| 可以是下面几个中的一个：|none|（什么也不做），
@@ -3018,17 +3096,33 @@ write(fout);                   // 写入新的一行
 write(fout,"List: ",1,2,3);    // 写入 "List: 1    2    3"
 \end{lstlisting}
 
+\index{xinput@\inlinecode=xinput=}
+\index{xoutput@\inlinecode=xoutput=}
+\index{XDR}
+\index{binput@\inlinecode=binput=}
+\index{boutput@\inlinecode=boutput=}
+\index{single@\inlinecode=single=}
 一个文件也可以用 |xinput| 或 |xoutput| 而不是 |input| 或 |output| 打开，用来
 以 Sun Microsystem 公司的 XDR（External Data Representation 外部数据表示）可
-移植二进制格式（它在所有 \prgname{UNIX} 平台都可用）读写双精度（64 位）实数值和单精度
-（32 位）整数值。一个文件同样可以由 |binput| 或 |boutput| 打开用来读写在本地
-机器的（不可移植）二进制格式双精度值。函数 |file single(file,0.0)| 可被用来
-设置一个文件读入单精度实数 XDR 或二进制值；调用 |file single(file,0.0,false)|
-又将其设回读入双精度值。函数 |file single(file,0)| 和
-|file single(file,0,false)| 可用于改变默认的整数精度（为单精度）。函数
-|file single(file)| 和 |file single(file,false)| 可用于同时设置实数和整数二者
-的精度。
+移植二进制格式（它在所有 \prgname{UNIX} 平台都可用）读写双精度（64 位）实数值
+和单精度（32 位）整数值。一个文件同样可以由 |binput| 或 |boutput| 打开用来读
+写在本地机器的（不可移植）二进制格式双精度值。函数 |file single(file,0.0)| 可
+被用来设置一个文件读入单精度实数 XDR 或二进制值；调用
+|file single(file,0.0,false)| 又将其设回读入双精度值。函数
+|file single(file,0)| 和 |file single(file,0,false)| 可用于改变默认的整数精度
+（为单精度）。函数 |file single(file)| 和 |file single(file,false)| 可用于同
+时设置实数和整数二者的精度。
 
+\index{eof@\inlinecode=eof=}
+\index{eol@\inlinecode=eol=}
+\index{error@\inlinecode=error=}
+\index{flush@\inlinecode=flush=}
+\index{clear@\inlinecode=clear=}
+\index{close@\inlinecode=close=}
+\index{precision@\inlinecode=precision=}
+\index{tell@\inlinecode=tell=}
+\index{seek@\inlinecode=seek=}
+\index{seekeof@\inlinecode=seekeof=}
 可以用布尔值函数 |eof(file)| 测试一个文件的末尾，用 |eol(file)| 测试行末尾，
 而用 |error(file)| 测试 I/O 错误。可以用 |flush(file)| 函数刷新输出缓存，用
 |clear(file)| 清除原有的 I/O 错误，而用 |close(file)| 关闭文件。给定 |digits|
@@ -3039,6 +3133,8 @@ write(fout,"List: ",1,2,3);    // 写入 "List: 1    2    3"
 |seek(file,0)| 倒回文件开头，用 |seek(file,-1)| 到达文件的最后一个字符处。
 命令 |seekeof(file)| 设置位置为文件的末尾。
 
+\index{scroll@\inlinecode=scroll=}
+\index{settings.scroll@\inlinecode=settings.scroll=}
 设定 |settings.scroll=n| 为一个正整数 |n| 会要求每向 |stdout| 输出 |n| 行就
 停顿一下。而后可以按下回车键继续下面的 |n| 行输出，按 |s| 键回车后会使后面的
 滚动不再停顿，按 |q| 键回车后跳出当前输出操作。如果 |n| 是负数，输出会每页
@@ -3046,6 +3142,11 @@ write(fout,"List: ",1,2,3);    // 写入 "List: 1    2    3"
 设定连续滚动。
 
 在 |plain| 模块中定义的过程
+\index{getstring@\inlinecode=getstring=}
+\index{getint@\inlinecode=getint=}
+\index{getreal@\inlinecode=getreal=}
+\index{getpair@\inlinecode=getpair=}
+\index{gettriple@\inlinecode=gettriple=}
 \begin{lstlisting}
 string getstring(string name="", string default="", string prompt="",
                  bool store=true);
@@ -3058,12 +3159,15 @@ pair getpair(string name="", pair default=0, string prompt="",
 triple gettriple(string name="", triple default=(0,0,0), string prompt="",
                  bool store=true);
 \end{lstlisting}
+\index{历史记录}
 可以用来显示提示符并从 |stdin| 中读入值，它使用 GNU \prgname{readline} 库。如果
 |store=true|，名字 |name| 的值的历史记录会被存在文件 |".asy_history_"|%
 ${}+{}$|name| 中（见手册的历史记录一节\transnote{这个节译本并不包括此节。请
-参看原英文版手册 9 Interactive mode 一章的相关内容。}）。% 注：这里原文的交叉引用不可用。
+参看原英文版手册 9 Interactive mode 一章的相关内容。}）。
 历史记录中最近的值将提供随后执行的默认值。默认值（初始为 |default|）在
 |prompt| 之后显示。这些函数都基于内部过程
+\index{readline@\inlinecode=readline=}
+\index{saveline@\inlinecode=saveline=}
 \begin{lstlisting}
 string readline(string prompt="", string name="", bool tabcompletion=false);
 void saveline(string name, string value, bool store=true);
@@ -3073,6 +3177,7 @@ void saveline(string name, string value, bool store=true);
 用于把字符串 |value| 保存在一个名为 |name| 的本地历史记录，可选地把本地历史
 记录保存在一个文件 |".asy_history_"|${}+{}$|name| 中。
 
+\index{history@\inlinecode=history=}
 过程 |history(string name, int n=1)| 可以用来查找最近为字符串 |name| 输入的第
 |n| 个值（或直到 |historylines| 的所有值，如果 |n=0|）。过程
 |history(int n=0)| 返回交互历史。例如，
@@ -3081,19 +3186,27 @@ write(output("transcript.asy"),history());
 \end{lstlisting}
 将交互历史输出到文件 |transcript.asy|。
 
+\index{delete@\inlinecode=delete=}
+\index{rename@\inlinecode=rename=}
+\index{-globalwrite@\verb=-glo=}
+\index{-nosafe@\verb=-nosafe=}
 函数 |int delete(string s)| 删去文件名为字符串的 |s| 文件。除非
 |-globalwrite|（或 |-nosafe|）选项可用，否则此文件必须存在于当前目录。函数
 |int rename(string from, string to)| 可以用于把文件 |from| 改名为文件 |to|。
 除非 |-globalwrite|（或 |-nosafe|）选项可用，否则此操作也限定在当前目录。函数
+\index{convert@\inlinecode=convert=}
+\index{animate@\inlinecode=animate=}
 \begin{lstlisting}
 int convert(string args="", string file="", string format="");
 int animate(string args="", string file="", string format="");
 \end{lstlisting}
+\index{system@\inlinecode=system=}
+\index{safe@\verb=safe=}
 分别调用 \prgname{ImageMagick} 命令 \prgname{convert} 和 \prgname{animate}，
 附带参数 |args| 以及由字符串 |file| 和 |format| 构成的文件名\transnote{这可能
 是不安全的，因为不能保证这两个命令是不是来自 \prgname{ImageMagick} 以及它们会
 做什么。特别地，\prgname{Windows} 系统把 FAT 硬盘格式转换为 NTFS 硬盘格式的
-命令就是 \prgname{convert}。}。如果设置 |safe| 为假，则函数
+命令就是 \prgname{convert}。}。如果设置 \verb=safe= 为假，则函数
 |int system(string s)| 可以用来执行任意的系统命令 |s|。
 
 
@@ -3104,6 +3217,7 @@ int animate(string args="", string file="", string format="");
 
 % 按：initializer 译为“初始式”，与《C++ 程序设计语言》中裘宗燕教授的译法一致。
 
+\index{初始式}
 一个变量可以在声明时赋值，就像 |int x=3;|，其中变量 |x| 被赋以值 |3|。与字面
 常量如 |3| 一样，任意表达式都可以用于初始式，如 |real x=2*sin(pi/2);|。
 
@@ -3118,21 +3232,33 @@ int x=5*x;
 大多数类型的变量声明时可以没有明确的初始式，并且它们会被该类型的默认初始式
 初始化：
 \begin{itemize}
+  \index{0}
+  \index{O@\inlinecode=O=}
   \item 数值类型 |int|, |real| 和 |pair| 的变量都初始化为零；类型 |triple| 的
     变量初始化为 |O=(0,0,0)|。
+  \index{false@\inlinecode=false=}
   \item |bool| 变量初始化为 |false|。
+  \index{空串}
   \item |string| 变量初始化为空串。
+  \index{恒同变换}
   \item |transform| 变量初始化为恒同变换。
+  \index{nullpath@\inlinecode=nullpath=}
   \item |path| 和 |guide| 变量初始化为 |nullpath|。
-  \item |pen| 变量初始化为默认画笔。 % “画笔”、“帧”与“图”的译法待商榷
+  \index{默认画笔}
+  \item |pen| 变量初始化为默认画笔。
+  \index{空帧}\index{空图}
   \item |frame| 和 |picture| 变量分别初始化为空的帧与图。
+  \index{null@\inlinecode=null=}
   \item |file| 变量初始化为 |null|。
 \end{itemize}
 
+\index{code@\inlinecode=code=}
 用户定义的数组、结构体和函数类型的默认初始式分别在对应的章节说明。一些类型，
 如 |code|，没有默认的初始式。当一个这种类型的变量被引入，用户必须明确用一个值
 对其进行初始化。
 
+\index{operator init@\inlinecode=operator init=}
+\index{init@\inlinecode=init=}
 任意类型 |T| 的默认初始式可能通过定义函数 |T operator init()| 来重新声明。
 例如，|int| 变量通常被初始化为零，但在
 \begin{lstlisting}
@@ -3150,6 +3276,12 @@ int y;
 % 5.8 Structures
 \label{sec:structures}
 
+\index{结构体}
+\index{struct@\inlinecode=struct=}
+\index{public@\inlinecode=public=}
+\index{restricted@\inlinecode=restricted=}
+\index{private@\inlinecode=private=}
+\index{this@\inlinecode=this=}
 用户可以定义自己的数据类型如结构体，连同用户定义的算子，就像在 C++ 中一样。
 默认地，结构体的成员是 |public|（公有的；可以在代码的任何地方读和更改），但
 也可选择声明为 |restricted|（受限的；可以在任何地方读，但只能在定义它的结构体
@@ -3157,6 +3289,8 @@ int y;
 中，关键字 |this| 可用于在一个表达式中引用包围它的结构体。在结构体顶层作用域
 的任何代码都会在初始化时执行。
 
+\index{引用}
+\index{结构体!引用}
 变量保存的是结构体的引用\transnote{请读者注意，这与 C/C++ 有重要的不同。}。就
 是说，例如\transnote{一个语法细节：结构体的定义后不需要再加分号，这与 C/C++
 不同。}：
@@ -3185,14 +3319,22 @@ struct T {
 T foo=new T;
 \end{lstlisting}
 
+\index{new@\inlinecode=new=}
 这里，表达式 |new T| 将会产生这个类的一个新的实例，但同时也会使 |Tcount| 
 增长，因此它会保有实例产生数目的轨迹\transnote{然而这个用法并不很好。如果真要
 记录实例创建的数目，应该将 \inlinecode{Tcount} 设置为类 \inlinecode{T} 的静态
 成员。参看 \pageref{sec:static} 页 \ref{sec:static} 节。}。
 
+\index{null@\inlinecode=null=}
+\index{空引用}
+\index{结构体!空引用}
 表达式 |null| 可以转换为任何结构体类型的空引用，即一个不指向任何实际结构体
 实例的引用。试图使用一个空引用的域将导致错误。
 
+\index{alias@\inlinecode=alias=}
+\index{==@\inlinecode/==/}
+\index{!=@\inlinecode/!=/}
+\index{深比较}
 函数 |bool alias(T,T)| 检查两个结构体是否引用结构体的同一个实例（或同时为
 |null|）。例如，在本节开头的示例代码中，|alias(foo,bar)| 将返回真，但
 |alias(foo,new T)| 将返回假，因为 |new T| 创建结构体 |T| 的一个新的实例。布尔
@@ -3247,6 +3389,7 @@ joe.lastname="Jones";
 创建一个新的“人”（Person）是件繁琐的事；要用三行来建立一个新的实例并初始化
 它的域（尽管这比在实际生活中建立一个新的人花的力气还要少得多）。
 
+\index{构造函数}
 我们可以通过定义一个构造函数 |Person(string,string)| 来简化这件工作：
 \begin{lstlisting}
 struct Person {
@@ -3275,10 +3418,10 @@ from Person unravel Person;
 函数，你就会发现每次你都得重复大量的代码。幸运的是，你友好的邻居 Asymptote 的
 开发者们设计出了一种方法能自动化完成大部分的过程。
 
-\lstset{emph=args,emphstyle={\slshape}}
 如果，在结构体的（定义）体中，Asymptote 遇到形如 |void operator init(args)|
 的函数定义，则会隐式地定义一个以 |args| 为函数的构造函数来初始化一个结构体的
 新实例。即，它实质上定义了如下的构造函数（假定结构体名叫 |Foo|）：
+\lstset{emph=args,emphstyle={\slshape}}
 \begin{lstlisting}
 static Foo Foo(args) {
   Foo instance=new Foo;
@@ -3304,15 +3447,25 @@ struct Person {
 Person joe=Person("Joe", "Jones");
 \end{lstlisting}
 
+\index{operator init@\inlinecode=operator init=}
+\index{init@\inlinecode=init=}
 |operator init| 隐式定义构造函数的用法不应与它定义变量的默认值的用法相混淆
 （见 \pageref{sec:initializers} 页 \ref{sec:initializers} 节）。确实，在前
 一种情况，|operator init| 的返回值类型必须是 |void|，而第二种情形它必须是变量
 的（非 |void|）类型。
 
+\index{cputime@\inlinecode=cputime=}
+\index{parent.user@\inlinecode=parent.user=}
+\index{parent.system@\inlinecode=parent.system=}
+\index{child.user@\inlinecode=child.user=}
+\index{child.system@\inlinecode=child.system=}
+\index{change.user@\inlinecode=change.user=}
+\index{change.system@\inlinecode=change.system=}
 函数 |cputime()| 返回一个结构体 |cputime|，它保存不断增长的 CPU 时间，分为域
 |parent.user|, |parent.system|, |child.user| 和 |child.system|。为了方便，
 增加的域 |change.user| 和 |change.system| 显示对应的总父进程和子进程 CPU 时间
 自上次调用 |cputime()| 的改变量。函数
+\index{write@\inlinecode=write=}
 \begin{lstlisting}
 void write(file file=stdout, string s="", cputime c,
            string format=cputimeformat, suffix suffix=none);
@@ -3320,6 +3473,9 @@ void write(file file=stdout, string s="", cputime c,
 显示增加的用户 CPU 时间（后跟“u”）、增加的系统 CPU 时间（后跟“s”）、总的
 用户 CPU 时间（后跟“U”）以及总的系统 CPU 时间（后跟“S”）。
 
+\index{类型转换}
+\index{继承}
+\index{虚函数}
 很像 C++ 中那样，类型转换（见 \pageref{sec:casts} 页 \ref{sec:casts} 节）提供
 了结构体\transnote{即 C++ 中的类。}继承和虚函数的一个优雅的实现\transnote{这
 只是对于 C++ 继承和多态性的一种模拟，然而这或许并不能算是如何优雅的实现。
@@ -3368,14 +3524,23 @@ write(c.y);               // 输出 2;
 \section{运算符}
 % 5.9 Operators
 
+\index{运算符!算术和逻辑运算符}
 \subsection{算术和逻辑运算符}
 % 5.9.1 Arithmetic & logical operators
 \label{subsec:arthlogoper}
 
+\index{quotient@\inlinecode=quotient=}
 \prgname{Asymptote} 使用标准二元算术运算符。然而，当一个整数被另一个整数所除
 时，两个参数都会在相除之前被转换为实数值并返回一个实数商（鉴于这通常是人们想
 要的）。函数 |int quotient(int x, int y)| 返回小于等于 |x/y| 的最大整数。在
 所有其他情况下，两个运算对象会被提升为相同的类型，此类型也将成为结果的类型：
+\index{+@\inlinecode=+=}
+\index{-@\inlinecode=-=}
+\index{*@\inlinecode=*=}
+\index{/@\inlinecode=/=}
+\index{%@\inlinecode=%=}
+\index{^@\inlinecode=^=}
+\index{**@\inlinecode=**=}
 \begin{longtable}[l]{l@{\hspace*{4em}}p{\dimexpr\textwidth-5em}}
   |+| & 加法 \\
   |-| & 减法 \\
@@ -3393,6 +3558,18 @@ write(c.y);               // 输出 2;
 \inlinecode{bool} 类型量，不包括按位计算。而且与 C/C++ 不同，其他类型的量不能
 依是否为 0 值自动转化为 \inlinecode{bool} 类型的量。因而 \inlinecode{3 && 5}
 这种写法是非法的，必须写成 \inlinecode{3!=0 && 5!=0}。}：
+\index{==@\inlinecode/==/}
+\index{!=@\inlinecode/!=/}
+\index{<@\inlinecode/</}
+\index{<=@\inlinecode/<=/}
+\index{>=@\inlinecode/>=/}
+\index{>@\inlinecode/>/}
+\index{&&@\inlinecode=&&=}
+\index{&@\inlinecode=&=}
+\index{"|"|@\inlinecode="|"|=}
+\index{"|@\inlinecode="|=}
+\index{^@\inlinecode=^=}
+\index{"!@\inlinecode="!=}
 \begin{longtable}[l]{l@{\hspace*{4em}}p{\dimexpr\textwidth-4.5em}}
  |==| & 等于 \\
  |!=| & 不等于 \\
@@ -3409,21 +3586,38 @@ write(c.y);               // 输出 2;
  |!| & 非
 \end{longtable}
 
+\index{? :@\inlinecode=? :=}
 \prgname{Asymptote} 同样支持类似 C 的条件语法：
 \begin{lstlisting}
 bool positive=(pi >= 0) ? true : false;
 \end{lstlisting}
 
+\index{interp@\inlinecode=interp=}
 函数 |T interp(T a, T b, real t)| 对所有非整数的内部数值类型 |T| 返回
 |(1-t)*a+t*b|。如果 |a| 和 |b| 是画笔（|pen|），它们会首先被提升到相同的颜色
 空间。
 
+\index{AND@\inlinecode=AND=}
+\index{OR@\inlinecode=OR=}
+\index{XOR@\inlinecode=XOR=}
+\index{NOT@\inlinecode=NOT=}
+\index{按位运算}
 \prgname{Asymptote} 同样定义了按位函数 |int AND(int,int)|, |int OR(int,int)|,
 |int XOR(int,int)| 以及 |int NOT(int)|。
 
+\index{运算符!前缀运算符}
+\index{运算符!自（赋值）运算符}
 \subsection{自（赋值）与前缀运算符}
 % 5.9.2 Self & prefix operators
 
+\index{+=@\inlinecode/+=/}
+\index{-=@\inlinecode/-=/}
+\index{*=@\inlinecode/*=/}
+\index{/=@\inlinecode+/=+}
+\index{%=@\inlinecode/%=/}
+\index{^=@\inlinecode/^=/}
+\index{++@\inlinecode=++=}
+\index{--@\inlinecode=--=}
 与在 C 中一样，每个运算符 |+|, |-|, |*|, |/|, |%|
 和 |^| 都可以作为自（赋值）运算符使用。前缀运算符 |++|（加一）与 |--|（减一）
 也有定义。例如，
@@ -3443,9 +3637,40 @@ int j=i=i+1;
 固有歧义性）。只在罕见的实例中 |i++| 和 |i--| 才真正需要，它们可以分别替换为
 表达式 |(++i-1)| 和 |(--i+1)|。
 
+\index{运算符!用户自定义运算符}
 \subsection{用户自定义运算符}
 % 5.9.3 User-defined operators
+
+\index{operator@\inlinecode=operator=}
+\index{运算符!重载}
 下列的符号可以与 |operator| 一起为结构体或内部类型定义或重定义运算符：
+\index{-@\inlinecode=-=}
+\index{+@\inlinecode=+=}
+\index{*@\inlinecode=*=}
+\index{/@\inlinecode=/=}
+\index{%@\inlinecode=%=}
+\index{^@\inlinecode=^=}
+\index{**@\inlinecode=**=}
+\index{"!@\inlinecode="!=}
+\index{<@\inlinecode/</}
+\index{>@\inlinecode/>/}
+\index{==@\inlinecode/==/}
+\index{<=@\inlinecode/<=/}
+\index{>=@\inlinecode/>=/}
+\index{&@\inlinecode=&=}
+\index{"|@\inlinecode="|=}
+\index{^^@\inlinecode=^^=}
+\index{..@\inlinecode=..=}
+\index{::@\inlinecode=::=}
+\index{--@\inlinecode=--=}
+\index{---@\inlinecode=---=}
+\index{++@\inlinecode=++=}
+\index{<<@\inlinecode=<<=}
+\index{>>@\inlinecode=>>=}
+\index{$@\inlinecode=$=}
+\index{$$@\inlinecode=$$=}
+\index{"@@\inlinecode="@=}
+\index{"@"@@\inlinecode="@"@=}
 \begin{lstlisting}
 - + * / % ^ ! < > == != <= >= & | ^^ .. :: -- --- ++
 << >> $ $$ @ @@
@@ -3457,7 +3682,7 @@ int j=i=i+1;
 说明的是，前置的 \inlinecode{++}, \inlinecode{--} 运算符的运算对象必须是一个
 左值，这会在重载时带来一些限制。C/C++ 中常见的逗号运算符、关于指针的运算符、
 \inlinecode{sizeof} 等都不存在。赋值、条件、圆点、指标 \inlinecode{[]}、括号
-等也都不能重载。}。
+等也都不能重载。重载 \inlinecode{**} 与重载 \inlinecode{^} 效果相同。}。
 
 路向运算符如 |..| 可以重载，比如说，写一个用户自定义函数从给定路向产生一条
 新的路向：
@@ -3486,6 +3711,7 @@ write("g=",g);
 
 \section{隐式放缩}
 % 5.10 Implicit scaling
+\index{隐式放缩}
 
 如果一个数值字面量在特定类型的表达式前面，则它们会相乘：
 \begin{lstlisting}
@@ -3525,10 +3751,13 @@ write(10cm);
 \section{函数}
 % 5.11 Functions
 \label{sec:functions}
+\index{函数}
 
 \prgname{Asymptote} 的函数被看作是带有标识的变量（非函数变量有空的标识）。
 允许有名字相同的变量，只要它们有不同的标识。
 
+\index{函数!参数传值}
+\index{函数!参数传引用}
 函数的参数是传值的。要以传引用方式传递参数，只不过需要把它用一个结构体包装
 起来（见 \pageref{sec:structures} 页 \ref{sec:structures} 节）。
 
@@ -3567,6 +3796,10 @@ c=a;                    // 合法：只有一种可能的赋值
 \end{lstlisting}
 
 % 4
+\index{函数!匿名函数}
+\index{函数!高阶函数}
+\index{匿名函数}
+\index{高阶函数}
 \item 同样允许匿名（又称“高阶”）函数：
 \begin{lstlisting}
 typedef int intop(int);
@@ -3633,6 +3866,7 @@ g(true); // 写入 true, 然后写入 false.
 \prgname{Asymptote} 是我们已知唯一的把函数看做变量，但又通过基于标识的变量而
 允许重载的语言。
 
+\index{函数!递归}
 允许函数递归调用自身。像在 C++ 中一样，无穷嵌套的递归将导致栈溢出（报告为一个
 段错误，除非一个完整工作着的 GNU \prgname{libsigsegv} 库（如 2.4 或更新）在
 配置的时候已经安装）。
@@ -3923,7 +4157,9 @@ Newton-Raphson bisection）在区间 $[$|x1|, |x2|$]$（在上面 |f| 的端点�
 \section{数组}
 % 5.12 Arrays
 \label{sec:arrays}
+\index{数组}
 
+\index{[]@\inlinecode=[]=}
 在内部或用户自定义的类型后加上 |[]| 就得到数组。数组 |A| 的元素 |i| 可用
 |A[i]| 访问。默认情况下，试图使用负指标对一个数组元素进行访问或赋值将产生
 错误。以超出数组长度的指标读数组元素同样会产生错误；然而，对超出数组长度处的
@@ -3937,6 +4173,11 @@ Newton-Raphson bisection）在区间 $[$|x1|, |x2|$]$（在上面 |f| 的端点�
 \begin{lstlisting}
 real[] A;
 \end{lstlisting}
+\index{数组!空白数组（empty array）}
+\index{数组!空数组（null array）}
+\index{空白数组（empty array）}
+\index{空数组（null array）}
+\index{null@\inlinecode=null=}
 初始化 |A| 为一个空白（长度为零的）数组（empty array）。空白数组应与空数组
 （null array，或译“无效数组”更直白）区别。如果我们说
 \begin{lstlisting}
@@ -3950,22 +4191,34 @@ real[] A=null;
 real[] A={0,1,2};
 \end{lstlisting}
 
+\index{浅复制}
+\index{深复制}
 在 \prgname{Asymptote} 中数组的赋值进行的是浅复制：只有指针被复制过来（如果
 一个复本被修改，则另一个也同样会被修改）。后面列出的 |copy| 函数提供了数组的
 深复制。
 
 每个类型为 |T[]| 的数组 |A| 都有虚成员
 \begin{itemize}
+  \index{length@\inlinecode=length=}
   \item |int length|，
+  \index{cyclic@\inlinecode=cyclic=}
   \item |void cyclic(bool b)|，
+  \index{cyclicflag@\inlinecode=cyclicflag=}
   \item |bool cyclicflag|，
+  \index{keys@\inlinecode=keys=}
   \item |int[] keys|，
+  \index{push@\inlinecode=push=}
   \item |T push(T x)|，
+  \index{append@\inlinecode=append=}
   \item |void append(T[] a)|，
+  \index{pop@\inlinecode=pop=}
   \item |T pop()|，
+  \index{insert@\inlinecode=insert=}
   \item |void insert(int i ... T[] x)|，
+  \index{delete@\inlinecode=delete=}
   \item |void delete(int i, int j=i)|，
   \item |void delete()|，以及
+  \index{initialized@\inlinecode=initialized=}
   \item |bool initialized(int n)|。
 \end{itemize}
 
@@ -4002,6 +4255,7 @@ A.insert(1 ... A);  // A 现在包含 {2,2,3,3}
 A.insert(2,4,5);    // A 现在包含 {2,2,4,5,3,3}
 \end{lstlisting}
 
+\index{[]@\inlinecode=[]=}
 |[]| 后缀同样可以出现在变量名的后面；有时这对声明同一类型的一列变量和数组比较
 方便：
 \begin{lstlisting}
@@ -4014,6 +4268,7 @@ real a,A[];
 仅在初次声明一个类型为 |T[]| 的变量后才有定义。
 
 \begin{funclist}
+\index{new@\inlinecode=new=}
 \item |new T[]| \go
   返回类型为 |T[]| 的新的空白数组。
 
@@ -4024,11 +4279,13 @@ real a,A[];
   返回一个新的 |n| 元数组。这 |n| 个数组元素不会被初始化，除非它们本身就是
   数组（在这种情况它们每个都被初始化为空白数组）。
 
+\index{array@\inlinecode=array=}
 \item |T[] array(int n, T value, int depth=intMax)| \go
   返回一个由 |value| 的 |n| 份复本组成的数组。默认情况下，如果 |value| 本身是
   一个数组，将对新数组的每个项做深复制。如果指明了 |depth|，这个深复制仅会
   递归指定的层数。
 
+\index{sequence@\inlinecode=sequence=}
 \item |int[] sequence(int n)| \go
   如果 |n >= 1| 则返回数组 |{0,1,...,n-1}|（否则返回一个空数组）。
 
@@ -4039,51 +4296,64 @@ real a,A[];
   给定函数 |T f(int)| 和整数 |int n|，如果 |n >= 1| 则返回序列
   |{f(i) : i=0,1,...,n-1}|（否则返回一个空数组）。
 
+\index{map@\inlinecode=map=}
 \item |T[] map(T f(T), T[] a)| \go
   返回数组，它包含把函数 |f| 应用于数组 |a| 的每个元素的结果。这等价于\\
   |sequence(new T(int i) {return f(a[i]);}, a.length)|。
 
+\index{reverse@\inlinecode=reverse=}
 \item |int[] reverse(int n)| \go
   如果 |n >= 1| 则返回数组 |{n-1,n-2,...,0}|（否则返回一个空数组）。
 
+\index{complement@\inlinecode=complement=}
 \item |int[] complement(int[] a, int n)| \go
   返回整数数组 |a| 对 |{0,1,2,...,n-1}| 的补集，于是
   |b[complement(a,b.length)]| 就得到补集 |b[a]|。
 
+\index{uniform@\inlinecode=uniform=}
 \item |real[] uniform(real a, real b, int n)| \go
   如果 |n >= 1| 则返回 $[$|a|,~|b|$]$ 的一个均匀划分，分为 |n| 段（否则返回
   一个空数组）\transnote{这个函数返回的是一个长为 \inlinecode|n+1| 的分点
   数组。}。
 
+\index{find@\inlinecode=find=}
 \item |int find(bool[], int n=1)| \go
   返回第 |n| 个 |true| 值的指标，若找不到则返回 |-1|。如果 |n| 是负数，则从
   数组末尾开始倒着找第 |-n| 个值。
 
+\index{search@\inlinecode=search=}
 \item |int search(T[] a, T key)| \go
   对于内部有序类型 |T|，在 |n| 元已排序的数组 |a| 中搜索一个区间包含 |key|，
   如果 |key| 比第一个元素还小则返回 |-1|，如果大于等于最后一个元素则返回
   |n-1|，否则返回的指标对应区间的左（较小）端点。
 
+\index{copy@\inlinecode=copy=}
 \item |T[] copy(T[] a)| \go
   返回数组 |a| 的一个深复制。
 
+\index{copy@\inlinecode=copy=}
 \item |T[][] copy(T[][] a)| \go
   返回数组 |a| 的一个深复制。
 
+\index{copy@\inlinecode=copy=}
 \item |T[][][] copy(T[][][] a)| \go
   返回数组 |a| 的一个深复制。
 
+\index{concat@\inlinecode=concat=}
 \item |T[] concat(... T[][] a)| \go
   返回一个由给定参数拼接构成的新数组。
 
+\index{alias@\inlinecode=alias=}
 \item |bool alias(T[] a, T[] b)| \go
   如果数组 |a| 和 |b| 是相同的\transnote{这里两个数组相同指它们的指针相同。}%
   则返回 |true|。
 
+\index{sort@\inlinecode=sort=}
 \item |T[] sort(T[] a)| \go
   对内部有序类型 |T|，返回 |a| 的增序排列的复本\transnote{也就是说，
   \inlinecode{a} 本身并不被修改。}。
 
+\index{sort@\inlinecode=sort=}
 \item |T[][] sort(T[][] a)| \go
   对内部有序类型 |T|，返回 |a| 的复本，其各行按第一列排序，若相等则按下一列
   排序。例如：
@@ -4100,13 +4370,16 @@ bob         9
 pete        7
 \end{lstlisting}
 
+\index{sort@\inlinecode=sort=}
 \item |T[] sort(T[] a, bool compare(T i, T j))| \go
   返回 |a| 的稳定递增排序复本，次序按如果 |compare(i,j)| 为真则元素 |i| 先于
   元素 |j| 定义。
 
+\index{transpose@\inlinecode=transpose=}
 \item |T[][] transpose(T[][] a)| \go
   返回 |a| 的转置。
 
+\index{transpose@\inlinecode=transpose=}
 \item |T[][][] transpose(T[][][] a, int[] perm)| \go
   返回 |a| 的 3 维转置，它由 |new int[]{0,1,2}| 的排列 |perm| 作用于每项的
   指标决定\transnote{在数学上，这就是说把对称群 $S_3$ 的一个元素（置换）
@@ -4115,11 +4388,13 @@ pete        7
   $\Set{a_{i_{\sigma(1)}, i_{\sigma(2)}, i_{\sigma(3)}}}
   {0\leq i_1, i_2, i_3 < n, \sigma \in S_3}$。}。
 
+\index{sum@\inlinecode=sum=}
 \item |T sum(T[] a)| \go
   对算术类型 |T|，返回 |a| 的和。在 |T| 是 |bool| 时，将返回 |a| 中为真的元素
   个数。
 
 \item 
+\index{min@\inlinecode=min=}
 \begin{lstlisting}[style=funclist]
 T min(T[] a)
 T min(T[][] a)
@@ -4128,6 +4403,7 @@ T min(T[][][] a)
   对内部有序类型 |T|，返回 |a| 中最小元素。
 
 \item
+\index{max@\inlinecode=max=}
 \begin{lstlisting}[style=funclist]
 T max(T[] a)
 T max(T[][] a)
@@ -4135,18 +4411,22 @@ T max(T[][][] a)
 \end{lstlisting} \go
   对内部有序类型 |T|，返回 |a| 中最大元素。
 
+\index{min@\inlinecode=min=}
 \item |T[] min(T[] a, T[] b)| \go
   对内部有序类型 |T|，并且 |a| 和 |b| 长度相同，返回一个由 |a| 与 |b| 中对应
   元素较小值构成的数组。
 
+\index{max@\inlinecode=max=}
 \item |T[] max(T[] a, T[] b)| \go
   对内部有序类型 |T|，并且 |a| 和 |b| 长度相同，返回一个由 |a| 与 |b| 中对应
   元素较大值构成的数组。
 
+\index{pairs@\inlinecode=pairs=}
 \item |pair[] pairs(real[] x, real[] y)| \go
   对长度相同的数组 |x| 和 |y|，返回复数（序对 |pair|）数组\\
   |sequence(new pair(int i) {return (x[i],y[i]);}, x.length)|。
 
+\index{fft@\inlinecode=fft=}
 \item |pair[] fft(pair[] a, int sign=1)| \go
   返回 |a| 的快速 Fourier 变换（如果可选的 \prgname{FFTW} 包安装了的话），
   使用给定的符号 |sign|\transnote{当 \inlinecode{sign} 为 $-1$ 时给出离散
@@ -4164,9 +4444,11 @@ write();
 write(f/n);
 \end{lstlisting}
 
+\index{dot@\inlinecode=dot=}
 \item |real dot(real[] a, real[] b)| \go
   返回向量 |a| 和 |b| 的点积。
 
+\index{tridiagonal@\inlinecode=tridiagonal=}
 \item |real[] tridiagonal(real[] a, real[] b, real[] c, real[] f)| \go
   求解周期三对角问题 $L\bm x = \bm f$ 并返回解 $\bm x$，其中 $\bm f$ 为 $n$
   维向量，而 $L$ 为 $n\times n$ 矩阵
@@ -4185,6 +4467,7 @@ write(f/n);
   \inlinecode{a}, \inlinecode{b}, \inlinecode{c}, \inlinecode{f}。这里为方便
   公式书写改为数学记法。}
   
+\index{solve@\inlinecode=solve=}
 \item |real[] solve(real[][] a, real[] b, bool warn=true)| \go
   利用 LU 分解求解线性方程组 |a|$\bm x = {}$|b|，并返回解 $x$，其中 |a| 是
   一个 $n\times n$ 矩阵而 |b| 为长度为 $n$ 的数组。例如：
@@ -4202,27 +4485,34 @@ write(a*x);
   对角阵，过程 |tridiagonal| 提供了一种更为有效的算法（见前面 |tridiagonal|
   的解释）。
 
+\index{solve@\inlinecode=solve=}
 \item |real[][] solve(real[][] a, real[][] b, bool warn=true)| \go
   求解线性方程组 |a|$x = {}$|b| 并返回解 $x$，其中 |a| 是一个 $n\times n$
   矩阵而 |b| 是一个 $n\times m$ 矩阵。如果 $a$ 是奇异矩阵而 |warn| 为
   |false|，返回一个空白矩阵。
 
+\index{identity@\inlinecode=identity=}
 \item |real[][] identity(int n)| \go
   返回 $n\times n$ 单位矩阵。
 
+\index{diagonal@\inlinecode=diagonal=}
 \item |real[][] diagonal(... real[] a)| \go
   返回以 |a| 为对角线元素的对角矩阵。
 
+\index{inverse@\inlinecode=inverse=}
 \item |real[][] inverse(real[][] a)| \go
   返回方阵 |a| 的逆。
 
+\index{quadraticroots@\inlinecode=quadraticroots=}
 \item |real[] quadraticroots(real a, real b, real c)| \go
   这是一个数值鲁棒的求解器，返回二次方程 $ax^2+bx+c=0$ 的实根，以升序排列。
   重根会分别列出。
 
+\index{quadraticroots@\inlinecode=quadraticroots=}
 \item |pair[] quadraticroots(explicit pair a, explicit pair b, explicit pair c)| \go
   这是一个数值鲁棒的求解器，返回二次方程 $ax^2+bx+c=0$ 的两个复根。
 
+\index{cubicroots@\inlinecode=cubicroots=}
 \item |real[] cubicroots(real a, real b, real c, real d)| \go
   这是一个数值鲁棒的求解器，返回三次方程 $ax^3+bx^2+cx+d=0$ 的实根。重根会
   分别列出。
@@ -4247,6 +4537,7 @@ real[] b={3,2};
 file fin=input("test.txt");
 real[] A=fin;
 \end{lstlisting}
+\index{line@\inlinecode=line=}
 向 |A| 内读入实数值，直至达到文件末尾（或发生 I/O 错误）。如果用 |line(file)|
 设置了行模式，则读入将改在达到行末时停止（行模式可以用 |line(file,false)|
 清除）：
@@ -4255,6 +4546,7 @@ file fin=word(line(input("test.txt")));
 real[] A=fin;
 \end{lstlisting}
 
+\index{csv@\inlinecode=csv=}
 另一个有用的模式是逗号分隔值模式，由 |csv(file)| 设置而由 |csv(file,false)|
 清除，它使得读入以逗号为界定符：
 \begin{lstlisting}
@@ -4262,6 +4554,7 @@ file fin=csv(input("test.txt"));
 real[] A=fin;
 \end{lstlisting}
 
+\index{dimension@\inlinecode=dimension=}
 要限定读入值的个数，使用 |dimension(file,int)| 函数：
 \begin{lstlisting}
 file fin=input("test.txt");
@@ -4280,6 +4573,9 @@ real[][][] B=dimension(fin,2,3,4);
 \end{lstlisting}
 同样地，一个零值的整数界限意味着没有限制。
 
+\index{read1@\inlinecode=read1=}
+\index{read2@\inlinecode=read2=}
+\index{read3@\inlinecode=read3=}
 有时数组维数与数据一起作为整数域保存在数组开头。这种数组可以用函数 |read1|,
 |read2| 和 |read3| 分别读入：
 \begin{lstlisting}
@@ -4289,6 +4585,7 @@ real[][] B=read2(fin);
 real[][][] C=read3(fin);
 \end{lstlisting}
 
+\index{write@\inlinecode=write=}
 基本数据类型的一、二、三维数组可以用函数 |write(file,T[])|,
 |write(file,T[][])|, |write(file,T[][][])| 分别输出。
 
@@ -4296,6 +4593,8 @@ real[][][] C=read3(fin);
 \subsection{切割}
 % 5.12.1 Slices
 
+\index{切割（slice）}
+\index{数组!切割（slice）}
 \prgname{Asymptote} 允许使用一种类似 Python 的语法以切割（slice）来表示数组的
 一个片断。如果 |A| 是一个数组，表达式 |A[m:n]| 返回一个新数组，它由 |A| 中
 指标从 |m| 开始直到但不包括 |n| 的元素构成。例如，
@@ -4368,7 +4667,9 @@ toppings[0:3]=new string[] {"tomato"};
 \section{类型转换}
 % 5.13 Casts
 \label{sec:casts}
+\index{类型转换}
 
+\index{explicit@\inlinecode=explicit=}
 \prgname{Asymptote} 隐式地转换 |int| 到 |real|，|int| 到 |pair|，|real| 到
 |pair|，|pair| 到 |path|，|pair| 到 |guide|，|path| 到 |guide|，|guide| 到
 |path|，|real| 到 |pen|，|pair[]| 到 |guide[]|，|pair[]| 到 |path[]|，|path|
@@ -4394,6 +4695,8 @@ int[] b=(int []) a;
 write(stdout,b); // 输出 2,-3  
 \end{lstlisting}
 
+\index{cast@\inlinecode=cast=}
+\index{operator cast@\inlinecode=operator cast=}
 使用 |operator cast| 同样可以向用户自定义类型转换：
 \begin{lstlisting}
 struct rpair {
@@ -4424,15 +4727,19 @@ real convert(int x) {return x*100;}
 real operator cast(int x)=convert;
 \end{lstlisting}
 
+\index{ecast@\inlinecode=ecast=}
+\index{operator ecast@\inlinecode=operator ecast=}
 显式类型转换用 |operator ecast| 类似地实现。
 
 
 
 \section{导入}
 % 5.14 Import
+\index{导入}
 
 尽管 \prgname{Asymptote} 默认提供了许多特征，但一些应用仍需要外部
 \prgname{Asymptote} 模块包含的特殊特征。例如，这几行
+\index{access@\inlinecode=access=}
 \begin{lstlisting}
 access graph;
 graph.axes();
@@ -4442,6 +4749,7 @@ graph.axes();
 结构体，我们可以像通常在一个结构体中一样引用它的域。
 
 经常，我们想要不必指定模块名就使用模块的函数。代码
+\index{from@\inlinecode=from=}
 \begin{lstlisting}
 from graph access axes;
 \end{lstlisting}
@@ -4456,6 +4764,7 @@ from graph access axes, xaxis, yaxis;
 from graph access *;
 \end{lstlisting}
 
+\index{unravel@\inlinecode=unravel=}
 类似地，可以使用关键字 |unravel| 将一个结构体的非私有的域和类型加入本地名字
 空间：
 \begin{lstlisting}
@@ -4470,6 +4779,7 @@ real det(matrix m) {
 \end{lstlisting}
 
 命令
+\index{import@\inlinecode=import=}
 \begin{lstlisting}
 import graph;
 \end{lstlisting}
@@ -4489,6 +4799,7 @@ unravel graph;
 其他导入的名字，这取决于它们引入的次序，并且如果引入的函数与后来定义的本地
 函数同名，还可能造成重载解析的问题。
 
+\index{as@\inlinecode=as=}
 要在将模块或域加入本地环境时对其重命名，使用 |as|：
 \begin{lstlisting}
 access graph as graph2d;
@@ -4521,11 +4832,13 @@ import "/usr/local/share/asymptote/graph.asy" as graph;
 
 然而，你可以这样在运行时导入一个由字符串 |s| 确定的 \prgname{Asymptote}
 模块：
+\index{eval@\inlinecode=eval=}
 \begin{lstlisting}
 eval("import "+s,true);
 \end{lstlisting}
 
 要有条件地运行一个 asy 文件数组，用
+\index{asy@\inlinecode=asy=}
 \begin{lstlisting}
 void asy(string format, bool overwrite ... string[] s);
 \end{lstlisting}
@@ -4535,6 +4848,7 @@ void asy(string format, bool overwrite ... string[] s);
 
 可以求值一个包含在字符串 |s| 中的 \prgname{Asymptote} 表达式（然而没有任何
 返回值），使用：
+\index{eval@\inlinecode=eval=}
 \begin{lstlisting}
 void eval(string s, bool embedded=false);
 \end{lstlisting}
@@ -4545,10 +4859,13 @@ void eval(string s, bool embedded=false);
 不包括此节。}）。
 
 可以使用下列命令求值任意 \prgname{Asymptote} 代码（可以包含非转义的引号）：
+\index{eval@\inlinecode=eval=}
 \begin{lstlisting}
 void eval(code s, bool embedded=false);
 \end{lstlisting}
 
+\index{code@\inlinecode=code=}
+\index{quote@\inlinecode=quote=}
 这里 |code| 是一种特殊类型，像这样以 |quote {}| 包装起 \prgname{Asymptote}
 代码来使用：
 \begin{lstlisting}
@@ -4561,12 +4878,14 @@ eval(s,true);          // 输出 1
 
 要逐字地包含一个文件 \prgname{graph} 的内容（就好像文件是内容被插入到那个点
 中），使用下列形式中的一种：
+\index{include@\inlinecode=include=}
 \begin{lstlisting}
 include graph;
 include "/usr/local/share/asymptote/graph.asy";
 \end{lstlisting}
 
 要列出在一个以字符串 |s| 的内容为名字的模块中定义的全部全局函数和变量，用函数
+\index{list@\inlinecode=list=}
 \begin{lstlisting}
 void list(string s, bool imports=false);
 \end{lstlisting}
@@ -4577,6 +4896,8 @@ void list(string s, bool imports=false);
 \section{静态（static）}
 % 5.15 Static
 \label{sec:static}
+\index{静态（static）}
+\index{static@\inlinecode=static=}
 
 静态限定符将变量的内存地址分配在一个较高的外围环境。
 
@@ -4680,7 +5001,8 @@ int y=A.x;
 类型。这与那个变量事实上究竟有什么域无关。
 
 
-
+\phantomsection
+\addcontentsline{toc}{chapter}{\indexname}
 \printindex
 \end{document}
 

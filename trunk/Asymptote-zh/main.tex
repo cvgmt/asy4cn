@@ -68,7 +68,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.75}
+\newcommand\asyversion{1.76}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -1846,6 +1846,14 @@ struct slice {
   ($t\in[0,t_0]$) 为复平面上的闭曲线，$z-a$ 的极坐标表示为 $(\tilde{r}(t),
   \tilde\theta(t))$。}。若路径以逆时针方向环绕 |z|，则卷绕数是正数。如果 |z|
   在路径 |p| 上，则返回常数 |undefined|（定义为最大的奇数）。
+
+\index{interior@\inlinecode=interior=}
+\item |bool interior(int windingnumber, pen fillrule);| \go
+  据填充规则 |fillrule|，当 |windingnumber| 对应一个内点时，返回 |true|%
+  \transnote{这是一个简单的函数，当 \inlinecode{fillrule} 为
+  \inlinecode{zerowinding} 时，返回值等价于 \inlinecode{windingnumber != 0}；
+  当 \inlinecode{fillrule} 为 \inlinecode{evenodd} 时，返回值等价于
+  \inlinecode{windingnumber\%2 != 0} 即 \inlinecode{windingnumber} 是奇数。}。
 
 \index{inside@\inlinecode=inside=}
 \item |bool inside(path p, pair z, pen fillrule=currentpen);| \go

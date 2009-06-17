@@ -20,6 +20,7 @@ André 很清楚他要画的图形的数学理论，但 André 的朋友 Timothy
 致勃勃的开始了。
 
 \section{从矩形到铺砌}
+\label{sec:rect2tiling}
 
 铺砌图，顾名思义，就是像铺地板砖一样，把许多相同样式的图形平铺开来。不过，并
 不是什么图形都可以平铺填满整个平面的——比如圆形就不行。把许多圆形一个挨一个
@@ -96,7 +97,6 @@ draw(p, gray+2mm);
 \begin{figure}[H]
   \centering
 \begin{asy}
-settings.tex = "xelatex";
 size(5cm,0);
 pair z1 = (0,1), z2 = (1,1), z3 = (2,1),
      z4 = (0,0), z5 = (1,0), z6 = (2,0);
@@ -133,7 +133,6 @@ draw(q, gray+2mm);
 \begin{figure}[H]
   \centering
 \begin{asy}
-settings.tex = "xelatex";
 size(5cm,0);
 pair z1 = (0,1), z2 = (1,1), z3 = (2,1),
      z4 = (0,0), z5 = (1,0), z6 = (2,0);
@@ -157,7 +156,6 @@ draw(q, gray+2mm);
 \begin{figure}[H]
   \centering
 \begin{asy}
-settings.tex = "xelatex";
 size(5cm,0);
 pair z1 = (0,1), z2 = (1,1), z3 = (2,1),
      z4 = (0,0), z5 = (1,0), z6 = (2,0);
@@ -172,6 +170,135 @@ dot("5", z5);
 dot("6", z6);
 \end{asy}
 \end{figure}
+
+就像使用 |box| 可以直接得到矩形一样，最常用的曲线：圆、椭圆和圆弧，也可以使用
+现成的命令得到：
+\begin{table}[H]
+\noindent
+\begin{tabular}{ll}
+|circle(c, r)| & 圆心 |c|，半径 |r| 的圆，这是逆时针方向的闭曲线； \\
+|ellipse(c, a, b)| & 中心为 |c|，长半轴 |a|，短半轴 |b| 的椭圆，这也是逆时针
+方向的闭曲线； \\
+|arc(c, r, angle1, angle2)| & 圆心 |c|，半径 |r|，角度从 |angle1| 到 |angle2|
+的圆弧。
+\end{tabular}
+\end{table}
+
+例如：
+\begin{lstlisting}
+filldraw( circle((0,0), 1cm), lightblue, gray+2mm );
+draw( arc((5cm,0), 1cm, 45, 135), gray+2mm );
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\begin{asy}
+filldraw( circle((0,0), 1cm), lightblue, gray+2mm );
+draw( arc((5cm,0), 1cm, 45, 135), gray+2mm );
+\end{asy}
+\end{figure}
+
+一条用 |cycle| 产生的闭路径和简单地把首尾结点重合的路径是非常不同的。首先，只
+有闭路径可以填充颜色；其次，使用 |cycle| 连结的曲线在起点处是光滑连接的，而如
+果只是首尾结点重合则不会光滑连接。试将下面的曲线 |q2| 与上面的曲线 |q| 比较：
+\begin{lstlisting}
+path q2 = z4 .. z1 .. z2 .. z6 .. z4;
+draw(q2, gray+2mm);
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\begin{asy}
+size(5cm,0);
+pair z1 = (0,1), z2 = (1,1), z3 = (2,1),
+     z4 = (0,0), z5 = (1,0), z6 = (2,0);
+path q2 = z4 .. z1 .. z2 .. z6 .. z4;
+draw(q2, gray+2mm);
+dot(Label("1", align=NW), z1);
+dot(Label("2", align=NE), z2);
+dot("3", z3);
+dot("4", z4);
+dot("5", z5);
+dot("6", z6);
+\end{asy}
+\end{figure}
+
+现在有了绘制曲线的方法，画出一个羊头就只是把草稿上的坐标连接起来而已。André
+有一个纸上的草图，于是在描出几个点以后，他很快得到这样的结果（这里给图形增加
+了辅助网格）：
+\begin{lstlisting}
+size(0,4cm);
+pen outline = black+1mm;
+// `\color{comment}头`
+path head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
+    .. (0.4,1.3) .. (0.8,1.5) .. (2.2,1.9) .. (3,1.5) .. (3.2,1.3)
+    .. (3.6,0.5) .. (3.4,-0.3) .. (3,0) .. (2.2,0.4) .. (0.5,-0.2) .. cycle;
+filldraw(head, cyan, outline);
+dot(head, red+1mm); // `\color{comment}画出羊头路径上的结点`
+// `\color{comment}五官`
+fill( circle((2.65,1.25), 0.12), outline );
+fill( (3.5,0.3) .. (3.35,0.45) .. (3.5,0.6) .. (3.6,0.4) .. cycle, outline );
+draw( (3,0.35) .. (3.3,0.1) .. (3.6,0.05), outline );
+draw( (2.3,1.3) .. (2.1, 1.5) .. (2.15,1.7), outline );
+draw( (2.1,1.7) .. (2.35,1.6) .. (2.45,1.4), outline );
+\end{lstlisting}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+size(0,4cm);
+import math;
+add(scale(1/2)*shift(0,-1)*grid(8,5,gray));
+dot(Label("$O$",align=left), 0);
+label("$1$", (0,1), align=W); label("$2$", (0,2), align=W);
+label("$1$", (1,-0.5), align=S); label("$2$", (2,-0.5), align=S);
+label("$3$", (3,-0.5), align=S); label("$4$", (4,-0.5), align=S);
+pen outline = black+1mm;
+path head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
+    .. (0.4,1.3) .. (0.8,1.5) .. (2.2,1.9) .. (3,1.5) .. (3.2,1.3)
+    .. (3.6,0.5) .. (3.4,-0.3) .. (3,0) .. (2.2,0.4) .. (0.5,-0.2) .. cycle;
+filldraw(head, cyan, outline);
+dot(head, red+1mm);
+fill( circle((2.65,1.25), 0.12), outline );
+fill( (3.5,0.3) .. (3.35,0.45) .. (3.5,0.6) .. (3.6,0.4) .. cycle, outline );
+draw( (3,0.35) .. (3.3,0.1) .. (3.6,0.05), outline );
+draw( (2.3,1.3) .. (2.1, 1.5) .. (2.15,1.7), outline );
+draw( (2.1,1.7) .. (2.35,1.6) .. (2.45,1.4), outline );
+\end{asy}
+\end{figure}
+
+在一开始，André 使用
+\begin{lstlisting}
+pen outline = black+1mm;
+\end{lstlisting}
+定义一个 |pen|\index{pen@\lstinline=pen=} 类型的变量 |outline| 表示用来画羊头
+轮廓的画笔\index{画笔}，以备使用。
+
+然后，André 直接用 |..| 连结一组坐标来定义羊的头部轮廓：
+\begin{lstlisting}
+path head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
+    .. (0.4,1.3) .. (0.8,1.5) .. (2.2,1.9) .. (3,1.5) .. (3.2,1.3)
+    .. (3.6,0.5) .. (3.4,-0.3) .. (3,0) .. (2.2,0.4) .. (0.5,-0.2) .. cycle;
+\end{lstlisting}
+需要尖角的时候，就使用重复的相同点（如这里的起点）；曲线变化大的地方，取的点
+也比较密集。
+
+最后五官的绘制。眼睛是填充的小黑圆，鼻子是黑色的卵形，耳朵和嘴都是简单的曲线。
+
+于是，只要把这样一个图形一个挨一个地重复画许多遍，就可以得到 André 想要的铺
+砌效果了。设计羊头形状的工作无疑是最关键也最复杂的，因此 André 的任务现在就
+已经完成了一半。
+
+不过继承了法国完美主义风气的 André 老师，很快挑出了毛病：这只羊头部的轮廓，
+并不完全是按照 \ref{sec:rect2tiling} 节对矩形变形得到的——他的手稿基本上是这
+样设计的，但在使用 \Asy{} 上绘图时则只是在手稿上相当随意地取了一些结点连结得
+到曲线，这个轮廓想必也并不能严丝合缝地一个个拼起来。还有一件很令他恼火的事情
+则是：要画出羊头的轮廓，他要画的点太多了，一个尖角用两个结点表示，也太不符合
+他的简洁美学了。因此，这个看上去相当不错的羊头一号，就被 André 老师无情地否
+决掉了。他决定发扬数学教师严谨简洁的作风，再做出更完美的羊头二号来。
+
+\section{细致的曲线调整与曲线操作}
+
+\section{子图和循环}
+
+\section{路径剪裁}
 
 \endinput
 

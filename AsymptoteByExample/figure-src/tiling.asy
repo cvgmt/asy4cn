@@ -6,9 +6,9 @@ size(15cm);
 
 void sheephead(pair pos, pen color)
 {
-    path headleft = (0,1.5){SE} .. tension 1.4 .. (0.5,-0.2){dir(-150)} ..
+    guide headleft = (0,1.5){SE} .. tension 1.4 .. (0.5,-0.2){dir(-150)} ..
         {NW}(0,0);
-    path headbottom = (0,0){SE} .. {dir(30)}(0.5,-0.2) ..{SE}(3,0);
+    guide headbottom = (0,0){SE} .. {dir(30)}(0.5,-0.2) ..{SE}(3,0);
     path head = headleft & headbottom &
         shift(3,0)*reverse(headleft) & shift(0,1.5)*reverse(headbottom) & cycle;
 

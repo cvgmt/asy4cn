@@ -195,7 +195,7 @@ fill( box((3cm,3cm), (4cm,4cm)), yellow );
 这个填充的命令应该放在画线之前（以免覆盖描的红线）。
 
 回顾前面的代码，赵博士觉得连续地写四个 |filldraw| 命令太重复了。他读了 \Asy{}
-的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^@\lstinline=^^=} 
+的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^^@\lstinline=^^=} 
 连起来，一起使用，于是立即着手改进原来的代码。
 
 而且，由于还打算在图的后面画出参考网格，图形的颜色还应该设置为半透明\index{透
@@ -503,7 +503,7 @@ label(`标签`, `路径`)
 这里默认会在路径中间的右侧（沿着路径行进方向）加标签。例如：
 \begin{lstlisting}
 draw( (0,0) -- (4cm,2cm), linewidth(0.5mm) );
-label("粗线条", (0,0) -- (4cm,2cm));
+label("`\color{string}粗线条`", (0,0) -- (4cm,2cm));
 \end{lstlisting}
 （其中的 |linewidth|\index{linewidth@\lstinline=linewidth=} 函数用来表示具有
 一定线宽\index{线宽}的画笔）这段代码将得到
@@ -523,9 +523,9 @@ label("粗线条", (0,0) -- (4cm,2cm));
 \begin{lstlisting}
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
-label( "勾三", (4cm,3cm) -- (4cm,0) );
-label( "股四", (0,3cm) -- (4cm,3cm) );
-label( "弦五", (4cm,0) -- (0,3cm) );
+label( "`\color{string}勾三`", (4cm,3cm) -- (4cm,0) );
+label( "`\color{string}股四`", (0,3cm) -- (4cm,3cm) );
+label( "`\color{string}弦五`", (4cm,0) -- (0,3cm) );
 \end{lstlisting}
 \begin{figure}[H]
 \centering
@@ -634,12 +634,12 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
     ^^ (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
 
-label("朱实", (2cm,4cm));
-label("黄实", (3.5cm,3.5cm));
-label("弦实", (5cm,4cm));
-label( Label("勾三",Rotate(S)), (4cm,0)--(4cm,3cm), LeftSide );
-label( Label("股四",Rotate(E)), (4cm,3cm)--(0,3cm), LeftSide );
-label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
+label("`\color{string}朱实`", (2cm,4cm));
+label("`\color{string}黄实`", (3.5cm,3.5cm));
+label("`\color{string}弦实`", (5cm,4cm));
+label( Label("`\color{string}勾三`",Rotate(S)), (4cm,0)--(4cm,3cm), LeftSide );
+label( Label("`\color{string}股四`",Rotate(E)), (4cm,3cm)--(0,3cm), LeftSide );
+label( Label("`\color{string}弦五`",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 \end{lstlisting}
 \begin{figure}[htbp]
 \centering
@@ -683,11 +683,15 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 
   \item 代码
 \begin{lstlisting}
-path zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
+guide zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
 \end{lstlisting}
     可以把一个三角形的路径保存在变量 |zhushi| 中，以后就可以使用
-    |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{关于变量定义和使用的
-    详细内容，参考后面的章节或手册 \cite{asyman}。}。
+    |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{这里定义了一个
+    \lstinline=guide= 类型的变量，我们译之为“路向”，以区别于“路径”
+    （\lstinline=path=）。两个概念在 \Asy{} 中同源而有别，但本章中二者可以互
+    换并无区别，因此为方便我们也不区别而通称为路径。有关 \Asy{} 语言中路径与
+    路向的区别，以及关于变量定义和使用的详细内容，请参考后续的章节及手册
+    \cite{asyman}。}。
 
     考虑如何利用平移和旋转变换，只定义一个三角形的路径，就把弦图中的四个红色
     三角形都画出来。
@@ -699,7 +703,7 @@ path zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
 \begin{asy}
 import roundedpath;
 pen thick = linewidth(0.8pt);
-path p = (0,0) -- (0,2cm) -- (1cm,3.25cm) -- (2cm,2cm) -- (2cm,0)
+guide p = (0,0) -- (0,2cm) -- (1cm,3.25cm) -- (2cm,2cm) -- (2cm,0)
 	-- (0,2cm) -- (2cm, 2cm) -- (0,0) -- (2cm,0);
 draw(roundedpath(p, 8pt), thick);
 \end{asy}

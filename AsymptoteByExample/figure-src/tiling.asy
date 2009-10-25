@@ -15,11 +15,7 @@ guide mouth = (3,0.4) .. (3.4,0.1) .. (3.6,0.2);
 for (int x = 0; x < 8; ++x) {
     for (int y = 0; y < 8; ++y) {
         transform pos = shift(3x, 1.5y);
-        pen color;
-        if ( (x+y) % 2 == 0 )
-            color = cyan;
-        else
-            color = yellow;
+        pen color = (i+j)%2==0 ? cyan : yellow;
         filldraw(pos * head, color, linewidth(2bp));
         fill(pos * (eye ^^ muzzle) );
         draw(pos * (ear ^^ mouth), linewidth(2bp));

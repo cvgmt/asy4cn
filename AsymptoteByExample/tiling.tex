@@ -3,7 +3,7 @@
 % asymptotebyexample 的一章，曲线绘制和编程入门
 
 \chapter{André Deledicq 的铺砌插画}
-\nocite{pstricks}
+\label{chap:tiling}
 
 André 是一名兴趣广泛的法国数学教师，在他的新著《Le monde des pavages》（《铺
 砌世界》）中，打算画一幅有关羊的铺砌插画：
@@ -295,6 +295,7 @@ guide head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
 决掉了。他决定发扬数学教师严谨简洁的作风，再做出更完美的羊头二号来。
 
 \section{细致的曲线调整与曲线操作}
+\label{sec:curve}
 
 在 \Asy{} 中，除了简单地使用 |--| 和 |..| 连接坐标来定义直线与曲线以外，也提
 供了更丰富的手段来对曲线进行更为细致的调整与操作。于是，就有了方向、张力、卷
@@ -952,7 +953,8 @@ pen color = (i+j)%2==0 ? cyan : yellow;
 现在，André 的铺砌图形就完成了。下面只要把他的图形剪裁一下，就大工告成了。
 
 
-\section{图形的剪裁}
+\section{图形的剪裁与自定义图}
+\label{sec:clippicture}
 
 André 最后的问题是把整个铺砌图形剪裁为椭圆形。为此，我们就需要引入在画线
 （|draw|）、填充（|fill|）、标注（|label|）之外的最后一种基本绘图命令，即剪裁
@@ -963,7 +965,104 @@ clip(`图`, `曲线`);     // `\color{comment}图的默认值是当前图 curren
 如果省略 |picture| 类型的图参数，则剪裁命令会把当前正在绘制的图用给定的曲线裁
 剪开来；显示指定图参数则只剪裁给定的图中的内容。
 
-剪裁命令的效果正是 André 需要的，为了用椭圆形剪裁图形，André 只需要增加一句
+裁剪默认的当前图只是在绘图的最后进行的少许修饰，而事实上，|clip| 命令更多地是
+用在明确指定的图上，以完成一些用其他方法难以达成的效果。在第\ref{chap:xiantu}
+章中已经看到了产生一个带网格的图的 |grid| 函数与使用图的 |add| 函数，下面，我
+们首先说明如何自定义图并在其上绘图。
+
+自定义一个图只要定义一个 |picture|\index{picture@\lstinline=picture=} 类型的
+变量。新定义的图相当于一块单独的画布，而画线、填充、标注这些命令都可以在最前
+面加上图的参数，表示在某一个图上进行绘图。例如：
+\begin{lstlisting}
+picture mypic;      //`\color{comment}自定义图`
+draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);  //`\color{comment}画三角形`
+fill(mypic, circle((4cm,3cm), 1cm), lightblue);                 //`\color{comment}画圆`
+label(mypic, "trangle", (0,0));     //`\color{comment}标注`
+label(mypic, "circle", (3cm,2cm));
+\end{lstlisting}
+不过这些内容都是画在自定义的图 |mypic| 上的，而只有在默认图 |currentpicture|
+上的内容才会真正输出被我们看到。因此，就又需要使用
+\autoref{sec:transformmodule} 中提到过的 |add| 命令把自定义图 |mypic| 中的内
+容加到 |currentpicture| 之上：
+\begin{lstlisting}
+add(mypic);
+\end{lstlisting}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+picture mypic;
+draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);
+fill(mypic, circle((3cm,2cm), 1cm), lightblue);
+label(mypic, "triangle", (1cm,0), N);
+label(mypic, "circle", (3cm,2cm));
+add(mypic);
+\end{asy}
+\end{figure}
+
+\index{add@\lstinline=add=}
+|add| 函数还可以有更多的参数，更一般的形式是\footnote{\lstinline=add= 函数有
+很多变形，还带有更多次要的参数，详细的语法形式参看手册 \cite{asyman} 和
+\prgname{plain\_picture.asy} 中的源代码。}：
+\begin{lstlisting}
+// `\color{comment}可以利用 size 函数自动缩放`
+add(`目标图`=currentpicture, `源图`, above=true);
+// `\color{comment}不能自动缩放`
+add(`目标图`=currentpicture, `源图`, `位置坐标`, above=true);
+\end{lstlisting}
+|add| 函数的意义是：把源图的内容加到目标图的上方或下方，并使源图的原点重合于
+目标图的位置坐标，其中目标图的默认值是当前图 |currentpicture|，|above| 的真假
+值控制目标图是否在源图的上方，位置坐标不指定的形式两图原点重合。但需要注意，
+带位置坐标的形式不支持利用 |size| 函数自动缩放，此时只能通过 |shift| 变换改变
+源图的位置。通常，可以把目标图看做是已经有一些图案的背景画布，而源图是一些新
+的图案，|add| 命令会把这些新的图案贴在原来画布的某个位置上。
+
+使用自定义图的一个好处是，画在自定义图上的所有内容作为一个整体，可以通过
+|add| 函数对其重复使用，或者进行各种操作（如仿射变换）。例如，对于前面定义的
+图 |pic|，经过仿射变换\footnote{为方便文字标签的阅读，在 \Asy{} 中文字默认只
+会旋转，不会倾斜。如果要求在图变换时，标签也随之变换产生特殊效果，可以修改
+\lstinline=Label= 的 \lstinline=embed= 参数，参见 \cite{asyman}。}：
+\begin{lstlisting}
+add(mypic);
+add(slant(1)*mypic, (5cm,0));
+\end{lstlisting}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+picture mypic;
+draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);
+fill(mypic, circle((3cm,2cm), 1cm), lightblue);
+label(mypic, "triangle", (1cm,0), N);
+label(mypic, "circle", (3cm,2cm));
+add(mypic);
+add(slant(1)*mypic, (5cm,0));
+\end{asy}
+\end{figure}
+
+把剪裁命令用在自定义的图上，则这个图的内容就会随之被剪裁，在使用 |add| 时，即
+可看到效果：
+\begin{lstlisting}
+add(mypic);                             // `\color{comment}增加未剪裁的图`
+draw(circle((2cm,2cm), 2cm), red+1bp);  // `\color{comment}在未剪裁的图上画出剪裁圆形线`
+clip(mypic, circle((2cm,2cm), 2cm));    // `\color{comment}用圆形剪裁`
+add(mypic, (5cm,0));                    // `\color{comment}增加剪裁过的图`
+\end{lstlisting}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+picture mypic;
+draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);
+fill(mypic, circle((3cm,2cm), 1cm), lightblue);
+label(mypic, "triangle", (1cm,0), N);
+label(mypic, "circle", (3cm,2cm));
+add(mypic);
+draw(circle((2cm,2cm), 2cm), red+1bp);
+clip(mypic, circle((2cm,2cm), 2cm));
+add(mypic, (5cm,0));
+\end{asy}
+\end{figure}
+
+剪裁命令的效果正是 André 需要的，为了用椭圆形剪裁图形，André 只需要对当前图
+上的铺砌图进行剪裁。增加一句
 \begin{lstlisting}
 clip(ellipse((6,3), 5, 2));
 \end{lstlisting}
@@ -1030,11 +1129,7 @@ guide mouth = (3,0.4) .. (3.4,0.1) .. (3.6,0.2);
 for (int x = 0; x < 8; ++x) {
     for (int y = 0; y < 8; ++y) {
         transform pos = shift(3x, 1.5y);
-        pen color;
-        if ( (x+y) % 2 == 0 )
-            color = cyan;
-        else
-            color = yellow;
+        pen color = (i+j)%2==0 ? cyan : yellow;
         filldraw(pos * head, color, linewidth(2bp));
         fill(pos * (eye ^^ muzzle) );
         draw(pos * (ear ^^ mouth), linewidth(2bp));
@@ -1044,6 +1139,208 @@ for (int x = 0; x < 8; ++x) {
 // `\color{comment}剪裁为椭圆形`
 clip(ellipse((12,6), 10, 5));
 \end{lstlisting}
+
+
+\section{习题和评注}
+\label{sec:tiling:ex}
+
+\begin{enumerate}
+  \item 试使用 \Asy{} 设计下面字母的轮廓曲线：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+settings.tex="xelatex";
+usepackage("fontspec");
+texpreamble("\setmainfont{Lucida Bright}");
+import math;
+path[] R = texpath(Label("R", fontsize(6cm), align=Align));
+fill(R);
+add(shift(6cm) * scale(0.5cm) * grid(9,9,gray+0.4bp));
+draw(shift(6cm)*R, linewidth(2bp));
+dot(shift(6cm)*R, red+2bp);
+\end{asy}
+\end{figure}
+    图中的网格和结点取法仅供参考。虽然设计花体字母或许更有挑战性，但这类自由
+    曲线并不适合数学描述，使用可视化的软件效果更好。
+
+  \item 诚然，\Asy{} 并不适合那些没有明确数学描述的曲线，尤其是在并不要求完全
+    精确的场合，但幸运的是，\Asy{} 的一个附属工具
+    \prgname{Xasy}\index{Xasy@\prgname{Xasy}} 可以弥补这个缺陷。
+    \prgname{Xasy} 是一个简单的图形界面绘图工具（\autoref{fig:xasy}），它可以
+    用鼠标控制画图，并保存为 \Asy{} 的代码或 EPS 等图形文件格式，也能读取写好
+    的代码并显示图形效果。\prgname{Xasy} 本身的绘图功能不强，但用来辅助生成一
+    些自由曲线，是很方便的。
+\begin{figure}[htpb]
+  \centering
+  \includegraphics{xasy.png}
+  \caption{微软 Windows 系统下运行的 \prgname{Xasy} 界面示例}
+  \label{fig:xasy}
+\end{figure}
+
+    请运行并熟悉 \prgname{Xasy} 的用法，查看用它生成的代码，并尝试与自己写的
+    代码结合起来。
+    
+    （注：\prgname{Xasy} 会随 \Asy{} 安装在系统中。但在 Windows 下运行
+    \prgname{Xasy} 需要自己下载安装 Python $2.6$ 系统及 Python Imaging
+    Library，请参考 \cite{asyman} 中的说明。）
+
+  \item 试画出下面的图形（提示：可以把叶子在一个自定义图中画好，在循环中变换
+    后用 |add| 加入当前图）：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+size(8cm,0);
+guide leaf_above = (-0.5,0) {dir(30)} .. {dir(-30)} (0.5,0);
+guide leaf_below = (-0.5,0) {dir(-30)} .. {dir(30)} (0.5,0);
+guide leaf = leaf_above & reverse(leaf_below) & cycle;
+picture pic;
+fill(pic, leaf, heavygreen);
+draw(pic, leaf_above, darkgreen+2);
+draw(pic, leaf_below, lightgreen+2);
+for (int i = 0; i < 10; ++i)
+    for (int j = 0; j < 5; ++j)
+        add( shift(i*1.1,j*1.1) * rotate((i+j)*18) * pic );
+shipout(bbox(Fill(darkblue)));
+\end{asy}
+\end{figure}
+
+  \item\label{ex:venn} 利用图形剪裁，绘制两个集合交集 $A \cap B$ 的 Venn 图：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+size(0,4cm);
+guide a = circle((0,0), 1);
+guide b = circle((1,0), 1);
+picture inter;
+fill(inter, a, lightblue);
+clip(inter, b);
+add(inter);
+label("$A\cap B$", (1/2,0));
+draw(a ^^ b, linewidth(0.6));
+label(Label("$A$",position=3), a);  // position=3 是圆下方 3 号结点
+label(Label("$B$",position=3), b);
+\end{asy}
+\end{figure}
+
+  \item 与 |clip| 命令作用类似，还有一个
+    |unfill|\index{unfill@\lstinline=unfill=} 命令也可以用于图形的剪裁。它们
+    的区别是，|clip| 命令留下剪裁曲线的内部，而 |unfill| 命令挖掉剪裁曲线的内
+    部而留下外部。|unfill| 命令的语法与 |clip| 相同。借用
+    \autoref{sec:clippicture} 中的 |mypic| 举例：
+\begin{lstlisting}
+add(mypic);
+draw(circle((2cm,2cm), 1.5cm), red+1bp);
+unfill(mypic, circle((2cm,2cm), 1.5cm));
+add(mypic, (5cm,0));
+\end{lstlisting}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+picture mypic;
+draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);
+fill(mypic, circle((3cm,2cm), 1cm), lightblue);
+label(mypic, "triangle", (1cm,0), N);
+label(mypic, "circle", (3cm,2cm));
+add(mypic);
+draw(circle((2cm,2cm), 1.5cm), red+1bp);
+unfill(mypic, circle((2cm,2cm), 1.5cm));
+add(mypic, (5cm,0));
+\end{asy}
+\end{figure}
+
+    下面，请利用 |unfill| 命令绘制两个集合差集 $A\setminus B$ 和对称差集
+    $A\bigtriangleup B$ 的 Venn 图\footnote{Venn 图的做法并不是唯一的。例如，
+    对称差集 $A\bigtriangleup B$ 的 Venn 图也可以利用 \autoref{sec:curve} 绘
+    制圆环的方式制做；在 \cite{asyman} 中，还介绍了利用表示特殊填充规则的画笔
+    \lstinline=evenodd=\index{evenodd@\lstinline=evenodd=} 绘制这种 Venn 图的
+    方法；路径的 \lstinline=buildcycle=
+    \index{buildcycle@\lstinline=buildcycle=}函数（参看 \cite{asyman}）也可以
+    用于绘制对称差集——这些方式对画一般的 Venn 图并不通用，但在一些情况下比
+    使用剪裁功能要简洁，或能得到更丰富的效果。读者在实际使用中不必拘泥。}：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+size(0,4cm);
+guide a = circle((0,0), 1);
+guide b = circle((1,0), 1);
+picture pic1, pic2;
+picture a_minus;
+fill(a_minus, a, lightblue);
+unfill(a_minus, b);
+add(pic1, a_minus);
+label(pic1, "$A\setminus B$", (-1/2,0));
+draw(pic1, a ^^ b, linewidth(0.6));
+label(pic1, Label("$A$",position=3), a);
+label(pic1, Label("$B$",position=3), b);
+picture b_minus;
+fill(b_minus, b, lightblue);
+unfill(b_minus, a);
+add(pic2, a_minus);
+add(pic2, b_minus);
+label(pic2, "$A\bigtriangleup B$", (1/2,1.2), N);
+draw(pic2, (1/2,1.2)--(0,3/4) ^^ (1/2,1.2)--(1,3/4));
+draw(pic2, a ^^ b, linewidth(0.6));
+label(pic2, Label("$A$",position=3), a);
+label(pic2, Label("$B$",position=3), b);
+add(pic1);
+add(shift(4)*pic2);
+\end{asy}
+\end{figure}
+
+  \item 请制做下面的艺术字效果：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+settings.tex="xelatex";
+usepackage("xeCJK");
+texpreamble("\setCJKmainfont{FZHei_GB18030-B01}");
+picture hei, bai;
+label(hei, "黑白", black+fontsize(4cm));
+label(bai, "黑白", white+fontsize(4cm));
+fill(hei, box((-5cm,-3cm), (5cm,3cm)), white);
+fill(bai, box((-5cm,-3cm), (5cm,3cm)), black);
+guide g = (-5cm,-3cm) {right} .. (0,0){down} .. {right} (5cm,3cm);
+clip(hei, g -- (-5cm,3cm) -- cycle);
+clip(bai, g -- (5cm,-3cm) -- cycle);
+add(hei);
+add(bai);
+\end{asy}
+\end{figure}
+\end{enumerate}
+
+本章的素材源自 \prgname{PSTricks} 的文档 \cite{pstricks} 中的一个例子。
+\prgname{PSTricks} 是 \TeX{} 的一个老牌绘图宏包，功能强大，尤其是与 \LaTeX{} 
+文档有很好的结合性。在 \cite{pstricks} 中还可以找到其他一些有趣的铺砌图形。
+
+\Asy{} 的曲线控制方式脱胎于它的前身 \MP{}，而 \MP{} 的语法和曲线控制方式则与
+其前身 \MF{} 完全相同。\MF{} 是 Knuth 为配合 \TeX{} 系统制做的字体设计软件，
+在 \MF{} 的经典文献 \cite{knuth1986} 中详细介绍了这种曲线的控制。\MP{} 是
+John D. Hobby 模仿 \MF{} 编写的绘图软件，它与 \Asy{} 采用基本相同的方式使用
+\TeX{} 排版文字，\MP{} 的文档 \cite{mpman} 也对曲线控制有一些说明。而介绍与
+\mbox{Con\TeX{}t} 配合使用 \MP{} 的著名文档 \emph{METAFUN}\cite{metafun} 更是
+以极其详实的例子展示了曲线绘制的各个方面。除个别连接符不同，\Asy{} 的曲线控制
+语法与 \MF{} 及 \MP{} 基本相同，本章关于曲线控制的内容也主要参考了这些文档
+\cite{knuth1986, mpman, metafun}。
+
+与在 \MF{} 及 \MP{} 不同的是，在 \Asy{} 中，曲线（包括直线）被分为两种不同的
+数据类型：|path|（译为路径）和 |guide|（暂译为路向）。在 \MF{} 和 \MP{} 中的
+路径（|path| 类型）实际对应于 \Asy{} 中的 |guide|。在计算机中曲线的数学表示是
+由一列结点和控制点决定的三次 Bézier 样条曲线，这种确定的曲线在 \Asy{} 中对应
+于 |path| 类型；而由 |--|、|..| 等连接符说明的曲线，仍可能在延长时改变形状，
+在以一定算法转换为三次 Bézier 样条之前，就是 \Asy{} 中的 |guide| 类型。本章
+的内容集中在使用更直观的曲线连接符生成 |guide| 类型的曲线，而完全用数学方式操
+控 |path| 类型，将在 \autoref{sec:guide2path} 中进一步介绍。
+
+变量定义、循环和判断是使用 \Asy{} 编程的基础。\Asy{} 的程序设计语法基本来自
+C++ 语言，而略有扩充和改动。本教程有意淡化编程语法，也不假定读者有很好的编程
+基础，但熟悉 C/C++/Java 语言的读者学习 \Asy{} 会方便得多。如果对 \Asy{} 语言
+有疑问，请参考 \Asy{} 的官方手册 \cite{asyman} 或中文的节译。
+
+图类型（|picture|）也源自 \MP{}，它是分组绘图和图形复用的基础。不过 \Asy{} 的
+图类型功能更复杂，使用 |size| 函数自动缩放就是 \Asy{} 的特色功能。
+
+剪裁功能可以产生许多特殊效果，本章正文只是最简单的应用，习题中展示了剪裁功能
+的一些更实际的应用，但仍然有一些问题没有涉及，留待读者自行思考了。
 
 \endinput
 

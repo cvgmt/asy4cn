@@ -47,8 +47,13 @@
 \usepackage{xcolor}
 \pagecolor{lightgray!50}
 
+\usepackage{everypage}
+\AddEverypageHook{%
+  \special{pdf: put @thispage << /Group << /S /Transparency /I true %
+  /CS /DeviceRGB >> >>}} % 处理插入透明图形时变色的问题
 \usepackage{asymptote}
 \usepackage{graphicx}
+
 \usepackage{hyperref}
 \hypersetup{
   bookmarksopen=false,
@@ -62,6 +67,7 @@
 \usepackage{asysyntex}
 \usepackage{listings}
 \lstloadlanguages{C}
+\def\cinline{\expandafter\lstinline[language=C]}
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand*\Asy{\textsf{Asymptote}}

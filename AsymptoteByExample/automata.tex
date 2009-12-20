@@ -926,7 +926,7 @@ draw(cat.angle(30){dir(30)} .. {dir(-30)}dog.angle(150), Arrow);
 \end{figure}
 最后一行的曲线连线看起来十分复杂，出现了四个角度，但它们其实加起来只表示一个
 意思：就是从 |cat| 从左边偏 $30^\circ$ 连一条曲线拐到 |dog|，这个 $30^\circ$
-是相对 |cat| 和 |dog| 的直线连线而说的。因此，看起来合情合理的词法就呼之欲出
+是相对 |cat| 和 |dog| 的直线连线而说的。因此，看起来合情合理的记法就呼之欲出
 了，它可以是这个样子的：
 \begin{asycode}
 draw(cat .. bendleft .. dog, Arrow);
@@ -986,7 +986,7 @@ path operator..(node nd1, edgeconnector con, node nd2)
 
 看上去问题陷入了僵局：我们已经定义了十分方便的 |cat -- dog|，却无法正确定义
 |cat .. bendleft .. dog|，而不得不使用 |bendleft(cat, dog)|。后一种函数调用的
-词法并不复杂，但缺乏一致性。
+记法并不复杂，但缺乏一致性。
 
 然而严教授总有办法：既然 \Asy{} 只允许 |cat .. bendleft|，那么何不就让它先算
 出一个正确的 |cat .. bendleft| 呢？可以让 |cat .. bendleft| 先算出一个中间值
@@ -1237,15 +1237,18 @@ for (elem : arr)
 图形了（\autoref{fig:automatapreliminary}）：
 \begin{asycode}
 real u = 2cm;
-pen Accept = thick(currentpen);
-node q0 = Circle("$q_0$", (0,0)),
-     q1 = Circle("$q_1$", q0.pos + u*S),
-     q2 = Circle("$q_2$", q1.pos + u*E, drawpen=Accept),
-     q3 = Circle("$q_3$", q0.pos + u*E),
-     q4 = Circle("$q_4$", q3.pos + u*E + 0.5u*S),
-     q5 = Circle("$q_5$", q4.pos + u*E),
-     q6 = Circle("$q_6$", q5.pos + u*E, drawpen=Accept),
-     q7 = Circle("$q_7$", q6.pos + u*E, drawpen=Accept);
+pen StateText = white;
+pen StateFill = deepgreen;
+pen StateDraw = darkgreen+0.6;
+pen AcceptDraw = darkgreen+1.8;
+node q0 = Circle("$q_0$", (0,0), StateText, StateFill, StateDraw),
+     q1 = Circle("$q_1$", q0.pos + u*S, StateText, StateFill, StateDraw),
+     q2 = Circle("$q_2$", q1.pos + u*E, StateText, StateFill, AcceptDraw),
+     q3 = Circle("$q_3$", q0.pos + u*E, StateText, StateFill, StateDraw),
+     q4 = Circle("$q_4$", q3.pos + u*E + 0.5u*S, StateText, StateFill, StateDraw),
+     q5 = Circle("$q_5$", q4.pos + u*E, StateText, StateFill, StateDraw),
+     q6 = Circle("$q_6$", q5.pos + u*E, StateText, StateFill, AcceptDraw),
+     q7 = Circle("$q_7$", q6.pos + u*E, StateText, StateFill, AcceptDraw);
 draw(q0, q1, q2, q3, q4, q5, q6, q7);
 pen edgepen = fontcommand("\scriptsize\ttfamily");
 draw(".",     q0 -- q1, edgepen, Arrow);
@@ -1379,15 +1382,18 @@ edgemaker loop(pair direction, real ratio=1.5)
 }
 
 real u = 2cm;
-pen Accept = linewidth(2);
-node q0 = Circle("$q_0$", (0,0)),
-     q1 = Circle("$q_1$", q0.pos + u*S),
-     q2 = Circle("$q_2$", q1.pos + u*E, drawpen=Accept),
-     q3 = Circle("$q_3$", q0.pos + u*E),
-     q4 = Circle("$q_4$", q3.pos + u*E + 0.5u*S),
-     q5 = Circle("$q_5$", q4.pos + u*E),
-     q6 = Circle("$q_6$", q5.pos + u*E, drawpen=Accept),
-     q7 = Circle("$q_7$", q6.pos + u*E, drawpen=Accept);
+pen StateText = white;
+pen StateFill = deepgreen;
+pen StateDraw = darkgreen+0.6;
+pen AcceptDraw = darkgreen+1.8;
+node q0 = Circle("$q_0$", (0,0), StateText, StateFill, StateDraw),
+     q1 = Circle("$q_1$", q0.pos + u*S, StateText, StateFill, StateDraw),
+     q2 = Circle("$q_2$", q1.pos + u*E, StateText, StateFill, AcceptDraw),
+     q3 = Circle("$q_3$", q0.pos + u*E, StateText, StateFill, StateDraw),
+     q4 = Circle("$q_4$", q3.pos + u*E + 0.5u*S, StateText, StateFill, StateDraw),
+     q5 = Circle("$q_5$", q4.pos + u*E, StateText, StateFill, StateDraw),
+     q6 = Circle("$q_6$", q5.pos + u*E, StateText, StateFill, AcceptDraw),
+     q7 = Circle("$q_7$", q6.pos + u*E, StateText, StateFill, AcceptDraw);
 draw(q0, q1, q2, q3, q4, q5, q6, q7);
 pen edgepen = fontcommand("\scriptsize\ttfamily");
 draw(".",     q0 -- q1, edgepen, Arrow);
@@ -1417,11 +1423,1343 @@ draw("[fFlL]", q2 .. bendright .. q7, edgepen, Arrow);
 
 \section{完善图形细节}
 
+仔细审视\autoref{fig:automatapreliminary} 的效果，严教授发现理想中的几点要求
+还没有做到：一是对于表示接受状态的结点 $q_2$, $q_6$, $q_7$，应该使用双线画出
+，而不是现在这样用一条粗线代替；二是为了最终效果的美观，结点应该加上灰色阴影
+的修饰；三是箭头显得太大，而且应该在末端处缩短一点，不与所指向的结点相接才好
+看。阴影效果只是为了修饰，但双线效果却是正确画出有限自动机图形所必需的特征，
+因而前面画出的似是而非的图形是不能拿到讲台上的。此外，原来手稿中的“开始”还
+没有画出来，它只是一个普通的文字标签，但又像图的结点一样有连线，一时还拿不准
+如何处理。
+
+对于双线，首先想到的解决方案是画一大一小两条线。看上去只要把边框路径相对中心
+做一个小小的放缩：
+\begin{asycode}
+path outline = circle((0,0), 1cm);
+draw(outline ^^ scale(0.9)*outline);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+path outline = circle((0,0), 1cm);
+draw(outline ^^ scale(0.9)*outline);
+\end{asy}
+\end{figure}
+然而这样做会带来许多问题：一是当放缩中心不在原点时，要进行比简单放缩更复杂的
+变换；二是放缩比例难以正确的确定；第三点是最主要的，就是当边框不再是前面定义
+的圆形时，其实任何放缩比例都不能得到正确的双线——距离中心远的地方双线距离也
+远，距离中心近的地方双线距离太近：
+\begin{asycode}
+path outline = box((-3cm,-1cm), (3cm,1cm));
+draw(outline ^^ scale(0.9)*outline, linewidth(1));  
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+path outline = box((-3cm,-1cm), (3cm,1cm));
+draw(outline ^^ scale(0.9)*outline, linewidth(1));
+\end{asy}
+\end{figure}
+
+其实得到双线的合适办法画一粗一细两条线，粗的是线的颜色，细的则是背景色，粗线
+的宽度正好是细线的 3 倍：
+\begin{asycode}
+path outline = box((-3cm,-1cm), (3cm,1cm));
+draw(outline, black+3);
+draw(outline, white+1);  
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+path outline = box((-3cm,-1cm), (3cm,1cm));
+draw(outline, black+3);
+draw(outline, white+1);
+\end{asy}
+\end{figure}
+
+再来看阴影。双线的解决办法是画两遍，其实阴影也是一样。要得到阴影效果，只要在
+原来图形的后面平移一小块位置用灰色再填充一遍：
+\begin{asycode}
+path outline = circle((0,0), 1cm);
+fill(shift(5SE) * outline, gray);
+fill(outline, deepgreen);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+path outline = circle((0,0), 1cm);
+fill(shift(5SE) * outline, gray);
+fill(outline, deepgreen);
+\end{asy}
+\end{figure}
+不要这里要注意，前面的图形必须填充上颜色或者用
+|unfill|\index{unfill@\asyinline=unfill=} 挖掉边框内的部分，否则灰色的阴影就
+露馅了。
+
+综合来看，前两个问题其实是相同的：那就是结点的绘制不再能简单地用三个画笔（文
+字、填充、边框）描述清楚，而需要双线、阴影等更复杂的效果。这提示严教授必须修
+改结点构造时的绘制过程，也必须修改结点的构造函数。
+
+要实现复杂的绘制过程，最有效的办法莫过于使用函数。用根据边框进行复杂画图的函
+数代替原来的画笔，就可以得到新的结点构造函数。首先给这种函数类型定义一个新的
+别名：
+\begin{asycode}
+typedef void draw_t(picture pic, path g);
+\end{asycode}
+于是圆形结点就变成：
+\begin{asycode}
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+\end{asycode}
+形式上的改动是微小的：第二个实现中函数原型的 |fillpen| 和 |drawpen| 参数都代
+以函数参数 |drawfn|，而原来绘制的 |filldraw| 语句也换成了 |drawfn| 语句。
+
+不过这样一来，暂时就要使用这样的语句来构造结点了：
+\begin{asycode}
+node cat = Circle("cat", (0,0),
+                  new void(picture pic, path g) {
+                      filldraw(pic, g, yellow, black);
+                  }
+                 );
+\end{asycode}
+为了能让使用普通方法画结点还像原来一样方便，就得定义一些与 |fill|、|draw|、
+|filldraw| 等对应的 |draw_t| 类型的函数：
+\begin{asycode}
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+\end{asycode}
+这里，|drawer(pen)| 函数返回一个用给定画笔画边框线的 |draw_t| 函数，但严教授
+同时又定义 |drawer| 本身也是一个 |draw_t| 函数，使用当前画笔画线。类似地，填
+充的 |filler| 也有两种形式。这实际上是利用了 \Asy{} 的函数重载功能（两个
+|drawer|、两个 |filler| 其实都是参数不同的函数类型）。
+
+于是，现在又可以像原来一样方便地画结点了：
+\begin{asycode}
+node cat = Circle("cat", (0,0), filldrawer(yellow, black)),
+     dog = Circle("dog", (2cm,0), drawer);  //`\color{comment}drawer 相当于 drawer(currentpen)`
+draw(cat, dog);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+// `\color{comment}结点类型，第二个实现`
+struct node {
+    path outline;
+    picture stuff;
+    pair pos;
+    pair E, N, W, S;
+    pair dir(pair v)
+    {
+        path g = shift(pos) * outline;
+        pair M = max(g), m = min(g), c = 0.5*(M+m);
+        path ray = c -- c + length(M-m)*unit(v);
+        return intersectionpoint(g, ray);
+    }
+    pair angle(real ang)
+    {
+        return this.dir(dir(ang));
+    }
+}
+
+typedef void draw_t(picture pic, path g);
+
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+
+
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+// `\color{comment}画出结点数组`
+void draw(picture pic=currentpicture, node[] nodearr)
+{
+    for (node nd: nodearr)
+        add(pic, shift(nd.pos) * nd.stuff);
+}
+
+// `\color{comment}画出一个或多个结点`
+void draw(picture pic=currentpicture ... node[] nodearr)
+{
+    draw(pic, nodearr);
+}
+
+path operator--(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    path edge = c1 -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+typedef path edgeconnector(node nd1, node nd2);
+typedef path edgemaker(node nd);
+
+// `\color{comment}nd1 .. con .. nd2 的前一半`
+edgemaker operator..(node nd, edgeconnector con)
+{
+    return new path(node nd2) {
+        return con(nd, nd2);
+    };
+}
+
+// `\color{comment}nd1 .. con .. nd2 的后一半`
+path operator..(edgemaker maker, node nd)
+{
+    return maker(nd);
+}
+
+edgeconnector bend(real ang)
+{
+    return new path (node nd1, node nd2) {
+        path g1 = shift(nd1.pos) * nd1.outline;
+        path g2 = shift(nd2.pos) * nd2.outline;
+        pair c1 = (max(g1)+min(g1)) / 2;
+        pair c2 = (max(g2)+min(g2)) / 2;
+        real deg = degrees(c2 - c1);
+        return nd1.angle(deg+ang) {dir(deg+ang)}
+            .. {dir(deg-ang)} nd2.angle(180+deg-ang);
+    };
+}
+
+edgeconnector bendleft = bend(30);
+edgeconnector bendright = bend(-30);
+
+path operator..(node nd, edgemaker maker)
+{
+    return maker(nd);
+}
+
+// `\color{comment}自动机循环`
+edgemaker loop(pair direction, real ratio=1.5)
+{
+    return new path(node nd) {
+        real deg = degrees(direction);
+        real angle1 = deg - 15, angle2 = deg + 15;
+        pair mid = nd.angle(deg)
+            + ratio*fontsize(currentpen)*unit(direction);
+        return nd.angle(angle1) {dir(angle1)} .. mid
+            .. {-dir(angle2)} nd.angle(angle2);
+    };
+}
+
+node cat = Circle("cat", (0,0), filldrawer(yellow, black)),
+     dog = Circle("dog", (2cm,0), drawer);  //`\color{comment}drawer 相当于 drawer(currentpen)`
+draw(cat, dog);
+\end{asy}
+\end{figure}
+
+当然，问题的关键是完成画双线和阴影的复杂函数。有了前面的铺垫，画双线边框是轻
+而易举的：
+\begin{asycode}
+// `\color{comment}画双线边框，第一个实现`
+draw_t doubledrawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p+3*linewidth(p));
+        draw(pic, g, white+linewidth(p));
+    };
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+
+node cat = Circle("cat", (0,0), doubledrawer),
+     dog = Circle("dog", (2cm,0), doubledrawer(red+1));
+draw(cat, dog);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+//#-*- coding: utf-8 -*-
+// `\color{comment}结点类型，第二个实现`
+struct node {
+    path outline;
+    picture stuff;
+    pair pos;
+    pair E, N, W, S;
+    pair dir(pair v)
+    {
+        path g = shift(pos) * outline;
+        pair M = max(g), m = min(g), c = 0.5*(M+m);
+        path ray = c -- c + length(M-m)*unit(v);
+        return intersectionpoint(g, ray);
+    }
+    pair angle(real ang)
+    {
+        return this.dir(dir(ang));
+    }
+}
+
+typedef void draw_t(picture pic, path g);
+
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+
+
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+// `\color{comment}画出结点数组`
+void draw(picture pic=currentpicture, node[] nodearr)
+{
+    for (node nd: nodearr)
+        add(pic, shift(nd.pos) * nd.stuff);
+}
+
+// `\color{comment}画出一个或多个结点`
+void draw(picture pic=currentpicture ... node[] nodearr)
+{
+    draw(pic, nodearr);
+}
+
+path operator--(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    path edge = c1 -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+typedef path edgeconnector(node nd1, node nd2);
+typedef path edgemaker(node nd);
+
+// `\color{comment}nd1 .. con .. nd2 的前一半`
+edgemaker operator..(node nd, edgeconnector con)
+{
+    return new path(node nd2) {
+        return con(nd, nd2);
+    };
+}
+
+// `\color{comment}nd1 .. con .. nd2 的后一半`
+path operator..(edgemaker maker, node nd)
+{
+    return maker(nd);
+}
+
+edgeconnector bend(real ang)
+{
+    return new path (node nd1, node nd2) {
+        path g1 = shift(nd1.pos) * nd1.outline;
+        path g2 = shift(nd2.pos) * nd2.outline;
+        pair c1 = (max(g1)+min(g1)) / 2;
+        pair c2 = (max(g2)+min(g2)) / 2;
+        real deg = degrees(c2 - c1);
+        return nd1.angle(deg+ang) {dir(deg+ang)}
+            .. {dir(deg-ang)} nd2.angle(180+deg-ang);
+    };
+}
+
+edgeconnector bendleft = bend(30);
+edgeconnector bendright = bend(-30);
+
+path operator..(node nd, edgemaker maker)
+{
+    return maker(nd);
+}
+
+// `\color{comment}自动机循环`
+edgemaker loop(pair direction, real ratio=1.5)
+{
+    return new path(node nd) {
+        real deg = degrees(direction);
+        real angle1 = deg - 15, angle2 = deg + 15;
+        pair mid = nd.angle(deg)
+            + ratio*fontsize(currentpen)*unit(direction);
+        return nd.angle(angle1) {dir(angle1)} .. mid
+            .. {-dir(angle2)} nd.angle(angle2);
+    };
+}
+
+// `\color{comment}画双线边框，第一个实现`
+draw_t doubledrawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p+3*linewidth(p));
+        draw(pic, g, white+linewidth(p));
+    };
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+
+node cat = Circle("cat", (0,0), doubledrawer),
+     dog = Circle("dog", (2cm,0), doubledrawer(red+1));
+draw(cat, dog);
+\end{asy}
+\end{figure}
+这个双线的实现考虑到了使用不同的边框画笔，并且自动计算画笔和白色背景的宽度，
+看上去是完美无缺了。不过，严教授仍然不满意：这种实现方式还是不够一般，不仅背
+景色不一定是白色的，而且结点可能不仅需要画双线，还需要填充、画阴影或是做别的
+什么操作——有无数种组合的可能性，却必须为这每种可能性单独写一个 |draw_t| 类
+型的函数。既然前面已经定义了画线、填充这些基本操作，那何不把它们组合起来呢？
+
+严教授意识到，组合起多个 |draw_t| 函数，形成一个新的画结点边框的函数，这个功
+能是的应用可能十分广泛。因此，他写出了把多个 |draw_t| 函数复合起来的函数，也
+就是在复合函数中依次调用这些函数：
+\begin{asycode}
+// `\color{comment}多个边框绘制函数的复合`
+draw_t compose(... draw_t[] drawfns)
+{
+    return new void(picture pic, path g) {
+        for (draw_t f : drawfns)
+            f(pic, g);
+    };
+}
+\end{asycode}
+这样，实现双线的函数就成为两个 |drawer| 的复合了：
+\begin{asycode}
+// `\color{comment}画双线边框，第二个实现`
+draw_t doubledrawer(pen p, pen bg=white)
+{
+    return compose(drawer(p+linewidth(p)*3), drawer(bg+linewidth(p)));
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+\end{asycode}
+更重要的是，可以更自由地组合不同的函数功能了：
+\begin{asycode}
+node cat = Circle("cat", (0,0), compose(filler(yellow), doubledrawer)),
+     dog = Circle("dog", (2cm,0), compose(filler(olive), doubledrawer(darkgreen+1)));
+draw(cat, dog);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+// `\color{comment}结点类型，第二个实现`
+struct node {
+    path outline;
+    picture stuff;
+    pair pos;
+    pair E, N, W, S;
+    pair dir(pair v)
+    {
+        path g = shift(pos) * outline;
+        pair M = max(g), m = min(g), c = 0.5*(M+m);
+        path ray = c -- c + length(M-m)*unit(v);
+        return intersectionpoint(g, ray);
+    }
+    pair angle(real ang)
+    {
+        return this.dir(dir(ang));
+    }
+}
+
+// `\color{comment}边框绘制函数类型`
+typedef void draw_t(picture pic, path g);
+
+// `\color{comment}多个边框绘制函数的复合`
+draw_t compose(... draw_t[] drawfns)
+{
+    return new void(picture pic, path g) {
+        for (draw_t f : drawfns)
+            f(pic, g);
+    };
+}
+
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+
+
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+// `\color{comment}画出结点数组`
+void draw(picture pic=currentpicture, node[] nodearr)
+{
+    for (node nd: nodearr)
+        add(pic, shift(nd.pos) * nd.stuff);
+}
+
+// `\color{comment}画出一个或多个结点`
+void draw(picture pic=currentpicture ... node[] nodearr)
+{
+    draw(pic, nodearr);
+}
+
+path operator--(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    path edge = c1 -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+typedef path edgeconnector(node nd1, node nd2);
+typedef path edgemaker(node nd);
+
+// `\color{comment}nd1 .. con .. nd2 的前一半`
+edgemaker operator..(node nd, edgeconnector con)
+{
+    return new path(node nd2) {
+        return con(nd, nd2);
+    };
+}
+
+// `\color{comment}nd1 .. con .. nd2 的后一半`
+path operator..(edgemaker maker, node nd)
+{
+    return maker(nd);
+}
+
+edgeconnector bend(real ang)
+{
+    return new path (node nd1, node nd2) {
+        path g1 = shift(nd1.pos) * nd1.outline;
+        path g2 = shift(nd2.pos) * nd2.outline;
+        pair c1 = (max(g1)+min(g1)) / 2;
+        pair c2 = (max(g2)+min(g2)) / 2;
+        real deg = degrees(c2 - c1);
+        return nd1.angle(deg+ang) {dir(deg+ang)}
+            .. {dir(deg-ang)} nd2.angle(180+deg-ang);
+    };
+}
+
+edgeconnector bendleft = bend(30);
+edgeconnector bendright = bend(-30);
+
+path operator..(node nd, edgemaker maker)
+{
+    return maker(nd);
+}
+
+// `\color{comment}自动机循环`
+edgemaker loop(pair direction, real ratio=1.5)
+{
+    return new path(node nd) {
+        real deg = degrees(direction);
+        real angle1 = deg - 15, angle2 = deg + 15;
+        pair mid = nd.angle(deg)
+            + ratio*fontsize(currentpen)*unit(direction);
+        return nd.angle(angle1) {dir(angle1)} .. mid
+            .. {-dir(angle2)} nd.angle(angle2);
+    };
+}
+
+// `\color{comment}画双线边框，第二个实现`
+draw_t doubledrawer(pen p, pen bg=white)
+{
+    return compose(drawer(p+linewidth(p)*3), drawer(bg+linewidth(p)));
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+
+node cat = Circle("cat", (0,0), compose(filler(yellow), doubledrawer)),
+     dog = Circle("dog", (2cm,0), compose(filler(olive), doubledrawer(darkgreen+1)));
+draw(cat, dog);
+\end{asy}
+\end{figure}
+
+下面对于阴影，只要考虑阴影本身，阴影之外的功能都可以通过复合函数得到了。因而
+画阴影的函数就很平常了：
+\begin{asycode}
+// `\color{comment}画阴影`
+draw_t shadow(pair shift=2SE, real scale=1, pen color=gray)
+{
+    return new void(picture pic, path g) {
+        fill(pic, shift(shift)*scale(scale)*g, color);
+    };
+}
+draw_t shadow=shadow();
+\end{asycode}
+使用阴影时，因为阴影在图形的最下方，因而应该在复合函数的最前面：
+\begin{asycode}
+node cat = Circle("cat", (0,0), compose(shadow, filldrawer(yellow))),
+     dog = Circle("dog", (2cm,0), compose(shadow, filler(olive)));
+draw(cat, dog);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+// `\color{comment}结点类型，第二个实现`
+struct node {
+    path outline;
+    picture stuff;
+    pair pos;
+    pair E, N, W, S;
+    pair dir(pair v)
+    {
+        path g = shift(pos) * outline;
+        pair M = max(g), m = min(g), c = 0.5*(M+m);
+        path ray = c -- c + length(M-m)*unit(v);
+        return intersectionpoint(g, ray);
+    }
+    pair angle(real ang)
+    {
+        return this.dir(dir(ang));
+    }
+}
+
+// `\color{comment}边框绘制函数类型`
+typedef void draw_t(picture pic, path g);
+
+// `\color{comment}多个边框绘制函数的复合`
+draw_t compose(... draw_t[] drawfns)
+{
+    return new void(picture pic, path g) {
+        for (draw_t f : drawfns)
+            f(pic, g);
+    };
+}
+
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+
+
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+// `\color{comment}画出结点数组`
+void draw(picture pic=currentpicture, node[] nodearr)
+{
+    for (node nd: nodearr)
+        add(pic, shift(nd.pos) * nd.stuff);
+}
+
+// `\color{comment}画出一个或多个结点`
+void draw(picture pic=currentpicture ... node[] nodearr)
+{
+    draw(pic, nodearr);
+}
+
+path operator--(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    path edge = c1 -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+typedef path edgeconnector(node nd1, node nd2);
+typedef path edgemaker(node nd);
+
+// `\color{comment}nd1 .. con .. nd2 的前一半`
+edgemaker operator..(node nd, edgeconnector con)
+{
+    return new path(node nd2) {
+        return con(nd, nd2);
+    };
+}
+
+// `\color{comment}nd1 .. con .. nd2 的后一半`
+path operator..(edgemaker maker, node nd)
+{
+    return maker(nd);
+}
+
+edgeconnector bend(real ang)
+{
+    return new path (node nd1, node nd2) {
+        path g1 = shift(nd1.pos) * nd1.outline;
+        path g2 = shift(nd2.pos) * nd2.outline;
+        pair c1 = (max(g1)+min(g1)) / 2;
+        pair c2 = (max(g2)+min(g2)) / 2;
+        real deg = degrees(c2 - c1);
+        return nd1.angle(deg+ang) {dir(deg+ang)}
+            .. {dir(deg-ang)} nd2.angle(180+deg-ang);
+    };
+}
+
+edgeconnector bendleft = bend(30);
+edgeconnector bendright = bend(-30);
+
+path operator..(node nd, edgemaker maker)
+{
+    return maker(nd);
+}
+
+// `\color{comment}自动机循环`
+edgemaker loop(pair direction, real ratio=1.5)
+{
+    return new path(node nd) {
+        real deg = degrees(direction);
+        real angle1 = deg - 15, angle2 = deg + 15;
+        pair mid = nd.angle(deg)
+            + ratio*fontsize(currentpen)*unit(direction);
+        return nd.angle(angle1) {dir(angle1)} .. mid
+            .. {-dir(angle2)} nd.angle(angle2);
+    };
+}
+
+// `\color{comment}画双线边框，第二个实现`
+draw_t doubledrawer(pen p, pen bg=white)
+{
+    return compose(drawer(p+linewidth(p)*3), drawer(bg+linewidth(p)));
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+
+// `\color{comment}画阴影`
+draw_t shadow(pair shift=2SE, real scale=1, pen color=gray)
+{
+    return new void(picture pic, path g) {
+        fill(pic, shift(shift)*scale(scale)*g, color);
+    };
+}
+draw_t shadow=shadow();
+
+node cat = Circle("cat", (0,0), compose(shadow, filldrawer(yellow))),
+     dog = Circle("dog", (2cm,0), compose(shadow, filler(olive)));
+draw(cat, dog);
+\end{asy}
+\end{figure}
+
+最后来看箭头的问题。在 \cite{asyman} 中，详细说明了箭头类型 |arrowhead| 的各
+种参数，如使用 |Arrow(6)| 就表示使用 6\,bp 大小的箭头，修改也起来十分容易，例
+如：
+\begin{asycode}
+Arrow = Arrow(6);
+draw((0,0) -- (2cm,0), darkblue+2, Arrow);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+Arrow = Arrow(6);
+draw((0,0) -- (2cm,0), darkblue+2, Arrow);
+\end{asy}
+\end{figure}
+
+然而要将箭头缩短一点，就没有现成的参数可用了。但可以把画箭头的曲线路径截短。
+可以使用 \autoref{sec:guide2path} 中提及的
+|subpath|\index{subpath@\asyinline=subpath=} 函数取路径的一段。于是只要知道所
+截路径首尾的时间参数。严教授查了 \cite{asyman}，得知可以使用
+\index{arclength@\asyinline=arclength=}
+\index{arctime@\asyinline=arctime=}
+\begin{asycode}
+real arclength(path p);
+real arctime(path p, real L);
+\end{asycode}
+来分别得到路径的总长度和长度 |L| 处的时刻。于是，把路径 |g| 缩短 2\,bp 就可以
+写成：
+\begin{asycode}
+subpath(g, 0, arctime(g, arclength(g) - 2bp));
+\end{asycode}
+这正是严教授需要的。
+
+缩短路径长度的表达式长而复杂，当然可以写成一个函数使用。但追求形式美的严教授
+甚至给缩短路径长度的函数调用一个新的记法：
+\begin{asycode}
+typedef path fpath(path);
+path operator@(path p, fpath t)
+{
+    return t(p);
+}
+
+fpath shorten(real pre=0, real post=2)
+{
+    return new path(path p) {
+	return subpath(p, arctime(p, pre), arctime(p, arclength(p)-post));
+    };
+}
+fpath shorten=shorten(0,2);
+\end{asycode}
+这种记法几乎就是前面用曲线连接结点表达式的翻版。使用这种记法，严教授就可以用
+\begin{asycode}
+g @ shorten
+\end{asycode}
+或是
+\begin{asycode}
+g @ shorten(2)
+\end{asycode}
+来表示把 |g| 缩短 2\,bp 的功能。事实上，这种记法用在实际的绘图命令中非常简洁
+明快：
+\begin{asycode}
+node cat = Circle("cat", (0,0), compose(shadow, filldrawer(yellow))),
+     dog = Circle("dog", (2cm,0), compose(shadow, filler(olive)));
+draw(cat, dog);
+draw(cat -- dog @ shorten, Arrow);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+// `\color{comment}结点类型，第二个实现`
+struct node {
+    path outline;
+    picture stuff;
+    pair pos;
+    pair E, N, W, S;
+    pair dir(pair v)
+    {
+        path g = shift(pos) * outline;
+        pair M = max(g), m = min(g), c = 0.5*(M+m);
+        path ray = c -- c + length(M-m)*unit(v);
+        return intersectionpoint(g, ray);
+    }
+    pair angle(real ang)
+    {
+        return this.dir(dir(ang));
+    }
+}
+
+// `\color{comment}边框绘制函数类型`
+typedef void draw_t(picture pic, path g);
+
+// `\color{comment}多个边框绘制函数的复合`
+draw_t compose(... draw_t[] drawfns)
+{
+    return new void(picture pic, path g) {
+        for (draw_t f : drawfns)
+            f(pic, g);
+    };
+}
+
+// `\color{comment}空函数，不做边框的绘制`
+draw_t none = new void(picture pic, path g){};
+// `\color{comment}画边框线`
+draw_t drawer(pen p)
+{
+    return new void(picture pic, path g) {
+        draw(pic, g, p);
+    };
+}
+draw_t drawer=drawer(currentpen);
+// `\color{comment}填充边框`
+draw_t filler(pen p)
+{
+    return new void(picture pic, path g) {
+        fill(pic, g, p);
+    };
+}
+draw_t filler=filler(currentpen);
+// `\color{comment}对边框填充并画线`
+draw_t filldrawer(pen fillpen, pen drawpen=currentpen)
+{
+    return new void(picture pic, path g) {
+        filldraw(pic, g, fillpen, drawpen);
+    };
+}
+
+
+// `\color{comment}圆形结点的构造函数，第三个实现`
+node Circle(Label text, pair pos, pen textpen=currentpen,
+            draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = circle(0.5*(M+m), 0.5*length(M-m));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+// `\color{comment}画出结点数组`
+void draw(picture pic=currentpicture, node[] nodearr)
+{
+    for (node nd: nodearr)
+        add(pic, shift(nd.pos) * nd.stuff);
+}
+
+// `\color{comment}画出一个或多个结点`
+void draw(picture pic=currentpicture ... node[] nodearr)
+{
+    draw(pic, nodearr);
+}
+
+path operator--(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    path edge = c1 -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+typedef path edgeconnector(node nd1, node nd2);
+typedef path edgemaker(node nd);
+
+// `\color{comment}nd1 .. con .. nd2 的前一半`
+edgemaker operator..(node nd, edgeconnector con)
+{
+    return new path(node nd2) {
+        return con(nd, nd2);
+    };
+}
+
+// `\color{comment}nd1 .. con .. nd2 的后一半`
+path operator..(edgemaker maker, node nd)
+{
+    return maker(nd);
+}
+
+edgeconnector bend(real ang)
+{
+    return new path (node nd1, node nd2) {
+        path g1 = shift(nd1.pos) * nd1.outline;
+        path g2 = shift(nd2.pos) * nd2.outline;
+        pair c1 = (max(g1)+min(g1)) / 2;
+        pair c2 = (max(g2)+min(g2)) / 2;
+        real deg = degrees(c2 - c1);
+        return nd1.angle(deg+ang) {dir(deg+ang)}
+            .. {dir(deg-ang)} nd2.angle(180+deg-ang);
+    };
+}
+
+edgeconnector bendleft = bend(30);
+edgeconnector bendright = bend(-30);
+
+path operator..(node nd, edgemaker maker)
+{
+    return maker(nd);
+}
+
+// `\color{comment}自动机循环`
+edgemaker loop(pair direction, real ratio=1.5)
+{
+    return new path(node nd) {
+        real deg = degrees(direction);
+        real angle1 = deg - 15, angle2 = deg + 15;
+        pair mid = nd.angle(deg)
+            + ratio*fontsize(currentpen)*unit(direction);
+        return nd.angle(angle1) {dir(angle1)} .. mid
+            .. {-dir(angle2)} nd.angle(angle2);
+    };
+}
+
+// `\color{comment}画双线边框，第二个实现`
+draw_t doubledrawer(pen p, pen bg=white)
+{
+    return compose(drawer(p+linewidth(p)*3), drawer(bg+linewidth(p)));
+}
+draw_t doubledrawer = doubledrawer(currentpen);
+
+// `\color{comment}画阴影`
+draw_t shadow(pair shift=2SE, real scale=1, pen color=gray)
+{
+    return new void(picture pic, path g) {
+        fill(pic, shift(shift)*scale(scale)*g, color);
+    };
+}
+draw_t shadow=shadow();
+
+typedef path fpath(path);
+path operator@(path p, fpath t)
+{
+    return t(p);
+}
+
+fpath shorten(real pre=0, real post=2)
+{
+    return new path(path p) {
+	return subpath(p, arctime(p, pre), arctime(p, arclength(p)-post));
+    };
+}
+fpath shorten=shorten(0,2);
+
+node cat = Circle("cat", (0,0), compose(shadow, filldrawer(yellow))),
+     dog = Circle("dog", (2cm,0), compose(shadow, filler(olive)));
+draw(cat, dog);
+draw(cat -- dog @ shorten, Arrow);
+\end{asy}
+\end{figure}
+
+至此，所有的准备工作就全部完成了，每一个细节都被严教授仔细实现出来。如果读者
+一直跟着严教授的思路一步步做下来的话，那么已经可以完整地画出严教授一开始设想
+的有限自动机（\autoref{fig:automata}）了。
+
+
 \section{自定义模块}
+
+可是，严教授还不满意（他总是对现状不够满足）。最大的问题是，现在一点一点拼凑
+起来的代码已经凌乱得难以看清，尤其是大量自定义类型和功能函数实现的代码已经完
+全淹没了实际描述并画出有限自动机主体的代码——好像写了很多东西，到头来却忘了
+最初的目的。而如果严教授想在他的幻灯片中画出类似的图形，是否还要从这些零乱的
+代码中挑选可用的部分呢？
+
+当然不。解决的办法仍然与之前一样：既然绘图与计算的过程可以抽象为函数、数据与
+函数的组合可以抽象为结构体，那么一样可以用抽象的办法把一组类型和函数封装
+\index{封装}起来，这就成为一个模块\index{模块}。
+
+就好像 \autoref{sec:transformmodule} 中的 \prgname{math} 模块、
+\autoref{sec:xiantu:ex} 中的 \prgname{roundedpath} 模块、
+\autoref{sec:stars:ex} 中的 \prgname{graph} 模块这些标准模块一样，严教授为了
+画出有限自动机而做出的所有这些类型、函数、运算符，也可以定义为一个模块，供以
+后导入使用。建立新模块的办法十分简单，就是把模块中的所有函数都放进一个 \Asy{}
+文件中。因此，严教授就把所有这些与结点 |node| 类型相关的代码整理了一下，都装
+进了一个\prgname{simplenode.asy} 的文件中：
+\lstinputlisting[language=Asymptote,numbers=left]{figure-src/simplenode.asy}
+
+把自定义的模块与使用模块的 \Asy{} 文件放在一起，只要使用一个 |import| 命令，
+就能在一个单独的文件中画图，使用自定义模块的全部功能了：
+\lstinputlisting[language=Asymptote,numbers=left]{figure-src/automata.asy}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics{automata.pdf}
+  \caption{最终完成的有限自动机，同\autoref{fig:automata}}
+  \label{fig:automatafinal}
+\end{figure}
+
+以上就是严教授画出\autoref{fig:automatafinal} 的全部代码。而且，更重要的是，
+他为了画出这个有限自动机所做出的各种努力有着比画出这一幅图更多的回报：他可以
+继续使用已经完成的 \prgname{simplenode} 模块方便地画出类似的自动机图形，并且
+可以扩充这个模块，以完成更丰富的功能。
 
 \section{习题和评注}
 
 \begin{enumerate}
+  \item 使用 \Asy{} 本身的 |object| 标签及连线机制，画出下面的状态转移图：
+\begin{figure}[H]
+  \centering
+\begin{asy}
+unitsize(2cm);
+real margin = 2mm;
+currentpen += 0.6;
+object  q1 = draw("1", ellipse, (0,0), margin, FillDraw(lightblue)),
+        q2 = draw("2", ellipse, (-1,-1), margin, FillDraw(lightblue)),
+        q3 = draw("3", ellipse, (1,-1), margin, FillDraw(lightblue));
+add(new void(picture pic, transform t) {
+    draw(pic, "$\frac14$", point(q1,SW,t) -- point(q2,NE,t), Arrow);
+    draw(pic, Label("$\frac34$",LeftSide), point(q1,SE,t) -- point(q3,NW,t),
+         Arrow);
+    draw(pic, "$\frac12$", point(q2,E,t) -- point(q3,W,t), Arrow);
+    draw(pic, "$\frac12$", point(q2,WNW,t){WNW} .. point(q2,W,t)+t*W/4
+         .. {-WSW}point(q2,WSW,t), ArcArrow);
+    draw(pic, "$1$", point(q3,ESE,t){ESE} .. point(q3,E,t)+t*E/4
+         .. {-ENE}point(q3,ENE,t), ArcArrow);
+});
+\end{asy}
+\end{figure}
+    注意其中自环箭头的绘制。
+
+    利用 \prgname{simplenode} 重画此图，比较两种方式有什么不同。
+
+  \item （此题较难）查看 \Asy{} 标准模块 \prgname{plain\_filldraw.asy} 中对
+    |filltype| 类型的实现，参考 \cite{asyman} 的说明，分析其机制。在 \Asy{}
+    1.90 中， |filltype| 被定义为：
+\begin{asycode}[numbers=left]
+struct filltype 
+{
+  typedef void fill2(frame f, path[] g, pen fillpen);
+  fill2 fill2;
+  pen fillpen;
+  pen drawpen;
+
+  int type;
+  static int Fill=1;
+  static int FillDraw=2;
+  static int Draw=3;
+  static int NoFill=4;
+  static int UnFill=5;
+      
+  void operator init(int type=0, pen fillpen=nullpen, pen drawpen=nullpen,
+                     fill2 fill2) {
+    this.type=type;
+    this.fillpen=fillpen;
+    this.drawpen=drawpen;
+    this.fill2=fill2;
+  }
+  void fill(frame f, path[] g, pen p) {fill2(f,g,p);}
+}
+\end{asycode}
+    
+    搞清楚：|fill2| 是什么类型？参考 |Fill| 等 |filltype| 填充类型的实现，尤
+    其是其中 |RadialShade| 的实现，写一个 |Shadow| 的填充类型，完成前面严教授
+    给结点画阴影函数相同的效果。在 \Asy{} 1.90 中 |RadialShade| 被实现为：
+\begin{asycode}[numbers=left]
+filltype RadialShade(pen penc, pen penr)
+{
+  return filltype(new void(frame f, path[] g, pen) {
+    pair c=(min(g)+max(g))/2;
+    radialshade(f,g,penc,c,0,penr,c,abs(max(g)-min(g))/2);
+    });
+}
+\end{asycode}
+    其效果是：
+\begin{asycode}
+object cat
+    = draw("cat", ellipse, (0,0), xmargin=2mm, RadialShade(yellow, red));
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+object cat
+    = draw("cat", ellipse, (0,0), xmargin=2mm, RadialShade(yellow, red));
+\end{asy}
+\end{figure}
+
+  \item 仿照前面 |Circle| 函数的实现，为 \prgname{simplenode} 模块增加矩形、
+    椭圆、菱形或是其他基本形状结点的构造函数，以便画出更丰富的图形。你可以需
+    要一些额外的参数，如文字与边框的距离 |margin|。矩形结点的构造函数原型可以
+    是这样的（你可以有不同的做法）：
+\begin{asycode}
+node Rectangle(Label text, pair pos, pen textpen=currentpen,
+               real margin=fontsize(textpen)/3, draw_t drawfn);
+\end{asycode}
+    应该能和 |Circle| 一样方便地使用不同的形状，如：
+\begin{asycode}
+node cat = Circle("cat", (0,0), filldrawer(yellow)),
+     dog = Rectangle("dog", (3cm,0), filler(olive));
+draw(cat, dog);
+draw(cat .. bendleft .. dog, Arrow);
+draw(dog .. bendleft .. cat, Arrow);
+\end{asycode}
+\begin{figure}[H]
+  \centering
+\begin{asy}
+import "figure-src/simplenode.asy" as simplenode;
+
+node Rectangle(Label text, pair pos, pen textpen=currentpen,
+               real margin=fontsize(textpen)/3, draw_t drawfn)
+{
+    node nd;
+    nd.pos = pos;
+    label(nd.stuff, text, textpen);
+    pair M = max(nd.stuff), m = min(nd.stuff);
+    nd.outline = box(m-(margin,margin),M+(margin,margin));
+    drawfn(nd.stuff, nd.outline);
+    nd.E = nd.dir(E);
+    nd.N = nd.dir(N);
+    nd.W = nd.dir(W);
+    nd.S = nd.dir(S);
+    return nd;
+}
+
+node cat = Circle("cat", (0,0), filldrawer(yellow)),
+     dog = Rectangle("dog", (3cm,0), filler(olive));
+draw(cat, dog);
+draw(cat .. bendleft .. dog, Arrow);
+draw(dog .. bendleft .. cat, Arrow);
+\end{asy}
+\end{figure}
+
+  \item 模仿 |bendleft|、|bendright| 的定义，为 \prgname{simplenode} 模块扩充
+    |edgeconnector| 类型的连线方式。例如，可以增加水平、垂直方向的折线连接
+    |HV|，它的用法类似于：
+\begin{asycode}
+node cat = Circle("cat", (0,0), filldrawer(yellow)),
+     dog = Circle("dog", (4cm,3cm), filler(olive));
+draw(cat, dog);
+draw(cat .. HV .. dog, Arrow);
+\end{asycode}
+    \begin{figure}[H]
+      \centering
+\begin{asy}
+import "figure-src/simplenode.asy" as simplenode;
+
+path HV(node nd1, node nd2)
+{
+    path g1 = shift(nd1.pos) * nd1.outline;
+    path g2 = shift(nd2.pos) * nd2.outline;
+    pair c1 = (max(g1)+min(g1)) / 2;
+    pair c2 = (max(g2)+min(g2)) / 2;
+    pair z = (c2.x, c1.y);
+    path edge = c1 -- z -- c2;
+    edge = firstcut(edge, g1).after;
+    edge = lastcut(edge, g2).before;
+    return edge;
+}
+
+node cat = Circle("cat", (0,0), filldrawer(yellow)),
+     dog = Circle("dog", (4cm,3cm), filler(olive));
+draw(cat, dog);
+draw(cat .. HV .. dog, Arrow);
+\end{asy}
+    \end{figure}
+    再定义类似的 |VH|，它先画垂直的线，再画水平的线。（提示：|HV| 和 |VH| 的
+    定义可能与 |operator--| 非常相似。）
+
   \item 在前面实现 |cat .. bendleft .. dog| 这种语法时，严教授使用一个函数作
     为中间类型。事实上也可以使用一个结构体。请补全下面的代码：
 \begin{asycode}
@@ -1445,7 +2783,63 @@ path operator..(node_con nc, node nd)
     // ...
 }
 \end{asycode}
+
+  \item 研究记法。
+    \begin{enumerate}
+      \item 在把多个 |draw_t| 类型的函数复合为一个函数时，严宇教授定义了
+        |compose| 函数。但还可以进一步赋予函数复合一种新的记法，如使用加法运
+        算符表示复合。试补全下面的实现：
+\begin{asycode}
+draw_t operator+(draw_t f1, draw_t f2)
+{
+    // ...
+}
+\end{asycode}
+        并动手试验，能否把加法运算符函数的原型定义这个样子：
+\begingroup
+\renewcommand\thelstnumber{?}
+\begin{asycode}[numbers=left]
+draw_t operator+(... draw_t[] fns);
+\end{asycode}
+\endgroup
+        并说明事实上前面定义的二元运算就已经足够了。
+
+      \item 新记法的创立需要符合直观性。前面用加法运算符表示函数的复合函数的
+        方式是否符合直观？把加法换成乘法怎么样？
+
+      \item 严教授定义的 |shorten| 函数之所以能方便地使用，一个前提条件是在
+        \Asy{} 中 |@| 运算符的优先级比 |--| 和 |..| 要低，因而在变换路径时不
+        需要加括号。查阅资料或推测，\Asy{} 中不同运算符的优先级。设计实验并动
+        手在 \Asy{} 环境中验证。并考虑在 \Asy{} 中所有可重载的运算符中，各自
+        有什么语法特点或限制（能带几个参数、参数类型有没有限制等）。
+    \end{enumerate}% 研究记法习题
+
+  \item 严教授已经给出了几种 |draw_t| 的类型：|none|、|drawer|、|filler|、
+    |filldrawer|、|shadow| 等等。请扩充 \prgname{simplenode} 中的定义，增加类
+    似放射渐变填充类型 |RadialShade| 的效果。想想还有什么可以扩充的，比如说，
+    \autoref{sec:object} 中球形立体效果的图形。
+
 \end{enumerate}
+
+本章的有限自动机及其表示的正则语言，可参看 \cite{aho1974}，C 语言词法的形式化
+描述参看 \cite{harbison2002}。
+
+\Asy{} 中绘制图论图形一直没有很方便的官方模块，一般都是用
+\autoref{sec:object} 一节 |object| 类型的机制绘制的。随 \Asy{} 安装的基本模块
+\prgname{flowchart} 是一个专用于绘制流程图的模块，里面定义了 |block| 类型，及
+包括矩形、菱形、圆形、圆角矩形、斜多边形（bevel）在内的多种预定义形状，在安装
+目录下可以找到例子，但这个模块因为没有采用像本章所采用的方便的记法，使用的方
+法与 |object| 类型类似。加拿大 Waterloo 大学的博士生 Hubert Chan 曾给出过一个
+图论模块的框架 \prgname{graphtheory2.asy}（在
+\url{http://asymptote.sourceforge.net/links.html} 有介绍），也完成了类似的功
+能，并与本章给出的 \prgname{simplenode} 模块有相似，都使用了一些新的记法。本
+章的 \prgname{simplenode} 模块是在作者在以前写的一个 \prgname{node} 模块的基
+础上简化改编得到的，源代码可以在 \url{http://asy4cn.googlecode.com/} 找到。
+
+本章中 \prgname{simplenode} 的一些设计受 \prgname{Ti\textit{k}Z} 宏包的影响，
+参看 \cite{pgfman}。
+
+
 \endinput
 
 % vim:tw=77:

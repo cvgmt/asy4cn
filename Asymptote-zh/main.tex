@@ -3,7 +3,7 @@
 % 要用 Windows 预装字体，给 ctexbook 用 winfonts 选项
 % 要用 Adobe 字体，给 ctexbook 用 adobefonts 选项
 
-\usepackage[pdftex]{geometry}
+\usepackage{geometry}
 \geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
 
 \usepackage{makeidx}
@@ -70,7 +70,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.90}
+\newcommand\asyversion{1.91}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -902,6 +902,7 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
 
 \chapter{Bézier 曲线}
 % 5 Bezier curves
+\label{chap:bezier}
 
 \index{三次样条曲线}
 \index{结点}
@@ -4089,8 +4090,8 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \index{expm1@\inlinecode=expm1=}
 \index{log1p@\inlinecode=log1p=}
 \index{identity@\inlinecode=identity=}
-\index{J@\inlinecode=J=}
-\index{Y@\inlinecode=Y=}
+\index{Jn@\inlinecode=Jn=}
+\index{Yn@\inlinecode=Yn=}
 \index{gamma@\inlinecode=gamma=}
 \index{erf@\inlinecode=erf=}
 \index{erfc@\inlinecode=erfc=}
@@ -4115,7 +4116,7 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \inlinecode{log1p} 为 $x \mapsto \log(1+x)$（对接近零的参数也精确）；
 恒等函数 \inlinecode{identity} 与产生单位方阵的函数同名。}。
 \prgname{Asymptote} 同样定义了 |n| 阶 Bessel 函数：
-第一类 |J(int n, real)| 以及第二类 |Y(int n, real)|，还有 $\Gamma$ 函数
+第一类 |Jn(int n, real)| 以及第二类 |Yn(int n, real)|，还有 $\Gamma$ 函数
 |gamma|，误差函数 |erf|，以及互补误差函数 |erfc|。还包括标准的
 |real(real, real)| 型函数 |atan2|, |hypot|, |fmod|, |remainder|\transnote{
 函数 \inlinecode{atan2(real y, real x)} 计算 \inlinecode{y/x} 的反正切；函数

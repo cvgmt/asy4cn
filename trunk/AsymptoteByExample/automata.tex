@@ -288,8 +288,9 @@ path ellipse(frame dest, frame src=dest, real xmargin=0, real ymargin=xmargin,
 难发现其实这个实现是错误的，原来的代码试图给长轴加上笔尖宽度的一半，以保证即
 使画笔很粗，也可以让边框线与标签内容间有正确的距离；由于笔尖的路径相对于原点
 对称，这里计算笔尖边框右上角坐标的一半，其实只是笔尖宽度的 $1/4$。正确的实现
-应该是 \asyinline{0.5*sign*(max(p)-min(p))}。在更新版本的 \Asy{} 中，这个错误
-已经修正。}，再加上用户定义的距离 |xmargin|；纵轴的定义与长轴类似。后面的 11
+应该是 \asyinline{0.5*sign*(max(p)-min(p))}。在 1.91 以后版本的 \Asy{} 中，这
+个错误已经修正。}，
+再加上用户定义的距离 |xmargin|；纵轴的定义与长轴类似。后面的 11
 至 15 行，实际就是根据 |above| 的具体取值，对边框的填充和画线（|above| 为假时
 在目标帧 |dest| 底部绘制）。
 
@@ -482,7 +483,7 @@ node Circle(Label text, pair pos, pen textpen=currentpen,
 
 然后是定义一个函数画出整个结点，方法和单独把结点的内容加进当前图一样：
 \begin{asycode}
-// `\color{comment}画结点，简单实现
+// `\color{comment}画结点，简单实现`
 void draw(picture pic=currentpicture, node nd)
 {
     add(pic, shift(nd.pos) * nd.stuff);
@@ -2627,7 +2628,7 @@ add(new void(picture pic, transform t) {
 
   \item （此题较难）查看 \Asy{} 标准模块 \prgname{plain\_filldraw.asy} 中对
     |filltype| 类型的实现，参考 \cite{asyman} 的说明，分析其机制。在 \Asy{}
-    1.90 中， |filltype| 被定义为：
+    1.91 中， |filltype| 被定义为：
 \begin{asycode}[numbers=left]
 struct filltype 
 {
@@ -2819,21 +2820,33 @@ draw_t operator+(... draw_t[] fns);
     似放射渐变填充类型 |RadialShade| 的效果。想想还有什么可以扩充的，比如说，
     \autoref{sec:object} 中球形立体效果的图形。
 
+  \item\label{ex:flowchart} \Asy{} 的 \prgname{flowchart} 是用来画流程图的一
+    个模块。它定义了一种特殊的记法，看起来很像严教授 \prgname{simplenode} 模
+    块的用法，也有 \autoref{sec:object} 中 |object| 连线的影子。
+
+    \prgname{flowchart} 
 \end{enumerate}
 
 本章的有限自动机及其表示的正则语言，可参看 \cite{aho1974}，C 语言词法的形式化
 描述参看 \cite{harbison2002}。
 
-\Asy{} 中绘制图论图形一直没有很方便的官方模块，一般都是用
+在 \Asy{} 中绘制图论图形一直没有很完善的官方模块，以往多是采用
 \autoref{sec:object} 一节 |object| 类型的机制绘制的。随 \Asy{} 安装的基本模块
 \prgname{flowchart} 是一个专用于绘制流程图的模块，里面定义了 |block| 类型，及
 包括矩形、菱形、圆形、圆角矩形、斜多边形（bevel）在内的多种预定义形状，在安装
-目录下可以找到例子，但这个模块因为没有采用像本章所采用的方便的记法，使用的方
-法与 |object| 类型类似。加拿大 Waterloo 大学的博士生 Hubert Chan 曾给出过一个
-图论模块的框架 \prgname{graphtheory2.asy}（在
+目录下可以找到例子。1.90 版以前的 \prgname{flowchart} 因为没有采用像本章所采
+用的方便的记法，使用的方法与 |object| 类型类似，所以很不方便；自 1.91 版以后
+的 \prgname{flowchart} 模块开始支持相对方便的记法了，实现的方法与本章中介绍的
+类似。习题~\ref{ex:flowchart} 给出了 \prgname{flowchart} 的相关例子。使用
+\prgname{flowchart} 并不足以完成本章带有阴影等修饰和曲线连线的图形，但有可能
+扩充这个模板完成类似的功能。
+
+加拿大 Waterloo 大学的博士生 Hubert Chan 曾给出过一个图论模块的框架
+\prgname{graphtheory2.asy}（在
 \url{http://asymptote.sourceforge.net/links.html} 有介绍），也完成了类似的功
-能，并与本章给出的 \prgname{simplenode} 模块有相似，都使用了一些新的记法。本
-章的 \prgname{simplenode} 模块是在作者在以前写的一个 \prgname{node} 模块的基
+能，并与本章给出的 \prgname{simplenode} 模块有相似，都使用了一些新的记法。
+
+本章的 \prgname{simplenode} 模块是在作者在以前写的一个 \prgname{node} 模块的基
 础上简化改编得到的，源代码可以在 \url{http://asy4cn.googlecode.com/} 找到。
 
 本章中 \prgname{simplenode} 的一些设计受 \prgname{Ti\textit{k}Z} 宏包的影响，

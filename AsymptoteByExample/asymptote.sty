@@ -3,11 +3,9 @@
 %%% Modified by John Bowman
 %%% Adapted from comment.sty (Under GPL v2+)
 
-\ProvidesPackage{asymptote}[2009/08/15 v1.10 Asymptote style file for LaTeX]    % modified my milksea
+\ProvidesPackage{asymptote}[2009/08/15 v1.11 Asymptote style file for LaTeX]
 \RequirePackage{keyval}
 \RequirePackage{ifthen}
-\RequirePackage{ifxetex}    %!!!
-\RequirePackage{ifpdf}      %!!!
 \newif\ifASYinline
 \DeclareOption{inline}{\ASYinlinetrue}
 \ProcessOptions*
@@ -45,14 +43,21 @@
 \newif\ifASYtex
 
 \newif\ifASYPDF
-\ifpdf                                                  %!!!
-  \immediate\write\AsyStream{settings.tex="pdflatex";}  %!!!
-  \ASYPDFtrue                                           %!!!
-\fi                                                     %!!!
-\ifxetex                                                %!!!
-  \immediate\write\AsyStream{settings.tex="xelatex";}   %!!!
-  \ASYPDFtrue                                           %!!!
-\fi                                                     %!!!
+\ifx\pdfoutput\undefined
+\else
+\ifcase\pdfoutput
+\else
+\ASYPDFtrue
+\fi
+\fi
+\ifx\XeTeXversion\undefined
+\ifASYPDF
+\immediate\write\AsyStream{settings.tex="pdflatex";}%
+\fi
+\else
+\immediate\write\AsyStream{settings.tex="xelatex";}%
+\ASYPDFtrue
+\fi
 
 \ifASYinline
 \immediate\write\AsyStream{settings.inlinetex=true;}%

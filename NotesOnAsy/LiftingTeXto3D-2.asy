@@ -1,7 +1,7 @@
 settings.tex="xelatex";
 settings.prc=false;
-texpreamble("\usepackage{fontspec}");
-texpreamble("\setmainfont{SimSun}");
+texpreamble("\usepackage{xeCJK}");
+texpreamble("\setCJKmainfont{SimSun}");
 import graph3;
 size(200,0);
 currentprojection=orthographic(4,0,2);

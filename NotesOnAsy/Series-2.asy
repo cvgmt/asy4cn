@@ -16,4 +16,4 @@ real Sum(real x){
   return s;
 }
 draw(graph(Sum,-1,1,operator--),red);
-  
+

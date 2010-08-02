@@ -1,6 +1,6 @@
-settings.tex="pdflatex";
+settings.tex="xelatex";
 srand(seconds());
-int[] A=sequence(1,10);
+int[] A=sequence(1,50);
 int[] arrange(int[] A){
   int n = A.length;
   for (int i = 0; i < n; ++i) {
@@ -46,11 +46,11 @@ picture[] RandomCircles(int[] A,real r){
 import animate;
 animation Ani;
 
-for(int k=0;k<4;++k){
+for(int k=0;k<1;++k){
   A=arrange(A);
-  for(int i=0;i<2*A.length;++i){  
+  for(int i=0;i<2*A.length;++i){
     if(i%2==0)
-      Ani.add(RandomCircles(A,10)[floor(i/2)]);
+      Ani.add(RandomCircles(A,20)[floor(i/2)]);
     else{
       picture figure;
       size(figure,400);
@@ -60,6 +60,6 @@ for(int k=0;k<4;++k){
   }
   write(A);
 }
-Ani.movie(delay=1000);
-//label(Ani.pdf("controls",multipage=false));
+//Ani.movie(delay=1000);
+label(Ani.pdf(keep=true,delay=1000,"controls,loop",multipage=false));
 

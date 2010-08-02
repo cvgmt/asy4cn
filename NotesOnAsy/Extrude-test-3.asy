@@ -1,4 +1,4 @@
-// Contributed by ltongfu@bbs.ctex.org , modified by cvgmt :-)
+// Contributed by ltongfu@bbs.ctex.org , modified by cvgmt@bbs.ctex.org  :-)
 import graph3;
 size(200,keepAspect=false);
 currentprojection=orthographic(1,1,2);
@@ -18,4 +18,4 @@ draw(extrude(unitcircle,25*Z),green);
 limits((0,0,0), (2,2,26));
 axes3("$x$","$y$","$z$",Arrow3());
 
- 
+

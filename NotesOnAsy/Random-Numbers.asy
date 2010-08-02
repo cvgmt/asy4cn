@@ -1,4 +1,4 @@
-settings.tex="pdflatex";
+settings.tex="xelatex";
 import slide;
 import animate;
 usersetting();

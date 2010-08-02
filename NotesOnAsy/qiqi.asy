@@ -1,4 +1,4 @@
-settings.tex="pdflatex";
+settings.tex="xelatex";
 import slide;
 import animate;
 usersetting();
@@ -10,7 +10,7 @@ viewportsize=pagewidth-2pagemargin;
 newslide();
 
 file out=output("qiqi.txt");
-//srand(seconds());
+srand(seconds());
 int begin=10;
 int end=20;
 int[] A=sequence(begin,end);
@@ -57,9 +57,9 @@ picture[] RandomCircles(int[] A,real r){
 import animate;
 animation Ani;
 
-for(int k=0;k<2;++k){
+for(int k=0;k<1;++k){
   A=arrange(A);
-  for(int i=0;i<A.length;++i){  
+  for(int i=0;i<A.length;++i){
     Ani.add(RandomCircles(A,10)[i]);
     if((i+1)%A.length==0){
       write(out,format("%d",A[i])+'  '+'\r\n\r\n');

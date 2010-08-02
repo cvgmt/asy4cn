@@ -1,6 +1,6 @@
 import graph3;
 import palette;
-size(200,0);
+size(0,200);
 currentprojection=perspective(10,10,10);
 limits((-10,-10,-20),(10,10,20));
 real a=4;

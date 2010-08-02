@@ -14,4 +14,4 @@ void Tree(pair A,pair B,int n){
     fill(A--B--C--D--cycle,brown);
   }
 }
-Tree((0,0),(1,0),11);
+Tree((0,0),(1,0),8);

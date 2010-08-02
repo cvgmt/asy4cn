@@ -1,6 +1,6 @@
 settings.prc=false;
 settings.render=0;
-settings.tex="pdflatex";
+settings.tex="xelatex";
 import three;
 import animate;
 currentprojection=orthographic(1,1,1.3);

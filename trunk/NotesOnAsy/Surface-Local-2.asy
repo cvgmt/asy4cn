@@ -6,8 +6,11 @@ real f(real x,real y){return x^2-y^2;}
 triple g(pair t){
   real r=t.x;
   real theta=t.y;
-  return (r*cos(theta),r*sin(theta),f(r*cos(theta),r*sin(theta)));
+  real x=r*cos(theta);
+  real y=r*sin(theta);
+  real z=f(x,y);
+  return (x,y,z);
 }
 draw(surface(g,(0,0),(1,2pi),20,Spline),red+opacity(0.5),black);
-  
+
 

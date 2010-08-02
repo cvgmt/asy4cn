@@ -1,7 +1,7 @@
 import graph3;
 size3(200,IgnoreAspect);
-currentprojection=perspective(1.69,2.66,17.43);
-file in=input("data.txt").line();
+currentprojection=orthographic(-2,-2,4);
+file in=input("data-1.txt").line();
 real[] x=in;
 real[] y=in;
 real[][] z=in.dimension(0,0);

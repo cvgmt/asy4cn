@@ -54,7 +54,7 @@ for(int i=0; i < P.length; ++i){
     },5);
   pentagon.cyclic=true;
   draw(sequence(new path3(int k) {
-        return arc(O,pentagon[k],pentagon[k+1]);},5),linewidth(2pt));
+        return arc(O,pentagon[k],pentagon[k+1]);},5),linewidth(4pt)+gray);
   triple M=unit(sum(pentagon)/5);
   for(int i=0; i < 5; ++i){
     surface sf=sphericaltriangle(O,pentagon[i],M,pentagon[i+1]);
@@ -68,7 +68,7 @@ for(int i=0; i < P.length; ++i){
     triple A=P[i][j];
     triple B=P[i][(j % 5)+1];
     path3[] p={arc(O,K,A),arc(O,A,B),arc(O,B,K)};
-    draw(subpath(p[0],reltime(p[0],1/3),reltime(p[0],2/3)),linewidth(4pt));
+    draw(subpath(p[0],reltime(p[0],1/3),reltime(p[0],2/3)),linewidth(4pt)+gray);
     triple[] hexagon={point(p[0],reltime(p[0],1/3)),
                       point(p[0],reltime(p[0],2/3)),
                       point(p[1],reltime(p[1],1/3)),

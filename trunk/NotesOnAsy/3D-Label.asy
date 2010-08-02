@@ -5,8 +5,7 @@ triple a_orth=2X;
 triple b=2Y;
 triple a_par=0.5*b;
 triple a=a_orth+a_par;
-draw(surface((4,4,0)--(-4,4,0)--(-4,-4,0)--(4,-4,0)--cycle),
-     lightgrey+opacity(0.3),nolight);
+draw((4,4,0)--(-4,4,0)--(-4,-4,0)--(4,-4,0)--cycle);
 draw(surface(O--0.3Y--(0.3Y+0.3Z)--0.3*Z--cycle),lightyellow,nolight);
 draw(surface(O--(-0.3)*X--(-0.3X+0.3Z)--0.3Z--cycle),lightyellow,nolight);
 draw(surface(O--(-0.3Y)--(-0.3Y-0.3X)--(-0.3X)--cycle),lightyellow,nolight);
@@ -26,10 +25,3 @@ for(int i: I){
     draw(Label(YZ()*format("$x_{%d}$",find(I==i)+1),EndPoint,align=S,red),
          O--a_orth+i*a_par, deepgreen, Arrow3(DefaultHead2(normal=Z)));
 }
-label(XY()*"\centering Cross Product \\\  Plane",position=-2Y);
-label(XZ()*"Anticrossproduct axis",position=a+3*a_par+0.5Z);
-label("\centering Relationships: \\
-$\vec{a}\times \vec{b}=\vec{c}$\\
-$\vec{x}_i\times \vec{b}=\vec{c}$ \\
-$\vec{a}_{orth}=\vec{x}_{iorth}$
-",(-5,-2,2));

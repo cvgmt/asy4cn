@@ -1,4 +1,8 @@
-size(200);
+settings.tex="xelatex";
+//settings.prc=false;
+texpreamble("\usepackage{fontspec}");
+texpreamble("\setmainfont{SimSun}");
 import three;
-draw(unitbox);
-label("\ss{ 这是点 } $A$",(1,1,1));
+size(200);
+draw(unitbox,red);
+label("顶点 $A$",(1,1,1),2Z);

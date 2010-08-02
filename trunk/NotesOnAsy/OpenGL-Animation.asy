@@ -3,7 +3,6 @@ settings.autoplay=true;
 import graph3;
 import animate;
 currentprojection=orthographic(1,-2,0.5);
-currentlight=(1,1,20);
 animation A;
 int n=25;
 for(int i=0; i < n; ++i) {

@@ -1,7 +1,8 @@
 //生成的 pdf 文件目前只能在 Windows 下用最新的 Adobe Reader 打开.
 settings.tex="xelatex";
-texpreamble("\usepackage{fontspec}\setmainfont{Comic Sans MS}");
-texpreamble("\usepackage{xeCJK}\setCJKmainfont{SimHei}");
+texpreamble("\usepackage{xeCJK}
+\setmainfont{Comic Sans MS}
+\setCJKmainfont{SimHei}");
 settings.user="stepping=true";
 string[] foods={"cake","chicken"};
 orientation=Landscape;

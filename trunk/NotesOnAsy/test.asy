@@ -1,7 +1,7 @@
 settings.tex="xelatex";
 //settings.prc=false;
-texpreamble("\usepackage{fontspec}");
-texpreamble("\setmainfont{SimSun}");
+texpreamble("\usepackage{xeCJK}");
+texpreamble("\setCJKmainfont{SimSun}");
 import three;
 size(200);
 draw(unitbox,red);

@@ -65,7 +65,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——编者注}}
-\newcommand\asyversion{2.02}
+\newcommand\asyversion{2.04}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -74,7 +74,7 @@
   pdftitle={Notes on asy},
   pdfauthor={F.A.Zhang(cvgmt)},
   pdfsubject={asy4cn},
-  pdfcreator={XeLaTeX+Asymptote2.02},
+  pdfcreator={XeLaTeX+Asymptote2.04},
   pdfkeywords={Asymptote,TeX,xeCJK,MetaPost,Drawing Language},
   pdfstartview={FitH},
   setpagesize=false,
@@ -268,7 +268,7 @@ pdflatex, ConTeXt 所生成的 pdf 字体文件转成 ps 文件, 以便利用这
 我们可以测试一下我们的安装, 试试输入一些绘图命令, 观察出来的结果. (用
 |quit|, |q| 或 |exit| 退出 )
 \begin{verbatim}
-Welcome to Asymptote version 2.02 (to view the manual, type help)
+Welcome to Asymptote version 2.04 (to view the manual, type help)
 > size(200);
 > import three;
 > draw(unitsphere,red);
@@ -327,7 +327,7 @@ texhash
 \end{verbatim}
 Linux 的用户此时可以打开一个终端, 输入 asy, 这时应该弹出类似于
 \begin{verbatim}
-Welcome to Asymptote version 2.02 (to view the manual, type help)
+Welcome to Asymptote version 2.04 (to view the manual, type help)
 >
 \end{verbatim}
 的等待状态, 如果有出错信息, 说明缺少某些库文件, 这时应该装上相应的库文
@@ -433,7 +433,8 @@ make clean
 tar -zxf asymptote-x.xx.src.tgz
 cd asymptote-x.xx
 wget http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.1.tar.gz
-wget http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz
+下载下列文件到当前目录
+http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz
 tar -zxf freeglut.tar.gz
 cd freeglut
 sh autogen.sh
@@ -540,7 +541,9 @@ Windows 用户建议进行如下的配置, 因为很多时候需要在 asy 命�
 成所想要的格式, 而且在命令行执行任务可以看到出错信息, 方便我们进一步测
 试我们的配置是否成功.
 
-先把 asy.bat 和 asy.exe 所在目录加入环境变量中的 PATH 中. 具体做法是:
+先把 asy.bat 和 asy.exe 所在目录加入环境变量中的 PATH 中
+\transnote{2.04 版本已经自动加入到系统的 PATH 变量里面了, 可以免去下面
+  操作}. 具体做法是:
 \begin{enumerate}
 \item  单击 \emph{开始}
 \item 右击 \emph{我的电脑}
@@ -789,18 +792,30 @@ dvipdfmx 和 pdflatex 的 |movie15_dvipdfmx.sty|, 我们可以到
 情况下可能要相应的更新 asymptote.sty 到最新的版本.
 \label{movie15:xelatex})
 
-请测试下面简单的例子. (用 |UTF-8| 编码保存代码为 test.asy, 直接用
-|asy -V test.asy| 编译 )
+请分别测试下面简单的例子. 注意要用 |UTF-8| 编码保存代码为 test.asy, 并
+且 \TeX 系统里面要装有 ctex 宏包以及 xeCJK 中文宏包以及相应的字体(用
+|fc-list :lang=zh| 查看是否有相应的字体) 直接用
+|asy -V test.asy| 编译.
+
+\begin{lstlisting}
+//需要 Windows 的 SimSun 字体或 Adobe 的 Adobe Song Std 字体.
+settings.tex="xelatex";
+usepackage("ctex");
+//usepacakge("ctex","adobefonts");
+label("中文");
+\end{lstlisting}
+
 \begin{lstlisting}
   settings.tex="xelatex";
   //settings.prc=false;
-  texpreamble("\usepackage{fontspec}");
-  texpreamble("\setmainfont{SimSun}");
+  texpreamble("\usepackage{xeCJK}");
+  texpreamble("\setCJKmainfont{SimSun}");
   import three;
   size(200);
   draw(unitbox,red);
   label("顶点 $A$",(1,1,1),2Z);
 \end{lstlisting}
+
 
 \subsection{ConTeXt-LuaTeX 方案}
 主要原理是以 ConTeXt 作为引擎, 通过 LuaTeX 成中生文字体, 然后再生成一
@@ -2584,7 +2599,7 @@ $f(x,y,z)=x^{2}+y^{2}+z^{2}-4$ 在 |0| 处的等值面.
 \lstinputlisting{Contour3-Spherical-Harmonic.asy}
 
 \section{常见的二次曲面}
-由于到目前的 2.02 版本为止, Asymptote 还没有提供通过不等式来限制绘图范
+由于到目前的 2.04 版本为止, Asymptote 还没有提供通过不等式来限制绘图范
 围的功能, 因此我们如果想画一些特定的图形还是比较麻烦. 这里综合前面的绘
 图知识画出几种常见的二次曲面.
 
@@ -3124,7 +3139,7 @@ g(i) 生成的曲线合起来构成了环绕环形的曲线.
 \lstinputlisting{PDF-Animation.asy}
 
 也可以做基于 OpenGL 的动画, 下面例子源于笔者提供的 inlinetex3.tex(见
-examples 目录下的 animations 目录) 到目前的 2.02 版本为止, Windows 的
+examples 目录下的 animations 目录) 到目前的 2.04 版本为止, Windows 的
 用户还需要用
 \begin{verbatim}
 asy -threads -framedelay=100
@@ -3140,7 +3155,7 @@ asy -threads -framedelay=100
 用 asy 生成的已经嵌入 PRC 真 3D 的 pdf 文件不能直接用普通的图像嵌入命
 令 |\includegraphics| 嵌入到 |tex| 中. 这时可以把 asy 代码嵌入到 tex
 文档生成真 3D. 由于调整了 hyperref 宏包的调用, 现在 Beamer 宏包已经与
-Asymptote 没有冲突了, 不过到目前的 2.02 版本, 好像还只能用 pdflatex 而
+Asymptote 没有冲突了, 不过到目前的 2.04 版本, 好像还只能用 pdflatex 而
 不能用 xelatex 编译, 因此我们暂时还只能用 CJK 中文方案.
 
 \begin{verbatim}

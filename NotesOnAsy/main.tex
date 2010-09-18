@@ -78,7 +78,7 @@
   pdfkeywords={Asymptote,TeX,xeCJK,MetaPost,Drawing Language},
   pdfstartview={FitH},
   setpagesize=false,
-  unicode=false,
+  unicode=false, % 处理标签中文乱码, 新版的 hyperref 好像默认忽略此.
   colorlinks=false,
   pdfborder=0 0 1  % Asymptote 的 settings.cc 里面默认是用 0 0 0, 会导
   % 致最后的超链接外框没有颜色.
@@ -378,6 +378,7 @@ debian 的用户装
 \begin{verbatim}
 sudo apt-get install zlibl1g-dev
 \end{verbatim}
+
 建立编译环境时, 在 Ubuntu 下也可以用
 \begin{verbatim}
 sudo apt-get build-dep asymptote
@@ -402,7 +403,11 @@ wget http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.1.tar.gz
 接下去要装 freeglut, 基于 OpenGL 的 3D 渲染 (render) 需要这个库. 建议
 下载
 \url{http://freeglut.svn.sourceforge.net/viewvc/freeglut/trunk/freeglut/freeglut.tar.gz}
-到 |asymptote| 目录下, 然后执行
+到 |asymptote| 目录下, 先用
+\begin{verbatim}
+sudo apt-get build-dep freeglut
+\end{verbatim}
+建立编译环境, 然后执行
 \begin{verbatim}
 tar -zxf freeglut.tar.gz
 cd freeglut
@@ -423,7 +428,7 @@ sudo make install
 cd ~/asymptote_svn/asymptote
 svn update
 make all
-(sudo) make install
+sudo make install
 make clean
 \end{verbatim}
 
@@ -528,6 +533,12 @@ movie15.sty 用于把 PRC 真 3D 嵌入到 pdf 中, 见前面 Asymptote 徽标�
 Asymptote 生成 |GIF| 和 |MPEG| 动画, 这时需要
 ImageMagick 这个软件, 见
 \url{http://www.imagemagick.org/script/binary-releases.php}
+Linux 的用户还需要安装 |ffmpeg|, Ubuntu 下用
+\begin{verbatim}
+sudo apt-get install ffmpeg
+\end{verbatim}
+安装, 然后可以测试 asymptote 的 examples 目录下, animations 文件夹里面
+的 slidemovies.asy(wheel.asy 要在同一目录中)
 
 为了使用 |xasy| 这个鼠标绘图功能, 我们需要先后安装 Python 以
 及相应的图形库.
@@ -626,7 +637,7 @@ Linux 下是 |~/.asy/config.asy|( 如果没有, 都请手工新建一个 ), 里�
 \item |batchView| // 在对 asy 文件编译时是否进行预览.
 \end{itemize}
 请根据系统修改路径, 特别注意的是: Windows 下 |gs| 应该是 |gswin32c.exe| 而不是
-|gswin32.exe|, 建议最好选择 Gsview里面的 \emph{fit to window to page}
+|gswin32.exe|. 另外, 建议最好选择 Gsview里面的 \emph{fit to window to page}
 和 \emph{eps clip},前面一个的作用, 使得窗口自动调整和图片一样大; 后面
 一个的作用, 使得对于的eps图片部分被剪裁掉.
 
@@ -798,7 +809,7 @@ dvipdfmx 和 pdflatex 的 |movie15_dvipdfmx.sty|, 我们可以到
 |asy -V test.asy| 编译.
 
 \begin{lstlisting}
-//需要 Windows 的 SimSun 字体或 Adobe 的 Adobe Song Std 字体.
+//需要 Windows 的 SimSun 等字体或 Adobe 的 Adobe Song Std 等字体.
 settings.tex="xelatex";
 usepackage("ctex");
 //usepacakge("ctex","adobefonts");
@@ -810,6 +821,7 @@ label("中文");
   //settings.prc=false;
   texpreamble("\usepackage{xeCJK}");
   texpreamble("\setCJKmainfont{SimSun}");
+  //texpreamble("\setCJKmainfont{Adobe Song Std}");
   import three;
   size(200);
   draw(unitbox,red);
@@ -860,7 +872,7 @@ label("中文");
   那么 asy 就会自动去读入那个 ~/.asy/ 目录下的 context.asy.
 \end{itemize}
 \subsubsection{用 simplefonts 的做法}
-假设 ConTeXt Minimals 被安装在 |~/context| 目录，那么就将
+假设 ConTeXt Minimals 被安装在 |~/context| 目录, 那么就将
 |Simplefonts| 解压后所得目录放置于
 |~/context/tex/texmf-local/tex/context/third| 目录下,
 |context --generte| 更新数据库.(如果在下载安装 ConTeXt Minimal 时
@@ -876,8 +888,7 @@ label("中文");
   import settings;
   autoimport="context";
 \end{lstlisting}
-然后就可以测试下面的例子了.
-\lstinputlisting{Test.asy}
+然后就可以测试前面的例子了.
 
 \subsection{CJK 方案}
 这种方式大家比较熟悉, 不多说了.
@@ -3024,8 +3035,7 @@ xelatex main.tex
 \end{verbatim}
 
 \subsection{用 latexmk 脚本的方案}
-我们的另外一种方案是用
-latexmk.pl 这个 perl 脚本.
+我们的另外一种方案是用latexmk.pl 这个 perl 脚本.
 \url{http://www.phys.psu.edu/~collins/software/latexmk/versions.html}
 下载最新版本以后,
 然后适当修改一下里面的内容. 如果我们专心只用 xelatex 编译, 那么把
@@ -3054,11 +3064,10 @@ add_cus_dep("asy","tex",0,"asy");
 latexmk -pdf main.tex
 \end{verbatim}
 那么就会用 xelatex 编译嵌入 asy 代码的 tex 文件, 如果 asy 环境里面的内
-容改变了, 那么生成的 main-*.asy 文件也就会相应的改变, latexmk.pl 脚本
-会追踪这个变化, 重新编译那些 main-*.asy 文件, 然后再用 xelatex 编译.
-反之, 如果我们并没有改动 asy 环境里面的 asy 代码, 那么 latexmk 是不会
-调用 asy 去分别编译那些 main-*.asy 文件的, 从而省去了很多内存和编译的
-时间.
+容改变了, 生成的 main-*.asy 文件也就会相应的改变, latexmk.pl 脚本会追
+踪这个变化, 重新编译那些 main-*.asy 文件, 然后再用 xelatex 编译. 反之,
+如果我们并没有改动 asy 环境里面的 asy 代码, 那么 latexmk 是不会调用
+asy 去分别编译那些 main-*.asy 文件的, 从而节省了内存和编译的时间.
 
 emacs 的用户可以定义一个简单的 lmk 函数, 然后通过 |M-x lmk| 来执行这个
 脚本.

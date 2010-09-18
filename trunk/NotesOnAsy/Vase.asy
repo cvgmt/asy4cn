@@ -1,3 +1,5 @@
+settings.outformat="svg";
+settings.render=0;
 import solids;
 size(7.5cm,0);
 currentprojection=perspective(45,45,20);

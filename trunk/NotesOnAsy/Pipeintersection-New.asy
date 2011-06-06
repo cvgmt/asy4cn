@@ -10,7 +10,7 @@ triple g(pair t){
   real theta=t.y;
   return (r*cos(theta),r*sin(theta),f(r*cos(theta),r*sin(theta)));
 }
-surface S=surface(g,(0,0),(a,2pi),50);
+surface S=surface(g,(0,0),(a,2pi),60,Spline);
 draw(S,brown);
 draw(zscale3(-1)*S,brown);
 draw(rotate(90,X)*S,springgreen);

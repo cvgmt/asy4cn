@@ -1,5 +1,8 @@
 % # -*- coding: utf-8 -*-
-\documentclass[nofonts,CJKnormalspaces]{ctexbook}[2009/05/20]
+%%%%%% 格式设置大部分取自 milksea@bbs.ctex.org 的 Asymptote 手册的中译本的 tex 设
+%%%%%% 置(http://code.google.com/p/asy4cn), 特此鸣谢!
+
+\documentclass[nofonts,CJKnormalspaces]{ctexbook}
 \input{fzfonts.tex} % 方正字体设置.
 
 \usepackage{geometry}
@@ -7,9 +10,29 @@
 
 % \usepackage{makeidx}
 % \makeindex
-
 \usepackage[inline]{asymptote}
-\usepackage{animate} % 内嵌动画
+
+\usepackage{hyperref}
+\hypersetup{
+  bookmarksopen=false,
+  bookmarksnumbered=true,
+  pdftitle={Notes on asy},
+  pdfauthor={F.A.Zhang(cvgmt)},
+  pdfsubject={asy4cn},
+  pdfcreator={XeLaTeX+Asymptote2.08},
+  pdfkeywords={Asymptote,TeX,xeCJK,MetaPost,Drawing Language},
+  pdfstartview={FitH},
+  setpagesize=false,
+  %unicode=false, % 处理标签中文乱码, 好像新版的 hyperref 不用在这里设
+  %置.
+  colorlinks=false,
+  pdfborder=0 0 1  % Asymptote 的 settings.cc 里面默认是用 0 0 0, 会导
+  % 致最后的超链接外框没有颜色, 因此要把 Asymptote 宏包放在 hyperref
+  % 前面.
+}
+
+\usepackage{animate} % 内嵌动画, 似乎与 hyperref 有些冲突, 放在其后就
+                     % 没这个问题.
 
 \usepackage{mflogo}
 
@@ -65,24 +88,8 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——编者注}}
-\newcommand\asyversion{2.04}
+\newcommand\asyversion{2.08}
 
-\usepackage{hyperref}
-\hypersetup{
-  bookmarksopen=false,
-  bookmarksnumbered=true,
-  pdftitle={Notes on asy},
-  pdfauthor={F.A.Zhang(cvgmt)},
-  pdfsubject={asy4cn},
-  pdfcreator={XeLaTeX+Asymptote2.04},
-  pdfkeywords={Asymptote,TeX,xeCJK,MetaPost,Drawing Language},
-  pdfstartview={FitH},
-  setpagesize=false,
-  unicode=false, % 处理标签中文乱码, 新版的 hyperref 好像默认忽略此.
-  colorlinks=false,
-  pdfborder=0 0 1  % Asymptote 的 settings.cc 里面默认是用 0 0 0, 会导
-  % 致最后的超链接外框没有颜色.
-}
 
 \begin{document}
 
@@ -104,8 +111,11 @@
   版权所有 \copyright{}F.A.Zhang（\nolinkurl{cvgmt@163.com}）
 
   {\leftskip=4em
-    在 GNU General Public License（GNU 通用公共许可证）的条款下授予复制、发布和/或修改此文档的许可。\par}
-  本文档的下载的地址 \url{http://code.google.com/p/asy4cn}
+    在 GNU General Public License（GNU 通用公共许可证）的条款下授予复
+    制、发布和/或修改此文档的许可, 见
+    \url{http://code.google.com/p/asy4cn} 源代码包里面的
+    LICENSE 文件 \par}
+  本文档的下载的地址 \url{http://code.google.com/p/asy4cn/downloads/list}
   \qquad\today
 \end{titlepage}
 
@@ -124,7 +134,8 @@ milksea, 是他帮忙设计了本文档的大部分格式.
 不少精彩的 3D 例子是从这个宏包提供的例子翻译改进得到的.
 
 本文档是 asy4cn 项目的一部分, 可以在
-\url{http://code.google.com/p/asy4cn} 找到更多的学习资料以及相应的更新.
+\url{http://code.google.com/p/asy4cn/downloads/list} 找到更多的学习资
+料以及相应的更新.
 
 \tableofcontents
 
@@ -268,7 +279,7 @@ pdflatex, ConTeXt 所生成的 pdf 字体文件转成 ps 文件, 以便利用这
 我们可以测试一下我们的安装, 试试输入一些绘图命令, 观察出来的结果. (用
 |quit|, |q| 或 |exit| 退出 )
 \begin{verbatim}
-Welcome to Asymptote version 2.04 (to view the manual, type help)
+Welcome to Asymptote version 2.08 (to view the manual, type help)
 > size(200);
 > import three;
 > draw(unitsphere,red);
@@ -280,7 +291,8 @@ Welcome to Asymptote version 2.04 (to view the manual, type help)
 置重新画另外一幅图. 如果能正确弹出一个基于 OpenGL 的窗口显示球(如果想
 导出那个窗口的图形, 用 |e| 快捷键), 然后弹出一个 gsview32.exe 的预览窗口显
 示圆, 那么我们的安装基本上没有大问题. 接下去我们应该参考第
-\pageref{asy:Settings} 页的相应章节进一步配置.
+\pageref{asy:Settings} 页的相应章节进一步配置, 特别的, 我们要注意 asy
+所在路径加入到 Path 这个环境变量中的这个问题.
 
 我们也可以把代码保存为一个以 |asy| 为扩展名的文件 ( 比如 test.asy ),
 然后双击该文件生成相应的图形文件. 不过我们还是建议按照第
@@ -316,6 +328,16 @@ sudo tar -C / -zxf asymptote-x.xx.i386.tgz
 子的 |examples| 目录, 还有 |FAQ| 等等, 这些都是 Asymptote 学习的重
 要资料.
 
+由于 asy 是安装到 |/usr/local/bin| 目录中, 因此为了保证系统用的是这个
+路径中的 asy 而不是 texlive 中的 asy(它通常在
+|/usr/local/texlive/2010/bin/i386-linux|
+等目录下), 我们可以在 |~/.profile| 文件里面把 |/usr/local/bin| 放到最
+前面, 例如把下面代码加到 |~/.profile| 后面, 注销以后再登入.
+\begin{verbatim}
+PATH=/usr/local/bin:/usr/local/texlive/2010/bin/i386-linux:$PATH
+export PATH
+\end{verbatim}
+
 接下去我们要把刚刚解压后的 |/usr/share/texmf/tex/latex/asymptote| 文件夹移动
 到您的 \TeX 系统的相应目录下, |TeXLive| 可以是
 |/usr/local/texlive/texmf-local/tex/latex|, 然后再执行 |texhash|. 当然,可
@@ -327,14 +349,16 @@ texhash
 \end{verbatim}
 Linux 的用户此时可以打开一个终端, 输入 asy, 这时应该弹出类似于
 \begin{verbatim}
-Welcome to Asymptote version 2.04 (to view the manual, type help)
+Welcome to Asymptote version 2.08 (to view the manual, type help)
 >
 \end{verbatim}
-的等待状态, 如果有出错信息, 说明缺少某些库文件, 这时应该装上相应的库文
+的等待状态. 如果有出错信息, 说明缺少某些库文件, 这时应该装上相应的库文
 件或链接, 可以参考 |apt-get install asymptote| 里面的依赖关系把所需要
-的库装上. 特别地, 我们需要 freeglut 这个基于 OpenGL 的库,如果没有, 会
-提示缺少 libglut.so.3. 其他的库我们可以根据出错信息安装. 另外, 如果提
-示缺少 |libtinfo.so.5|, 那么可能要执行
+的库装上. 特别地, 我们需要 freeglut 这个基于 OpenGL 的库, 如果没有, 会
+提示缺少 libglut.so.3, 这时在 Ubuntu 简单地用
+|apt-get install freeglut3-dev|
+装上就可以. 其他的库我们可以根据出错信息安装. 另外, 特别
+要注意的是, 如果提示缺少 |libtinfo.so.5|, 那么可能要执行
 \begin{verbatim}
 sudo ln -s /lib/libncurses.so.5 /usr/lib/libtinfo.so.5
 \end{verbatim}
@@ -379,7 +403,7 @@ debian 的用户装
 sudo apt-get install zlibl1g-dev
 \end{verbatim}
 
-建立编译环境时, 在 Ubuntu 下也可以用
+建立编译环境时, 在 Ubuntu 下也可以简单地用
 \begin{verbatim}
 sudo apt-get build-dep asymptote
 \end{verbatim}
@@ -552,17 +576,20 @@ Windows 用户建议进行如下的配置, 因为很多时候需要在 asy 命�
 成所想要的格式, 而且在命令行执行任务可以看到出错信息, 方便我们进一步测
 试我们的配置是否成功.
 
-先把 asy.bat 和 asy.exe 所在目录加入环境变量中的 PATH 中
-\transnote{2.04 版本已经自动加入到系统的 PATH 变量里面了, 可以免去下面
-  操作}. 具体做法是:
+先把 asy.bat 和 asy.exe 所在目录加入环境变量中的 PATH 中, 具体做法是:
 \begin{enumerate}
 \item  单击 \emph{开始}
 \item 右击 \emph{我的电脑}
 \item 选择 \emph{属性}
 \item 单击 \emph{高级}
 \item 单击 \emph{环境变量}
-\item 看看您的用户名下是否有 PATH 这个环境变量, 没有就新建一个, 然后编辑, 把
-  |C:\Program Files\Asymptote;| 加到上面去.
+\item 双击系统变量下的 Path 这个环境变量, 看看这个变量值里面是否有
+ |C:\Program  Files\Asymptote;|
+ 这一项, 而且是否在 TeXLive 路径名的前面(通常是类似于
+ |C:\texlive\2010\bin\win32;|),
+ 如果不是, 请把
+|C:\Program Files\Asymptote;|
+ 添加到变量值的最前面. 这样才能保证我们调用的是最新的 asy.
 \end{enumerate}
 
 接下去在右键加入进入 DOS 命令行.
@@ -615,7 +642,7 @@ Linux 下是 |~/.asy/config.asy|( 如果没有, 都请手工新建一个 ), 里�
 
 \begin{lstlisting}
   import settings;
-  gs="C:\Program Files\gs\gs8.70\bin\gswin32c.exe";
+  gs="C:\Program Files\gs\gs9.00\bin\gswin32c.exe";
   psviewer="C:\Program Files\Ghostgum\gsview\gsview32.exe";
   pdfviewer="C:\Program Files\Adobe\Reader 9.0\Reader\AcroRd32.exe";
   python="";
@@ -891,7 +918,8 @@ label("中文");
 然后就可以测试前面的例子了.
 
 \subsection{CJK 方案}
-这种方式大家比较熟悉, 不多说了.
+假定已经安装了 TeXLive, 里面有中文字体 |gkai|, 否则要把 |gkai| 换成自
+己生成的字体文件名.
 \begin{lstlisting}
   texpreamble("\usepackage{CJK}
   \AtBeginDocument{\begin{CJK*}{UTF8}{gkai}}
@@ -996,7 +1024,8 @@ NotesOnAsy-*.tar.gz 的 ollydbg 目录中.
 在 \url{http://code.google.com/p/asy4cn/downloads/list} 的
 |NotesOnAsy-*.tar.gz| 里面找到 |userDefineLangxml.asy| 这个
 文件, 让它与 |C:\Program Files\Asymptote| 目录中的 |asy-keywords.el|
-放在同一目录下, 接着在命令行下执行(或双击执行)
+放在同一目录下(这个 asy-keywords.el 文件也可以在 asymptote-*.src.tgz
+这个源代码包里面找到), 接着在命令行下执行(或双击执行)
 \begin{verbatim}
 asy userDefineLangxml.asy
 \end{verbatim}
@@ -1009,9 +1038,10 @@ NotePad++ 打开一个以 |asy| 为扩展名的文件, 那么就会有语法高�
 解压后 |notepad++.exe| 所在目录就可以了)
 
 类似的, 在 \url{http://code.google.com/p/asy4cn/downloads/list}
-的 |NotesOnAsy-*.tar.gz| 里面找到 |asyxml.asy| 这个文件, 把上述代码
-复制进去, 让它与 |C:\Program Files\Asymptote| 中的 |asy-keywords.el|
-放在同一目录下, 再执行(或双击执行)
+的 |NotesOnAsy-*.tar.gz| 里面找到 |asyxml.asy| 这个文件, 让它与
+|C:\Program Files\Asymptote| 中的 |asy-keywords.el|
+放在同一目录下(这个 asy-keywords.el 文件也可以在 asymptote-*.src.tgz
+这个源代码包里面找到), 再执行(或双击执行)
 \begin{verbatim}
 asy  asyxml.asy
 \end{verbatim}
@@ -1296,11 +1326,12 @@ perpendicular(pair z,pair align,path g);
 其中 |real x| 声明函数自变量 |x| 是实数型, |f| 前面的
 |real| 声明函数 |f| 也是一个实数型.
 
-\section{画参数曲线}
-利用若干个点画曲线能力有限, 我们可以利用数学中的参数曲线来生成更丰富多
-彩而且有意义的曲线.
-\begin{center}\includegraphics[scale=0.5]{Parameter-Curve-1.pdf}\end{center}%
-\lstinputlisting{Parameter-Curve-1.asy}
+\section{画函数图像}
+利用若干个点画曲线能力有限, 我们可以利用数学中的函数图像来生成更丰富多
+彩而且有意义的曲线, 更进一步的, 我们可以生成参数曲线以及用隐函数表达的
+曲线.
+\begin{center}\includegraphics[scale=0.5]{Graph-of-Function-1.pdf}\end{center}%
+\lstinputlisting{Graph-of-Function-1.asy}
 
 函数 |graph| 是一个返回数据类型为路径 |path| (其实是称为 |guide| 的
 数据类型, 与 |path| 稍微有些区别)的函数.它需要知道要画的函数
@@ -1309,8 +1340,9 @@ perpendicular(pair z,pair align,path g);
 \begin{lstlisting}
   guide graph(real f(real), real a, real b,interpolate join=operator --);
 \end{lstlisting}
-\begin{center}\includegraphics[scale=0.8]{Parameter-Curve-2.pdf}\end{center}%
-\lstinputlisting{Parameter-Curve-2.asy}
+
+\begin{center}\includegraphics[scale=0.8]{Graph-of-Function-2.pdf}\end{center}%
+\lstinputlisting{Graph-of-Function-2.asy}
 
 \begin{itemize}
 \item 在 |Label()| 函数中加 |position=EndPoint|,那么就
@@ -1318,6 +1350,18 @@ perpendicular(pair z,pair align,path g);
 \item  类似地,标 $y$ 轴时用 |align=N| 把 $y$ 安置(|align|)在 $y$ 轴默认的
   |position=EndPoint| 的北边.
 \end{itemize}
+
+\section{参数曲线和隐函数表达的曲线}
+参数方程的例子如下, 可以有多种方式, 比如采用注释号 |/* */| 内部的方案.
+
+\begin{center}\includegraphics[scale=0.8]{Parameter-Curve.pdf}\end{center}%
+\lstinputlisting{Parameter-Curve.asy}
+隐函数表达的曲线要调用 |contour| 宏包. 我们要画的是 Descartes 的叶形线,
+方程为 $x^3+y^3-3axy=0$, 也就是二元函数 $x^3+y^3-3axy$ 在 $0$ 处的等值
+线, 因此我们要采用匿名函数新建一个数组, 该数组仅仅包含一个元素 |{0}|,
+即用 |new real[]{0}| 的方式.
+\begin{center}\includegraphics[scale=0.8]{Contour-Curve.pdf}\end{center}%
+\lstinputlisting{Contour-Curve.asy}
 
 \section{画阴影}
 传统的图形, 特别是印成黑白颜色的图形, 通常是希望在封闭曲线里面填上阴影
@@ -1691,58 +1735,58 @@ Asymptote 里面就是采用这种 $3$ 次曲线. 我们可以把这种生成曲
 假定我们有一些点的坐标, 我们有两种方法读入这些数据后绘图.
 
 \begin{lstlisting}
-  96.25		3.00239
-  96.00		2.99448
-  95.95		2.99289
-  95.90		2.9913
-  95.85		2.9897
-  95.80		2.98809
-  95.75		2.98645
-  95.72		2.98545
-  95.71		2.98509
-  95.71		2.98493
-  95.72		2.98519
-  95.75		2.98601
-  95.80		2.98743
-  95.85		2.98885
-  95.90		2.99028
-  95.95		2.99169
-  96.00		2.99309
-  96.05		2.99446
-  96.10		2.99577
-  96.15		2.99696
-  96.16		2.99716
-  96.17		2.99734
-  96.18		2.99746
-  96.185	2.99746
-  96.188	2.99739
-  96.188	2.99706
-  96.185	2.99676
-  96.18		2.9964
-  96.17		2.99578
-  96.16		2.99521
-  96.15		2.99466
-  96.10		2.99205
-  96.05		2.98944
-  96.00		2.98671
-  95.95		2.98376
-  95.90		2.9804
-  95.85		2.97619
-  95.84		2.97513
-  95.83		2.97392
-  95.82		2.97248
-  95.81		2.97054
-  95.805	2.96901
-  95.805	2.96463
-  95.81		2.96307
-  95.82		2.9611
-  95.83		2.95962
-  95.84		2.95838
-  95.85		2.95729
-  95.90		2.9529
-  95.95		2.94939
-  96.00		2.94631
-  96.25		2.93356
+  96.25         3.00239
+  96.00         2.99448
+  95.95         2.99289
+  95.90         2.9913
+  95.85         2.9897
+  95.80         2.98809
+  95.75         2.98645
+  95.72         2.98545
+  95.71         2.98509
+  95.71         2.98493
+  95.72         2.98519
+  95.75         2.98601
+  95.80         2.98743
+  95.85         2.98885
+  95.90         2.99028
+  95.95         2.99169
+  96.00         2.99309
+  96.05         2.99446
+  96.10         2.99577
+  96.15         2.99696
+  96.16         2.99716
+  96.17         2.99734
+  96.18         2.99746
+  96.185        2.99746
+  96.188        2.99739
+  96.188        2.99706
+  96.185        2.99676
+  96.18         2.9964
+  96.17         2.99578
+  96.16         2.99521
+  96.15         2.99466
+  96.10         2.99205
+  96.05         2.98944
+  96.00         2.98671
+  95.95         2.98376
+  95.90         2.9804
+  95.85         2.97619
+  95.84         2.97513
+  95.83         2.97392
+  95.82         2.97248
+  95.81         2.97054
+  95.805        2.96901
+  95.805        2.96463
+  95.81         2.96307
+  95.82         2.9611
+  95.83         2.95962
+  95.84         2.95838
+  95.85         2.95729
+  95.90         2.9529
+  95.95         2.94939
+  96.00         2.94631
+  96.25         2.93356
 \end{lstlisting}
 \begin{center}\includegraphics[scale=0.8]{filegraph.pdf}\end{center}%
 \lstinputlisting{filegraph.asy}
@@ -1784,7 +1828,9 @@ Ivaldi 提供的 |trembling| 宏包可以模拟徒手绘图, 比较有趣.
 \begin{center}\includegraphics{PythagoreanTree-new.pdf}\end{center}%
 \lstinputlisting{PythagoreanTree-new.asy}
 
-
+下面构造的例子是连续但无处可微分函数.
+\begin{center}\includegraphics[scale=0.8]{Fractal-Another.pdf}\end{center}%
+\lstinputlisting{Fractal-Another.asy}
 \chapter{3D 绘图}
 
 \section{Asymptote 三维作图概述 }
@@ -1797,7 +1843,7 @@ Asymptote 中与 3D 有关的主要是 three, graph3, solids  三个宏包, 其�
 助的宏包还有 tube, grid3, contour3, obj, labelpath3 等等. 在画 3D 图形
 之前, 我们一般都要调用前面三个宏包之一二.
 
-\section{预览 3D 输出}
+ \section{预览 3D 输出}
 先给出一个简单的 3D 例子.
 \begin{center}\includegraphics[scale=0.8]{Simple-Example.pdf}\end{center}%
 \lstinputlisting{Simple-Example.asy}
@@ -1809,7 +1855,7 @@ asy -V filename.asy
 \end{verbatim}
 
 这时我们可以用鼠标左键控制弹出的窗口, 而在鼠标右键有各种选项. 下面只是说说
-比较实用的键盘快捷键.
+比较常用的快捷键.
 
 \begin{itemize}
 \item h: home(复位)
@@ -1826,7 +1872,10 @@ asy -V filename.asy
 \item e: export(导出为 eps 或 pdf 格式)
 \item c: show camera parameters(当使用此快捷键时, 将会在命令行输出
   camera, target, up 等与投影有关的参数, 非常有利于我们根据这些参数调
-  整最终的图形输出视角!)
+  整最终的图形输出视角!)\footnote{具体说来, 就是当弹出 OpenGL 的窗口时,
+    随便用鼠标转动图像到合适位置, 然后用 c 键, 那么就会在命令行出现
+    一大串关于视角的代码, 把它复制到代码里面, 然后再重新编译, 那么出
+    来的图形的视角就是您所要的.}
 \item +: expand(放大)
 \item =: expand(放大)
 \item -: shrink(缩小)
@@ -1843,7 +1892,9 @@ asy -f pdf filename.asy
 
 我们的 TeX 系统需要有最新的 movie15 宏包, asy 会调用那个宏包把 asy 生成的
 prc 文件嵌入到 pdf 中, 而且需要 Adobe 9.0 以上的版本的阅读器才能读出那个
-真 3D 效果.
+真 3D 效果. \footnote{对于 Linux 用户, 如果显示 3D 的画面不太稳定, 可以通过选择
+Edit, 3D\&Multimedia, Preferred Renderer, 把默认的 OpenGL(Mesa)(OpenGL
+在 Linux 中的实现) 改为 Software.}
 
 另外, 在 2010 年 6 月份, Asymptote 生成包含 PRC 的 pdf 文
 件的渲染速度有了极大的提高, 必要时候我们还可以加入
@@ -1998,8 +2049,8 @@ Asymptote 定义了一个与数据类型 |path3| 名字一样 |path3| 的函数�
 
 如果给出参数曲线的方程, 我们可以通过 |graph| 函数把该参数方程转成
 |path3|, 因此要调用 |graph3| 宏包.
-\begin{center}\includegraphics[scale=0.8]{Parameter-Curve.pdf}\end{center}%
-\lstinputlisting{Parameter-Curve.asy}
+\begin{center}\includegraphics[scale=0.8]{Parameter-Curve3.pdf}\end{center}%
+\lstinputlisting{Parameter-Curve3.asy}
 这是一条螺旋上升的空间线.
 
 \section{Bezier 曲面片}
@@ -2353,9 +2404,8 @@ $\theta$ 和 $\phi$ 有关, 如 $1+\sin(5\theta)\sin(5\phi)/5$, 那么我们得
 上述平面曲线由 11 段 Bezier 曲线构成, 我们依照红绿蓝的顺序循环着色, 以
 便看清楚它的构造.
 
-接下去我们用 path3() 然后利用 |path3()| 函数加上 |YZplane| 参
-数把 XY 平面的曲线转成 |YZ| 的曲线, 然后绕着 Z 轴旋转. 我们这里的颜色
-与原来的曲各段对应.
+接下去我们利用 |path3()| 函数加上 |YZplane| 参数把 XY 平面的曲线转换成
+|YZ| 的曲线, 然后绕着 Z 轴旋转. 我们这里的颜色与原来的曲各段对应.
 \begin{center}\includegraphics[scale=0.8]{Revolution.pdf}\end{center}%
 \lstinputlisting{Revolution.asy}
 
@@ -2425,13 +2475,15 @@ Asymptote 提供了不少常见的旋转体函数, 如 |unitsphere|, |unitcone|,
 |z.x| 对应 |t| 因此所画的曲线是在曲面上的, 其中那个 8 是让曲线绕 8 圈.
 
 但如果要画一些不知道参数方程的曲线, 这时可以借助于 |lift| 函数.
-\begin{center}\includegraphics[scale=0.8]{Impact-Modified.pdf}\end{center}%
+\begin{center}\includegraphics[scale=1.0]{Impact-Modified.pdf}\end{center}%
 \lstinputlisting{Impact-Modified.asy}
 所画的锥体落在由 $z=g(x,y)=\sqrt{x^2+y^2}/c$ 确定的曲面上, 而球的方程是
 $(x-Os.x)^2+(y-Os.y)^2+(z-Os.z)^2-r^2=0$, 从这两个方程中消去 $z$, 得到
 的就是 $(x-Os.x)^2+(y-Os.y)^2+(g(x,y)-Os.z)^2-r^2=0$, 这个正是两个曲面
 交线在 XY 平面的投影方程. 我们用 |contour| 生成该曲线, 然后再用 |lift|
 函数把这个曲线提升到 |g(x,y)| 上, 由此即画出两个曲面交线.
+
+一般的, 我们可以画出 $z=g(x,y), F(x,y,z)=0$ 确定的空间曲线.
 
 下面用类似的方法画两个曲面的交线.
 \begin{center}\includegraphics[scale=0.8]{Intersection-of-Two-Surfaces.pdf}\end{center}%
@@ -2529,7 +2581,7 @@ $x=r\cos(\theta),y=r\sin(\theta)$
 
 我们要画两个不等式 $x^{2}+3y^{2}\leq z \leq 8-x^{2}-y^{2}$ 之间的区域,
 我们采用分别把 $z=x^{2}+3y^{2}$ 和 $z=8-x^{2}-y^{2}$ 用广义椭圆坐标化
-成参数方程的做法.
+成参数方程的做法.\label{Surface:Local}
 \begin{center}\includegraphics[scale=0.8]{Two-Surfaces.pdf}\end{center}%
 \lstinputlisting{Two-Surfaces.asy}
 它们的相交线的画法就是联合两个曲面方程消去 $z$, 得到一个椭圆方程, 然后
@@ -2539,9 +2591,6 @@ $x=r\cos(\theta),y=r\sin(\theta)$
 录里面的 |pipeintersection.asy|.
 \begin{center}\includegraphics[scale=0.8]{Pipeintersection-New.pdf}\end{center}%
 \lstinputlisting{Pipeintersection-New.asy}
-
-
-
 
 \section{直线段与平面的交点, 曲线与曲面的交点}
 |math| 宏包提供了直线段与平面交点的 |intersect| 函数.
@@ -2610,7 +2659,7 @@ $f(x,y,z)=x^{2}+y^{2}+z^{2}-4$ 在 |0| 处的等值面.
 \lstinputlisting{Contour3-Spherical-Harmonic.asy}
 
 \section{常见的二次曲面}
-由于到目前的 2.04 版本为止, Asymptote 还没有提供通过不等式来限制绘图范
+由于到目前的 2.08 版本为止, Asymptote 还没有提供通过不等式来限制绘图范
 围的功能, 因此我们如果想画一些特定的图形还是比较麻烦. 这里综合前面的绘
 图知识画出几种常见的二次曲面.
 
@@ -3148,7 +3197,7 @@ g(i) 生成的曲线合起来构成了环绕环形的曲线.
 \lstinputlisting{PDF-Animation.asy}
 
 也可以做基于 OpenGL 的动画, 下面例子源于笔者提供的 inlinetex3.tex(见
-examples 目录下的 animations 目录) 到目前的 2.04 版本为止, Windows 的
+examples 目录下的 animations 目录) 到目前的 2.08 版本为止, Windows 的
 用户还需要用
 \begin{verbatim}
 asy -threads -framedelay=100
@@ -3163,9 +3212,8 @@ asy -threads -framedelay=100
 \section{做 3D 幻灯}
 用 asy 生成的已经嵌入 PRC 真 3D 的 pdf 文件不能直接用普通的图像嵌入命
 令 |\includegraphics| 嵌入到 |tex| 中. 这时可以把 asy 代码嵌入到 tex
-文档生成真 3D. 由于调整了 hyperref 宏包的调用, 现在 Beamer 宏包已经与
-Asymptote 没有冲突了, 不过到目前的 2.04 版本, 好像还只能用 pdflatex 而
-不能用 xelatex 编译, 因此我们暂时还只能用 CJK 中文方案.
+文档生成真 3D. 虽然 Asymptote 调整了 hyperref 宏包的调用, 不过似乎仍然
+与 Beamer 有冲突, 有兴趣的读者可以测试下面的例子.
 
 \begin{verbatim}
 \documentclass[pdftex]{beamer}
@@ -3248,4 +3296,63 @@ draw(unitsphere,red,render(compression=Low,merge=true));
       % \begin{center}\includegraphics[scale=0.8]{Xasy.pdf}\end{center}%
       % \lstinputlisting{Xasy.asy}
 
-    \end{document}
+\section{用 Asymptote 添加图片中的字母标签}
+应该说, Asymptote 的某些 3D 绘图功能还不够强大, 一些需要调用复杂函数的
+图形目前还不能由 Asymptote 绘制出来. 但我们可以用其他软件生成图片, 然
+后用 asy 添加中英文标签.
+
+例如我们调用功能强大的 Mathematica 绘制出著名的极小曲面 Costa 曲面, 并
+且导出特定像素的 pdf 图像, 代码如下.
+\begin{verbatim}
+c = WeierstrassInvariants[{1/2, 0.5 I}][[1]];
+P[z_] = WeierstrassP[z, {c, 0}];
+Z[z_] = WeierstrassZeta[z, {c, 0}];
+e = P[1/2];
+Costa[u_, v_] := {
+   (1/2)*Re[-Z[u + I*v] + Pi*u + Pi^2/(4 e) +
+      Pi/(2 e)*(Z[u + I*v - 1/2] - Z[u + I*v - I/2])],
+   (1/2)*Re[-I*Z[u + I*v] + Pi*v + Pi^2/(4 e) -
+      Pi*I/(2 e)*(Z[u + I*v - 1/2] - Z[u + I*v - I/2])],
+   (1/4)*Sqrt[2 Pi]*Log[Abs[(P[u + I*v] - e)/(P[u + I*v] + e)]]
+   };
+sf = ParametricPlot3D[Costa[u, v], {u, 0, 1}, {v, 0, 1},
+  Boxed->False, Axes->False,Mesh->False]
+Export["Costa.pdf", sf, ImageResolution -> 200,
+ ImageSize -> {200, 200}]
+Import["Costa.pdf"]
+\end{verbatim}
+那么我们可以用 Mathematica 右键提供的 Get Coordinates 获取图像点的坐标, 然后用
+Asymptote 的绘图功能添加一些新的元素.
+\lstinputlisting{Mathematica-Label.asy}
+\begin{center}\includegraphics[scale=1.0]{Mathematica-Label.pdf}\end{center}%
+其中 |layer()| 使得其后的添加的内容标在图片上层, 从而不会被图片遮挡.
+|align=NE| 放置嵌入的 Costa.pdf 文件, 会使得图片左下角的坐标是
+|(0,0)|. 当然, 这里的嵌入与 Mathematica 捕获的坐标有些误差, 因此, 我们
+把图片往左下角移动了一点点, 即 |position=(-2,-2)|.
+
+\section{与 Mathematica 结合}
+Asymptote 由于还没有类似于 Mathematica 的 |RegionFunction| 命令, 因此
+对曲面裁剪还需要技巧, 不过由于 Mathematica 能输出 obj 这种 3D 格式, 而
+asy 能调用 obj 宏包部分地读取 obj 文件里面的信息生成 3D 图形.
+
+下面我们对 \pageref{Surface:Local} 的例子用 Mathematica 与 asy 结合的
+方式重新生成.
+
+首先用 Mathematica 很容易分别画出上下两个曲面, 且分别导出为 sf1.obj 和
+sf2.obj 文件.
+\begin{verbatim}
+sf1 = Plot3D[8-x^2-y^2, {x, -2, 2}, {y, -2, 2},
+  RegionFunction->Function[{x, y, z}, z >=x^2+3y^2],
+  Mesh->False, Boxed->False, Axes->False, MaxRecursion->1,
+  PlotPoints->60]
+sf2 = Plot3D[x^2 + 3y^2, {x, -2, 2}, {y, -2, 2},
+  RegionFunction->Function[{x, y, z}, z <=8-x^2-y^2],
+  Mesh->False, Boxed->False, Axes->False, MaxRecursion->1,
+  PlotPoints->60]
+Export["sf1.obj", sf1, "obj"]
+Export["sf2.obj", sf2, "obj"]
+\end{verbatim}
+然后如下调用 obj 宏包.
+\lstinputlisting{Mathematica-Obj.asy}
+\begin{center}\includegraphics[scale=1.0]{Mathematica-Obj.pdf}\end{center}%
+\end{document}

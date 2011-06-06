@@ -1,7 +1,18 @@
-import graph3;
-size(0,200);
-real x(real t) {return cos(2pi*t);}
-real y(real t) {return sin(2pi*t);}
-real z(real t) {return t;}
-path3 p=graph(x,y,z,0,2.7,operator ..);
-draw(p,Arrow3);
+import graph;
+size(200);
+pair f(real t){
+  real x=(1-t^2)/(1+t^2);
+  real y=t*(1-t^2)/(1+t^2);
+  return (x,y);
+}
+draw(graph(f,-2,2),red);
+/*
+  real x(real t) {return (1-t^2)/(1+t^2);}
+  real y(real t) {return t*(1-t^2)/(1+t^2);}
+  draw(graph(x,y,-2,2),red);
+*/
+limits((-1.5,-1.5),(1.5,1.5));
+xaxis("$x$",Arrow);
+yaxis("$y$",Arrow);
+
+

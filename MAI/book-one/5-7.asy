@@ -13,8 +13,8 @@ guide q=reflect(T,K)*p;
 
 draw(q,linewidth(1));
 
-label(Label("$f'>0$",position=Relative(0.7),align=2W),p);
-label(Label("$f'<0$",position=Relative(0.7),align=2E),q);
+label(Label("$f'<0$",position=Relative(0.7),align=2W),p);
+label(Label("$f'>0$",position=Relative(0.7),align=2E),q);
 
 label("$x_{0}$",K,S);
 label("$O$",(0,0),SW);

@@ -14,7 +14,7 @@ picture intersection;
 path r=buildcycle(q,reverse(p));
 fill(r,pattern("hatch"));
 
-label("$A$",(-20,0));
+label("$A$",(-20,0),UnFill);
 label("$B$",(80,30));
 
 draw(p,linewidth(1));

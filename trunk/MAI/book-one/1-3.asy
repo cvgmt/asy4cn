@@ -1,11 +1,11 @@
 size(200);
-import math;
 import graph;
 real c=1;
 
-draw((-1.5,c)--(1.5,c));
-label("$y=c$",(1,c),S);
-label("$c$",(0,c),SE);
-ylimits(-0.5,1.5);
+draw((-2,c)--(2,c));
+label("$y=c$",(1,c),SE);
 label("$O$",(0,0),SW);
+label("$c$",(0,c),SE);
+xlimits(-2.5,2.5);
+ylimits(-1,2);
 axes("$x$","$y$",Arrow());

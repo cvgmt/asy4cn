@@ -1,4 +1,4 @@
-size(0,200);
+size(0,100);
 import graph;
 real a=pi/2;
 pair A=(a,a);

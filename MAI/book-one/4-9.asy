@@ -1,7 +1,6 @@
 size(200);
-import math;
+import geometry;
 import graph;
-import markers;
 real p=4;
 real f(real t){return p/(1-cos(t)); }
 draw(polargraph(f,pi-2.5,pi+2.5));
@@ -26,7 +25,7 @@ real y(real t){return f(t)*expi(t).y;}
 real k=(y(t+h)-y(t))/(x(t+h)-x(t));
 
 pair T=P+7(1,k);
-pair M=P-23.3(1,k);
+point M=intersectionpoint(line(T,P),line((0,0),(1,0)));
 draw(M--T);
 markangle(Label("$\alpha$"),O,M,T,radius=14);
 label("$M$",M,S);

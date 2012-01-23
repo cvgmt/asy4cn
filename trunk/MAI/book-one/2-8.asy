@@ -1,7 +1,7 @@
 size(200);
 import graph;
 import markers;
-draw(unitcircle);
+draw(unitcircle,linewidth(1));
 real x=0.4pi/2;
 pair B=expi(x);
 pair B1=expi(-x);

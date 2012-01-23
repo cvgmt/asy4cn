@@ -18,7 +18,7 @@ draw((pi/2,0)--(pi/2,f(pi/2)),dashed);
 draw((5pi/4,0)--(5pi/4,f(5pi/4)),dashed);
 draw((3pi/2,0)--(3pi/2,f(3pi/2)),dashed);
 
-label(rotate(-60)*Label("$y=e^{-x}$",position=Relative(0.1),align=2NE),g1);
+label(rotate(-75)*Label("$y=e^{-x}$",position=Relative(0.1),align=N+0.5E),g1);
 
 label(rotate(60)*Label("$y=-e^{-x}$",position=Relative(0.1),align=SE),g2);
 axes("$x$","$y$",Arrow());

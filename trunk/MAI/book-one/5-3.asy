@@ -10,8 +10,7 @@ draw(p);
 point A=point(p,0);
 point B=point(p,length(p));
 
-real k=(B.y-A.y)/(B.x-A.x);
-real t=dirtime(p,(1,k));
+real t=dirtime(p,B-A);
 point C=point(p,t);
 draw(C--(C.x,0),dashed);
 transform proj=projection(A,B);
@@ -20,7 +19,7 @@ draw(C--M,dashed);
 
 draw(A--B);
 draw(C--(C.x,0),dashed);
-draw(C-40(1,k)--C+40(1,k));
+draw(C-.3(B-A)--C+.3(B-A));
 pair P=point(p,t+1);
 dot("$P$",P,NE);
 point N1=proj*P;

@@ -71,7 +71,7 @@ surface sphericaltriangle(triple center, triple A, triple B, triple C,
 for(int k=0;k<F.length;++k){
   for(int j=0;j<F[k].length;++j){
      triple[] PatchPoints=sequence(new triple(int l) {
-         return (P[F[k][l]-1][0],P[F[k][l]-1][1],P[F[k][l]-1][2]);
+         return unit((P[F[k][l]-1][0],P[F[k][l]-1][1],P[F[k][l]-1][2]));
     },F[k].length);
      PatchPoints.cyclic=true;
      triple M=unit(sum(PatchPoints)/F[k].length);
@@ -80,6 +80,6 @@ for(int k=0;k<F.length;++k){
     if(F[k].length==6){p=yellow;}
     if(F[k].length==8){p=red;}
     draw(sphericaltriangle(O,M,PatchPoints[j],PatchPoints[j+1]),p,nolight);
-    draw(arc(O,unit(PatchPoints[j]),unit(PatchPoints[j+1])),linewidth(2));
+    draw(arc(O,PatchPoints[j],PatchPoints[j+1]),linewidth(2));
   }
 }

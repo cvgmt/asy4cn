@@ -1,3 +1,4 @@
+size(200);
 import three;
 import palette;
 

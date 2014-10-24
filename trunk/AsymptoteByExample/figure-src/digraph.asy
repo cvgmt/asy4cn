@@ -38,7 +38,7 @@ picture spanningforest;
 void setpos(node nd, pair pos)
 {
     nd.pos = pos;
-    nd.updateanchors(nd._anchor);
+    nd.setanchor(nd._anchor);
 }
 
 real v = 1.5u;

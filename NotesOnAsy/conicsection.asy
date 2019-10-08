@@ -1,11 +1,16 @@
-size(0,200,IgnoreAspect);
-//settings.outformat="html";
+size(200);
+texpreamble("
+\usepackage{fourier}
+\usepackage[T1]{fontenc}
+");
 
 import graph3;
 import three;
 import contour;
 import solids;
-settings.render=8;
+import labelpath3;
+defaultpen(fontsize(15));
+
 currentprojection=perspective(
 camera=(13.233646141568,-5.68933912425039,6.7141140486494),
 up=(-0.0370965806193627,0.0112964292655084,0.0430879857956991),
@@ -13,6 +18,8 @@ target=(0.904875167606338,-0.267192542245532,-5.32186610050458),
 zoom=0.90702947845805,
 angle=39.7319377166926,
 autoadjust=false);
+
+
 real r=5;
 real h=9;
 triple O=(0,0,0);
@@ -37,12 +44,9 @@ draw(In--Proj(In,C,A));
 draw(Out--Proj(Out,A,B));
 draw(Out--Proj(Out,B,C));
 draw(Out--Proj(Out,C,A));
-//dot(Proj(In,A,B),green);
-//dot(Proj(In,B,C),green);
-//dot(Proj(In,C,A),green);
+
 dot(Proj(Out,A,B),green+4,nolight);
-//dot(Proj(Out,B,C),green);
-//dot(Proj(Out,C,A),green);
+
 draw(shift(In)*scale3(abs(Proj(In,A,B)-In))*unitsphere,magenta);
 draw(shift(Out)*scale3(abs(Proj(Out,A,B)-Out))*unitsphere,magenta);
 path3 p=(0,0,0)--(r*cos(2pi/20),r*sin(2pi/20),-h);
@@ -55,7 +59,7 @@ triple S=Proj(In,B,C);
 triple P=(abs((S.x,S.y))*cos(2pi/20),abs((S.x,S.y))*sin(2pi/20),Proj(In,B,C).z);
 dot(P,green+4,nolight);
 label("$P$",P,NE,nolight);
-label("$A$",A,W);
+label("$A$",A,NW);
 label("$B$",B,E);
 label("$C$",C,N);
 triple F1=Proj(Out,A,B);
